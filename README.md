@@ -1,38 +1,31 @@
-# sv
+# SGTCC
+O **SGTCC**, ou Sistema de Gestão de Trabalhos de Conclusão de Curso, é, como o nome já diz, um sistema destinado à gestão e acompanhamento dos Trabalhos de Conclusão de Curso (TCC) em instituições de ensino superior. Ele tem como objetivo centralizar e facilitar o processo de submissão, acompanhamento, correção e aprovação dos TCCs, proporcionando uma plataforma eficiente tanto para os alunos quanto para os orientadores e coordenadores de curso. Através do **SGTCC**, é possível gerenciar desde a escolha do tema até a defesa do trabalho, com funcionalidades que visam otimizar o tempo e melhorar a organização de todas as etapas envolvidas.
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**Tabela de conteúdos**
+1. [Sobre](#sobre)
+2. [Rodando o projeto](#rodando)
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+<a name="sobre" ></a>
 
-```bash
-# create a new project in the current directory
-npx sv create
+# Sobre
 
-# create a new project in my-app
-npx sv create my-app
+Este é um projeto de interface web desenvolvido utilizando a framework [Svelte](https://svelte.dev) e a biblioteca de componentes [Skeleton](https://www.skeleton.dev). O objetivo deste projeto é criar uma aplicação simples e moderna para comunicação com a API REST [SGTCC_FINAL](https://github.com/progjaoo/SGTCC_FINAL).
+
+Além dessa interface web existe o aplicativo mobile [SGTCC_APP](https://github.com/progjaoo/SGTCC_APP).
+
+Esses 3 repositorios foram desenvolvidos em conjunto como trabalho de conclusão de curso para a instituição [AEDB](https://www.aedb.br) entre os anos de **2024** e **2025** e são de autoria de:
+* [Gilberto Luis](https://github.com/gilbertolgs)
+* [João Evangelista](https://github.com/M4luc0B1g0d3)
+* [João Marcos Valente](https://github.com/progjaoo)
+
+<a name="rodando" ></a>
+
+# Rodando o projeto
+Para rodar o projeto em desenvolvimento utilize os seguintes comandos:
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+npm install
+```
+```
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
