@@ -6,13 +6,7 @@
 	import FormSelectComponent from '$components/FormSelectComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 
-	let {
-		abrirModal,
-		getCursos,
-		cursos,
-		curso = $bindable(),
-		papelBusca = $bindable()
-	} = $props();
+	let { abrirModal, getCursos, cursos, curso = $bindable(), papelBusca = $bindable() } = $props();
 
 	let papeis = $state(EnumPapelTodosPapeis);
 
@@ -69,10 +63,10 @@
 						<td>
 							<a
 								href={`perfil/${cursoAtual.id}`}
-								class="anchor inline-flex w-min items-center gap-1 whitespace-nowrap"
+								class="inline-flex w-min items-center gap-1 whitespace-nowrap"
 							>
 								<img class="min-w-26 rounded" src={cursoAtual.ExibeImagem()} alt="" />
-								<span>
+								<span class="anchor">
 									{cursoAtual.nome}
 								</span>
 							</a>
@@ -82,23 +76,23 @@
 							<button
 								class="btn preset-filled-success-500"
 								onclick={() => {
-									abrirModal("Insert", cursoAtual);
+									abrirModal('Insert', cursoAtual);
 								}}
 							>
 								<Pencil /> Editar
 							</button>
 							<button
-							class="btn preset-filled-warning-500"
-							onclick={() => {
-								abrirModal("Imagem", cursoAtual);
-							}}
-						>
-							<ImagePlus /> Editar Imagem
-						</button>
+								class="btn preset-filled-warning-500"
+								onclick={() => {
+									abrirModal('Imagem', cursoAtual);
+								}}
+							>
+								<ImagePlus /> Editar Imagem
+							</button>
 							<button
 								class="btn preset-filled-error-500"
 								onclick={() => {
-									abrirModal("Delete", cursoAtual);
+									abrirModal('Delete', cursoAtual);
 								}}
 							>
 								<Trash /> Excluir

@@ -91,7 +91,7 @@
 						<td>
 							<a
 								href={`/usuario/${usuarioAtual.id}`}
-								class="anchor inline-flex w-min items-center gap-1 whitespace-nowrap"
+								class="inline-flex w-min items-center gap-1 whitespace-nowrap"
 							>
 								<Avatar
 									classes="select-none group-hover:brightness-50"
@@ -99,7 +99,7 @@
 									src={usuarioAtual.ExibeImagem()}
 									name={usuarioAtual.nome}
 								/>
-								<span>
+								<span class="anchor">
 									{usuarioAtual.nome}
 								</span>
 							</a>

@@ -43,7 +43,10 @@ class Projeto {
   }
 
   static CriaDeDados(data: Projeto): Projeto {
-    const usuarios = data.usuarios.map(Usuario.CriaDeDados);
+    let usuarios: Usuario[] = []
+    if (data.usuarios) {
+      usuarios = data.usuarios.map(Usuario.CriaDeDados);
+    }
     return new Projeto(data.id, data.idUsuario, data.nome, data.descricao, data.justificativa, data.estado, data.dataInicio, data.imagem, data.tags, usuarios, data.dataFim);
   }
 
