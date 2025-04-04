@@ -1,0 +1,18 @@
+RF 1: Cadastrar Usuario
+RF 2: Autenticar
+RF 3: Cadastrar Projeto
+RF 4: Cadastrar Curso
+RF 5: Comentar no Projeto
+RF 6: Adicionar Usuário no Projeto
+RF 7: Sair do Projeto
+RF 8: Remover Integrante do Projeto
+RF 9: Enviar Arquivo para o Projeto
+RF 10: Agendar Tarefa (Remover?)
+RF 11: Cadastrar Atividade
+RF 12: Avaliar Projeto Publico
+RF 13: Cadastrar Categoria
+RF 14: Cadastrar Campo do Documento da Avaliação
+RF 15: Avaliar Projeto Final
+RF 16: Cadastrar Banca
+RF 17: Convidar Usuário para Banca
+RF 18: Definir Estado do Projeto

@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@import '../MudClone.css';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+@import '@skeletonlabs/skeleton/themes/cerberus';
+
+@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+.preset-input-success {
+    background-color: var(--color-success-500);
+}
+.preset-input-error {
+    border-color: var(--color-error-100);
+    background-color: var(--color-error-100);
+}
+
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
