@@ -1,3 +1,7 @@
+# ⚠️ Branch de Legado
+
+Essa branch existe somente para **legado**.  
+
 # SGTCC
 O **SGTCC**, ou Sistema de Gestão de Trabalhos de Conclusão de Curso, é, como o nome já diz, um sistema destinado à gestão e acompanhamento dos Trabalhos de Conclusão de Curso (TCC) em instituições de ensino superior. Ele tem como objetivo centralizar e facilitar o processo de submissão, acompanhamento, correção e aprovação dos TCCs, proporcionando uma plataforma eficiente tanto para os alunos quanto para os orientadores e coordenadores de curso. Através do **SGTCC**, é possível gerenciar desde a escolha do tema até a defesa do trabalho, com funcionalidades que visam otimizar o tempo e melhorar a organização de todas as etapas envolvidas.
 
