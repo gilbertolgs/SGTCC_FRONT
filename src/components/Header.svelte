@@ -38,12 +38,14 @@
 	</a>
 {/snippet}
 
-<header class="sticky top-0 grid w-full flex-col space-y-4 p-4 shadow md:hidden">
-	<HeaderMobile {logo} {rota} {links} bind:usuarioLogado/>
+<header
+	class="sticky top-0 z-100 grid w-full flex-col space-y-4 p-4 shadow backdrop-blur-3xl md:hidden"
+>
+	<HeaderMobile {logo} {rota} {links} bind:usuarioLogado />
 </header>
 
 <header
-	class="sticky top-0 hidden w-full flex-col space-y-4 p-4 shadow md:flex"
+	class="sticky top-0 z-100 hidden w-full flex-col space-y-4 p-4 shadow backdrop-blur-3xl md:flex"
 	role="toolbar"
 	data-testid="app-bar"
 >

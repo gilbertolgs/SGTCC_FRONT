@@ -6,6 +6,7 @@
 	import { EnumTipoFiltro } from '$model/EnumTipoFiltro';
 	import { EnumTipoOrdenacao } from '$model/EnumTipoOrdenacao';
 	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
+	import PesquisaProjetoPublico from './PesquisaProjetoPublico.svelte';
 
 	let projetos: Projeto[] = $state([]);
 
@@ -39,6 +40,8 @@
 		content="Exibindo projetos concluidos"
 	/>
 </svelte:head>
+
+<PesquisaProjetoPublico/>
 
 {#if projetos.length > 0}
 	{#each projetos as projeto}

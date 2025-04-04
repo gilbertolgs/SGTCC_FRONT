@@ -59,12 +59,12 @@
 		</div>
 		<hr class="text-stone-800" />
 
-		<div class="grid items-center justify-between p-4">
+		<div class="grid items-center justify-between p-4 overflow-hidden">
 			<div>
-				<a href={`projeto/${projeto.id}`} class="anchor font-bold">
+				<a href={`/projeto/${projeto.id}`} class="anchor font-bold">
 					{projeto.nome}
 				</a>
-				<div class="text-xs opacity-70">{projeto.descricao}</div>
+				<div class="text-xs break-normal opacity-70">{projeto.descricao}</div>
 			</div>
 		</div>
 	</div>

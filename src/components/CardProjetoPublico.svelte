@@ -61,32 +61,36 @@
 		<hr class="text-stone-800" />
 
 		<div class="grid grid-flow-col">
-			<div class="grid items-center justify-between p-4">
+			<div class="grid items-center justify-between overflow-hidden p-4">
 				<div>
-					<a href={`projeto/${projeto.id}`} class="anchor font-bold">
+					<a href={`/projeto/${projeto.id}`} class="anchor font-bold">
 						{projeto.nome}
 					</a>
-					<div class="text-xs opacity-70">{projeto.descricao}</div>
+					<div class="text-xs break-normal opacity-70">{projeto.descricao}</div>
 				</div>
 			</div>
-			<button class="ml-auto m-2 hover:text-[#e3d664] brightness-125 group/estrela">
-				<Star class="hidden group-hover/estrela:block" fill="#e3d664"/>
-				<Star class="block group-hover/estrela:hidden"/>
+			<button class="group/estrela mt-3 mr-2 mb-auto ml-auto brightness-125 hover:text-[#e3d664]">
+				<Star class="hidden group-hover/estrela:block" fill="#e3d664" />
+				<Star class="block group-hover/estrela:hidden" />
 			</button>
 		</div>
 	</div>
 	{#if projeto.usuarios.length > 0}
 		<div class="grid gap-2 p-2">
 			{#each projeto.usuarios as usuario}
-				<div class="flex items-center gap-2">
-					<Avatar
-						classes="select-none"
-						size="size-8"
-						src={usuario.ExibeImagem()}
-						name={usuario.nome}
-					/>
-					{usuario.nome}
-				</div>
+				<a href={`/usuario/${usuario.id}`}>
+					<div class="flex items-center gap-2">
+						<Avatar
+							classes="select-none"
+							size="size-8"
+							src={usuario.ExibeImagem()}
+							name={usuario.nome}
+						/>
+						<span class="anchor">
+							{usuario.nome}
+						</span>
+					</div>
+				</a>
 			{/each}
 		</div>
 	{/if}

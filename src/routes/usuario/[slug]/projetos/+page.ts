@@ -5,8 +5,8 @@ import { z } from 'zod';
 
 export const _createProjectSchema = z.object({
     nome: z.string().min(3, "Insira um nome"),
-    descricao: z.string().min(5, "Insira uma descrição"),
-    justificativa: z.string().min(5, "Insira uma Justificativa"),
+    descricao: z.string().min(5, "Insira uma descrição").max(300, "Descrição muito longa"),
+    justificativa: z.string().min(5, "Insira uma Justificativa").max(300, "Justificativa muito longa"),
     tags: z.string().min(2, "Insira Tag").array().min(1, "Insira no mínimo uma Tag")
 });
 
