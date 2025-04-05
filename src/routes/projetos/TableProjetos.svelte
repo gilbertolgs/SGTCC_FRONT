@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BaseTableComponent from '$components/BaseTableComponent.svelte';
+	import TableBaseComponent from '$components/TableBaseComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import ImageComponent from '$components/ImageComponent.svelte';
 	import type Projeto from '$model/Projeto';
@@ -50,7 +50,7 @@
 	</thead>
 {/snippet}
 {#if projetosFiltrados}
-	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={projetosFiltrados.length}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={projetosFiltrados.length}>
 		{#snippet cabecalho()}
 			{@render cabecalhoProjetos()}
 		{/snippet}
@@ -82,9 +82,9 @@
 				</tr>
 			{/each}
 		{/snippet}
-	</BaseTableComponent>
+	</TableBaseComponent>
 {:else}
-	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={1}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1}>
 		{#snippet cabecalho()}
 			{@render cabecalhoProjetos()}
 		{/snippet}
@@ -108,5 +108,5 @@
 				</td>
 			</tr>
 		{/snippet}
-	</BaseTableComponent>
+	</TableBaseComponent>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BaseTableComponent from '$components/BaseTableComponent.svelte';
+	import TableBaseComponent from '$components/TableBaseComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import FormSelectComponent from '$components/FormSelectComponent.svelte';
 	import { EnumPapel, EnumPapelTodosPapeis } from '$model/EnumPapel';
@@ -82,7 +82,7 @@
 	</thead>
 {/snippet}
 {#if usuariosFiltrados}
-	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={usuariosFiltrados.length}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={usuariosFiltrados.length}>
 		{#snippet cabecalho()}
 			{@render cabecalhoUsuarios()}
 		{/snippet}
@@ -111,9 +111,9 @@
 				</tr>
 			{/each}
 		{/snippet}
-	</BaseTableComponent>
+	</TableBaseComponent>
 {:else}
-	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={1}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1}>
 		{#snippet cabecalho()}
 			{@render cabecalhoUsuarios()}
 		{/snippet}
@@ -137,5 +137,5 @@
 				</td>
 			</tr>
 		{/snippet}
-	</BaseTableComponent>
+	</TableBaseComponent>
 {/if}

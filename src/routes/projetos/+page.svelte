@@ -21,6 +21,8 @@
 	}
 	onMount(async () => {
 		await getProjetos();
+
+		openStatePublicar = true;
 	});
 
 	function abrirModal(modal: string, argumentos: any = null) {
@@ -29,7 +31,10 @@
 				projeto = argumentos;
 				openState = !openState;
 				break;
+
 			case 'Publicar':
+				console.log(argumentos);
+				
 				if (argumentos == null) return;
 
 				projeto = argumentos;
@@ -47,7 +52,7 @@
 	<meta name="Página de administrador exibindo projetos" content="Exibindo projetos" />
 </svelte:head>
 
-<PublicarProjeto bind:openState={openStatePublicar} curso={projeto} getCursos={getProjetos} />
+<PublicarProjeto bind:openState={openStatePublicar} {projeto} {getProjetos} />
 
 <div class="grid">
 	<TableProjetos {abrirModal} {getProjetos} {projetos} />
