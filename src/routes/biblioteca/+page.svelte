@@ -8,7 +8,7 @@
 	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
 	import PesquisaProjetoPublico from './PesquisaProjetoPublico.svelte';
 
-	let projetos: Projeto[] = $state([]);
+	let projetos: Projeto[] | null = $state(null);
 
 	onMount(() => {
 		getProjetos(
@@ -25,6 +25,7 @@
 		tipoOrdenacao: EnumTipoOrdenacao,
 		ano: number
 	) {
+		projetos = null;
 		ProjetoRepository.PegarTodosPorFiltro(tipoFiltro, filtro, tipoOrdenacao, ano).then(
 			(resposta) => {
 				projetos = resposta;
@@ -41,10 +42,12 @@
 	/>
 </svelte:head>
 
-<PesquisaProjetoPublico/>
+<div class="m-5 mx-auto md:w-2/3">
+	<PesquisaProjetoPublico {getProjetos} />
+</div>
 
-{#if projetos.length > 0}
+{#if projetos}
 	{#each projetos as projeto}
-		<CardProjetoPublico {projeto}/>
+		<CardProjetoPublico {projeto} />
 	{/each}
 {/if}

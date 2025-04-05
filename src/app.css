@@ -13,9 +13,48 @@
 .preset-input-success {
     background-color: var(--color-success-500);
 }
+
 .preset-input-error {
     border-color: var(--color-error-100);
     background-color: var(--color-error-100);
 }
+
+
+.scrollbar-h-hide {
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.scrollbar-h-hide::-webkit-scrollbar {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+    border: 3px solid #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    /* "auto" or "thin" */
+    scrollbar-color: #888 #f0f0f0;
+    /* thumb and track */
+}
+
 
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type Curso from '$model/Curso';
 	import CursoRepository from '$repository/CursoRepository';
-	import { Grid2X2Plus, Plus } from 'lucide-svelte/icons';
+	import { Plus } from 'lucide-svelte/icons';
 	import { getContext, onMount } from 'svelte';
 	import FormCadastroCurso from './FormCadastroCurso.svelte';
 	import TableCursos from './TableCursos.svelte';
 
 	import Toaster from '$lib/ToastHandler';
-	import ExcluirCurso from './ExcluirCurso.svelte';
 	import { pageName } from '../../stores';
 	import AlterarImagemCurso from './AlterarImagemCurso.svelte';
+	import ExcluirCurso from './ExcluirCurso.svelte';
 
 	const toast = new Toaster(getContext);
 

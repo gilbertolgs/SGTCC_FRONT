@@ -6,13 +6,13 @@ export enum EnumTipoOrdenacao {
 }
 
 export const textoEnumTipoOrdenacao: Record<EnumTipoOrdenacao, string> = {
-    [EnumTipoOrdenacao.MaisAvaliados]: "MaisAvaliados",
-    [EnumTipoOrdenacao.MenosAvaliados]: "MenosAvaliados",
+    [EnumTipoOrdenacao.MaisAvaliados]: "Mais Avaliados",
+    [EnumTipoOrdenacao.MenosAvaliados]: "Menos Avaliados",
     [EnumTipoOrdenacao.Recentes]: "Recentes",
     [EnumTipoOrdenacao.Antigos]: "Antigos",
 };
 
-export const EnumTipoOrdenacaoTodosPapeis = Object.entries(textoEnumTipoOrdenacao).map(([key, label]) => ({
+export const EnumTipoOrdenacaoTodosOrdenacoes = Object.entries(textoEnumTipoOrdenacao).map(([key, label]) => ({
     valor: Number(key),
     label
 }));
