@@ -13,6 +13,14 @@ class ProjetoRepository {
         return projeto;
     }
 
+    async PegarPendentes(): Promise<Projeto[]> {
+        const response = await Api.get(`projetos/pendente`);
+
+        const projeto = response.map(Projeto.CriaDeDados);
+
+        return projeto;
+    }
+
     async PegarTodosPorIdUsuario(idUsuario: number): Promise<Projeto[]> {
         const response = await Api.get(`projetos/porUsuario/${idUsuario}`);
 
@@ -47,6 +55,15 @@ class ProjetoRepository {
         };
 
         const response = await Api.post(`projetos/criarProjeto`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async TornarPublico(idProjeto: number) {
+        const response = await Api.put(`projetos/${idProjeto}/tornarPublico`, null)
             .catch((error) => {
                 throw new Error(error);
             });

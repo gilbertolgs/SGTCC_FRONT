@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BaseTableComponent from '$components/BaseTableComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import FormSelectComponent from '$components/FormSelectComponent.svelte';
 	import { EnumPapel, EnumPapelTodosPapeis } from '$model/EnumPapel';
@@ -71,7 +72,7 @@
 	<button class="btn preset-filled-primary-500 h-10" onclick={pesquisar}>Pesquisar</button>
 </div>
 
-{#snippet cabecalho()}
+{#snippet cabecalhoUsuarios()}
 	<thead>
 		<tr>
 			{#each camposCabecalho as campo}
@@ -81,67 +82,60 @@
 	</thead>
 {/snippet}
 {#if usuariosFiltrados}
-	<div class="table-wrap">
-		<table class="table-striped table">
-			{@render cabecalho()}
-			<tbody class="[&>tr]:hover:preset-tonal-primary">
-				{#each usuariosFiltrados as usuarioAtual}
-					<tr class="even:preset-tonal">
-						<td>{usuarioAtual.id}</td>
-						<td>
-							<a
-								href={`/usuario/${usuarioAtual.id}`}
-								class="inline-flex w-min items-center gap-1 whitespace-nowrap"
-							>
-								<Avatar
-									classes="select-none group-hover:brightness-50"
-									size="size-10"
-									src={usuarioAtual.ExibeImagem()}
-									name={usuarioAtual.nome}
-								/>
-								<span class="anchor">
-									{usuarioAtual.nome}
-								</span>
-							</a>
-						</td>
-						<td>{usuarioAtual.email}</td>
-						<td>{usuarioAtual.ExibePapel()}</td>
-					</tr>
-				{/each}
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan={camposCabecalho.length - 1}>Total</td>
-					<td class="text-right">{usuariosFiltrados.length} Usuários</td>
+	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={usuariosFiltrados.length}>
+		{#snippet cabecalho()}
+			{@render cabecalhoUsuarios()}
+		{/snippet}
+		{#snippet corpo()}
+			{#each usuariosFiltrados as usuarioAtual}
+				<tr class="even:preset-tonal">
+					<td>{usuarioAtual.id}</td>
+					<td>
+						<a
+							href={`/usuario/${usuarioAtual.id}`}
+							class="inline-flex w-min items-center gap-1 whitespace-nowrap"
+						>
+							<Avatar
+								classes="select-none group-hover:brightness-50"
+								size="size-10"
+								src={usuarioAtual.ExibeImagem()}
+								name={usuarioAtual.nome}
+							/>
+							<span class="anchor">
+								{usuarioAtual.nome}
+							</span>
+						</a>
+					</td>
+					<td>{usuarioAtual.email}</td>
+					<td>{usuarioAtual.ExibePapel()}</td>
 				</tr>
-			</tfoot>
-		</table>
-	</div>
-	<!-- {:else if placeholderSkeleton} -->
+			{/each}
+		{/snippet}
+	</BaseTableComponent>
 {:else}
-	<div class="table-wrap">
-		<table class="table-striped table">
-			{@render cabecalho()}
-			<tbody class="[&>tr]:hover:preset-tonal-primary">
-				<tr class="">
-					<td class="">
-						<div class="placeholder animate-pulse"></div>
-					</td>
-					<td class="flex items-center gap-2">
-						<div class="placeholder-circle size-10 animate-pulse"></div>
-						<div class="placeholder h-2 w-full animate-pulse"></div>
-					</td>
-					<td class="">
-						<div class="placeholder animate-pulse"></div>
-					</td>
-					<td class="">
-						<div class="placeholder animate-pulse"></div>
-					</td>
-					<td class="">
-						<div class="placeholder animate-pulse"></div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={1}>
+		{#snippet cabecalho()}
+			{@render cabecalhoUsuarios()}
+		{/snippet}
+		{#snippet corpo()}
+			<tr class="">
+				<td class="">
+					<div class="placeholder animate-pulse"></div>
+				</td>
+				<td class="flex items-center gap-2">
+					<div class="placeholder-circle size-10 animate-pulse"></div>
+					<div class="placeholder h-2 w-full animate-pulse"></div>
+				</td>
+				<td class="">
+					<div class="placeholder animate-pulse"></div>
+				</td>
+				<td class="">
+					<div class="placeholder animate-pulse"></div>
+				</td>
+				<td class="">
+					<div class="placeholder animate-pulse"></div>
+				</td>
+			</tr>
+		{/snippet}
+	</BaseTableComponent>
 {/if}
