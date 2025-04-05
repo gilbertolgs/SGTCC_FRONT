@@ -5,12 +5,12 @@ export enum EnumTipoFiltro {
 }
 
 export const textoEnumTipoFiltro = {
-    [EnumTipoFiltro.NomeUsuario]: "NomeUsuario",
-    [EnumTipoFiltro.NomeProjeto]: "NomeProjeto",
+    [EnumTipoFiltro.NomeUsuario]: "Usuário",
+    [EnumTipoFiltro.NomeProjeto]: "Projeto",
     [EnumTipoFiltro.Tag]: "Tag",
 };
 
-export const EnumTipoFiltroTodosPapeis = Object.entries(textoEnumTipoFiltro).map(([key, label]) => ({
+export const EnumTipoFiltroTodosTipos = Object.entries(textoEnumTipoFiltro).map(([key, label]) => ({
     valor: Number(key),
     label
 }));

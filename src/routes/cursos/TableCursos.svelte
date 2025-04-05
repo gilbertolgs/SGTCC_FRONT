@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Pencil, X as IconX, Trash, ImagePlus } from 'lucide-svelte';
-	import type Usuario from '$model/Usuario';
-	import { EnumPapel, EnumPapelTodosPapeis } from '$model/EnumPapel';
-	import FormSelectComponent from '$components/FormSelectComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
+	import ImageComponent from '$components/ImageComponent.svelte';
+	import { generateRandomCanvas } from '$lib/canvasUtils';
+	import type Curso from '$model/Curso';
+	import { EnumPapelTodosPapeis } from '$model/EnumPapel';
+	import type Usuario from '$model/Usuario';
+	import { ImagePlus, Pencil, Trash } from 'lucide-svelte';
 
 	let { abrirModal, getCursos, cursos, curso = $bindable(), papelBusca = $bindable() } = $props();
 
@@ -40,7 +41,7 @@
 		erros={null}
 		constraints={[]}
 	/>
-	<button class="btn preset-filled-primary-500 h-10" onclick={pesquisar}>Pesquisar</button>
+	<button class="btn preset-filled-primary-500 mt-auto" onclick={pesquisar}>Pesquisar</button>
 </div>
 
 {#snippet cabecalho()}
@@ -65,38 +66,40 @@
 								href={`perfil/${cursoAtual.id}`}
 								class="inline-flex w-min items-center gap-1 whitespace-nowrap"
 							>
-								<img class="min-w-26 rounded" src={cursoAtual.ExibeImagem()} alt="" />
+								<ImageComponent objeto={cursoAtual} />
 								<span class="anchor">
 									{cursoAtual.nome}
 								</span>
 							</a>
 						</td>
 						<td>{cursoAtual.descricao}</td>
-						<td class="grid grid-flow-col gap-2">
-							<button
-								class="btn preset-filled-success-500"
-								onclick={() => {
-									abrirModal('Insert', cursoAtual);
-								}}
-							>
-								<Pencil /> Editar
-							</button>
-							<button
-								class="btn preset-filled-warning-500"
-								onclick={() => {
-									abrirModal('Imagem', cursoAtual);
-								}}
-							>
-								<ImagePlus /> Editar Imagem
-							</button>
-							<button
-								class="btn preset-filled-error-500"
-								onclick={() => {
-									abrirModal('Delete', cursoAtual);
-								}}
-							>
-								<Trash /> Excluir
-							</button>
+						<td>
+							<div class="grid grid-flow-col gap-2">
+								<button
+									class="btn preset-filled-success-500"
+									onclick={() => {
+										abrirModal('Insert', cursoAtual);
+									}}
+								>
+									<Pencil /> Editar
+								</button>
+								<button
+									class="btn preset-filled-warning-500"
+									onclick={() => {
+										abrirModal('Imagem', cursoAtual);
+									}}
+								>
+									<ImagePlus /> Editar Imagem
+								</button>
+								<button
+									class="btn preset-filled-error-500"
+									onclick={() => {
+										abrirModal('Delete', cursoAtual);
+									}}
+								>
+									<Trash /> Excluir
+								</button>
+							</div>
 						</td>
 					</tr>
 				{/each}
