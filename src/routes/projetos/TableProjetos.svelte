@@ -2,29 +2,26 @@
 	import BaseTableComponent from '$components/BaseTableComponent.svelte';
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import ImageComponent from '$components/ImageComponent.svelte';
-	import type Curso from '$model/Curso';
-	import { EnumPapelTodosPapeis } from '$model/EnumPapel';
-	import { ImagePlus, Pencil, Trash } from 'lucide-svelte';
+	import type Projeto from '$model/Projeto';
+	import { Globe } from 'lucide-svelte';
 
-	let { abrirModal, getCursos, cursos, curso = $bindable(), papelBusca = $bindable() } = $props();
+	let { abrirModal, getProjetos, projetos, papelBusca = $bindable() } = $props();
 
-	let papeis = $state(EnumPapelTodosPapeis);
-
-	let cursosFiltrados = $derived(cursos);
+	let projetosFiltrados = $derived(projetos);
 
 	let pesquisa = $state({
-		nomeCurso: ''
+		nomeProjeto: ''
 	});
 
 	async function pesquisar() {
-		await getCursos();
+		await getProjetos();
 
-		const txtNomeCurso = pesquisa.nomeCurso.toLowerCase().trim();
-		if (txtNomeCurso == '') {
-			cursosFiltrados = cursos;
+		const txtNomeProjeto = pesquisa.nomeProjeto.toLowerCase().trim();
+		if (txtNomeProjeto == '') {
+			projetosFiltrados = projetos;
 		} else {
-			cursosFiltrados = cursosFiltrados.filter((cursoFiltrado: Curso) =>
-				cursoFiltrado.nome.toLowerCase().includes(txtNomeCurso)
+			projetosFiltrados = projetosFiltrados.filter((projetoFiltrado: Projeto) =>
+				projetoFiltrado.nome.toLowerCase().includes(txtNomeProjeto)
 			);
 		}
 	}
@@ -36,14 +33,14 @@
 		label="Nome"
 		placeholder="nome"
 		tipo="text"
-		bind:valor={pesquisa.nomeCurso}
+		bind:valor={pesquisa.nomeProjeto}
 		erros={null}
 		constraints={[]}
 	/>
 	<button class="btn preset-filled-primary-500 mt-auto" onclick={pesquisar}>Pesquisar</button>
 </div>
 
-{#snippet cabecalhoCursos()}
+{#snippet cabecalhoProjetos()}
 	<thead>
 		<tr>
 			{#each camposCabecalho as campo}
@@ -52,49 +49,33 @@
 		</tr>
 	</thead>
 {/snippet}
-{#if cursosFiltrados}
-	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={cursosFiltrados.length}>
+{#if projetosFiltrados}
+	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={projetosFiltrados.length}>
 		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
+			{@render cabecalhoProjetos()}
 		{/snippet}
 		{#snippet corpo()}
-			{#each cursosFiltrados as cursoAtual}
+			{#each projetosFiltrados as projetoAtual}
 				<tr class="even:preset-tonal">
-					<td>{cursoAtual.id}</td>
+					<td>{projetoAtual.id}</td>
 					<td>
 						<span class="inline-flex w-min items-center gap-1 whitespace-nowrap">
-							<ImageComponent objeto={cursoAtual} />
+							<ImageComponent objeto={projetoAtual} />
 							<span>
-								{cursoAtual.nome}
+								{projetoAtual.nome}
 							</span>
 						</span>
 					</td>
-					<td>{cursoAtual.descricao}</td>
+					<td>{projetoAtual.descricao}</td>
 					<td>
 						<div class="grid grid-flow-col gap-2">
 							<button
 								class="btn preset-filled-success-500"
 								onclick={() => {
-									abrirModal('Insert', cursoAtual);
+									abrirModal('Insert', projetoAtual);
 								}}
 							>
-								<Pencil /> Editar
-							</button>
-							<button
-								class="btn preset-filled-warning-500"
-								onclick={() => {
-									abrirModal('Imagem', cursoAtual);
-								}}
-							>
-								<ImagePlus /> Editar Imagem
-							</button>
-							<button
-								class="btn preset-filled-error-500"
-								onclick={() => {
-									abrirModal('Delete', cursoAtual);
-								}}
-							>
-								<Trash /> Excluir
+								<Globe /> Publicar
 							</button>
 						</div>
 					</td>
@@ -105,7 +86,7 @@
 {:else}
 	<BaseTableComponent {camposCabecalho} arrObjetosTamanho={1}>
 		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
+			{@render cabecalhoProjetos()}
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">

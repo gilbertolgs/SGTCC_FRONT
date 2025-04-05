@@ -13,7 +13,7 @@ export class NavigationLinks {
         }
         switch (this.usuario.papel) {
             case EnumPapel.Admin:
-                return this.LinksAdmin(this.usuario.id);
+                return this.LinksAdmin();
 
             case EnumPapel.Aluno:
                 return this.LinksAluno(this.usuario.id);
@@ -40,11 +40,12 @@ export class NavigationLinks {
         ];
     }
 
-    private LinksAdmin(idUsuario: number) {
+    private LinksAdmin() {
         return [
             { label: 'Biblioteca', href: '/biblioteca' },
             { label: 'Cursos', href: '/cursos' },
             { label: 'Usuários', href: '/usuarios' },
+            { label: 'Projetos', href: '/projetos' },
             { label: 'Documento', href: '/documento' },
         ];
     }
