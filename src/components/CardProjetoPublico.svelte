@@ -58,9 +58,9 @@
 		/>
 	</div>
 	<div class="grid items-center justify-between overflow-hidden p-4">
-		<a href={`/projeto/${projeto.id}`} class="anchor mb-auto font-bold">
+		<span class="mb-auto font-bold">
 			{projeto.nome}
-		</a>
+		</span>
 		{#if projeto.usuarios.length > 0}
 			<div class="grid max-h-20 gap-2 overflow-y-auto">
 				{#each projeto.usuarios as usuario}
