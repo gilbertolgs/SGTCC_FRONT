@@ -56,18 +56,18 @@
 </script>
 
 {#if projeto}
-	<div class="grid items-center justify-items-center">
+	<div class="md:grid items-center justify-items-center">
 		<div class="relative flex w-full justify-center">
 			<img
 				src={imagemProjeto}
 				alt="Imagem do Projeto"
-				class="w-full rounded-xl inset-shadow-sm md:w-1/2"
+				class="rounded-xl inset-shadow-sm md:w-1/2"
 			/>
 			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">
 				{projeto.nome}
 			</div>
 		</div>
-		<div class="md:m-2 md:w-3/4">
+		<div class="md:m-2 md:w-3/4 w-full">
 			<Tabs
 				listJustify="justify-between"
 				value={abaAtual}
@@ -75,16 +75,24 @@
 			>
 				{#snippet list()}
 					<Tabs.Control value="informacoes">
-						<span class="flex items-center gap-2"><Info />Informações</span>
+						<span class="flex items-center md:gap-2"><Info />
+						<span class="md:block hidden">Informações</span>
+						</span>
 					</Tabs.Control>
 					<Tabs.Control value="participantes">
-						<span class="flex items-center gap-2"><Users />Participantes</span>
+						<span class="flex items-center md:gap-2"><Users />
+						<span class="md:block hidden">Participantes</span>
+						</span>
 					</Tabs.Control>
 					<Tabs.Control value="atividades">
-						<span class="flex items-center gap-2"><ListTodo />Atividades</span>
+						<span class="flex items-center md:gap-2"><ListTodo />
+						<span class="md:block hidden">Atividades</span>
+						</span>
 					</Tabs.Control>
 					<Tabs.Control value="arquivos">
-						<span class="flex items-center gap-2"><FolderOpen />Arquivos</span>
+						<span class="flex items-center md:gap-2"><FolderOpen />
+						<span class="md:block hidden">Arquivos</span>
+						</span>
 					</Tabs.Control>
 				{/snippet}
 				{#snippet content()}
