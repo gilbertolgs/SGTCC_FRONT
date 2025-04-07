@@ -3,7 +3,13 @@
 	import type Projeto from '$model/Projeto.js';
 	import CursoRepository from '$repository/CursoRepository.js';
 	import ProjetoRepository from '$repository/ProjetoRepository.js';
+	import { Tabs } from '@skeletonlabs/skeleton-svelte';
+	import { FolderOpen, Info, ListTodo, Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import Informacoes from './components/Informacoes.svelte';
+	import Participantes from './components/Participantes.svelte';
+	import Atividades from './components/Atividades.svelte';
+	import Arquivos from './components/Arquivos.svelte';
 
 	let { data } = $props();
 
@@ -45,8 +51,49 @@
 
 		defineImagem(projeto);
 	});
+
+	let abaAtual = $state('informacoes');
 </script>
 
 {#if projeto}
-	<img src={imagemProjeto} alt="" />
+	<div class="grid items-center justify-items-center">
+		<div class="relative flex w-full justify-center">
+			<img
+				src={imagemProjeto}
+				alt="Imagem do Projeto"
+				class="w-full rounded-xl inset-shadow-sm md:w-1/2"
+			/>
+			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">
+				{projeto.nome}
+			</div>
+		</div>
+		<div class="md:m-2 md:w-3/4">
+			<Tabs
+				listJustify="justify-between"
+				value={abaAtual}
+				onValueChange={(e) => (abaAtual = e.value)}
+			>
+				{#snippet list()}
+					<Tabs.Control value="informacoes">
+						<span class="flex items-center gap-2"><Info />Informações</span>
+					</Tabs.Control>
+					<Tabs.Control value="participantes">
+						<span class="flex items-center gap-2"><Users />Participantes</span>
+					</Tabs.Control>
+					<Tabs.Control value="atividades">
+						<span class="flex items-center gap-2"><ListTodo />Atividades</span>
+					</Tabs.Control>
+					<Tabs.Control value="arquivos">
+						<span class="flex items-center gap-2"><FolderOpen />Arquivos</span>
+					</Tabs.Control>
+				{/snippet}
+				{#snippet content()}
+					<Tabs.Panel value="informacoes"><Informacoes {projeto} /></Tabs.Panel>
+					<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
+					<Tabs.Panel value="atividades"><Atividades {projeto} /></Tabs.Panel>
+					<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
+				{/snippet}
+			</Tabs>
+		</div>
+	</div>
 {/if}

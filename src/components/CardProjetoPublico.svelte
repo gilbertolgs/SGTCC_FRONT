@@ -91,7 +91,7 @@
 		{/if}
 	</div>
 	<div class="m-2 flex flex-col">
-		<span class="text-xl break-normal opacity-70">{projeto.descricao}</span>
+		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
 		<button class="btn preset-filled-secondary-500 mt-auto">
 			<Download />
 			Baixar PDF</button

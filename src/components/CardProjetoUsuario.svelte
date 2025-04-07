@@ -36,7 +36,7 @@
 					return imagem;
 				}
 
-				imagem = imagemGerada.imageUrl;
+				imagem = imagemGerada.imageUrl;				
 			});
 		});
 	}
