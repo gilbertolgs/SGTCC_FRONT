@@ -28,7 +28,9 @@
 	onMount(async () => {
 		usuario = await UsuarioRepository.PegarPorId(idUsuario);
 
-		projetos = await ProjetoRepository.PegarTodosPorIdUsuario(idUsuario);
+		if (usuarioLogado && usuario.id === usuarioLogado.id) {
+			projetos = await ProjetoRepository.PegarTodosPorIdUsuario(idUsuario);
+		}
 	});
 </script>
 
@@ -42,7 +44,7 @@
 </div>
 
 {#if projetos && usuario}
-	<div class="preset-tonal rounded md:m-5 grid md:grid-cols-3 gap-2 p-3">
+	<div class="preset-tonal grid gap-2 rounded p-3 md:m-5 md:grid-cols-3">
 		{#each projetos as projeto}
 			<CardProjetoUsuario {projeto} {usuario} />
 		{/each}

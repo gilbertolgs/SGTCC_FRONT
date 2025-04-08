@@ -131,7 +131,7 @@
 	</div>
 {/if}
 
-{#snippet cabecalhoCursos()}
+{#snippet cabecalhoArquivos()}
 	<thead>
 		<tr>
 			{#each camposCabecalho as campo}
@@ -147,7 +147,7 @@
 		labelObjeto="Arquivos, {tamanhoTotal} Utilizados"
 	>
 		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
+			{@render cabecalhoArquivos()}
 		{/snippet}
 		{#snippet corpo()}
 			{#if arquivos}
@@ -179,7 +179,7 @@
 		labelObjeto="Arquivos, {tamanhoTotal} Utilizados"
 	>
 		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
+			{@render cabecalhoArquivos()}
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">

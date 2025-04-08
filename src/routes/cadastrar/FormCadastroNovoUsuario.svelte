@@ -34,7 +34,13 @@
 
 	async function RealizarCadastro(nome: string, email: string, curso: number, senha: string) {
 		try {
-			const response = await UsuarioRepository.CriarUsuario(curso, nome, email, senha, EnumPapel.Aluno)
+			const response = await UsuarioRepository.CriarUsuario(
+				curso,
+				nome,
+				email,
+				senha,
+				EnumPapel.Aluno
+			);
 			toast.triggerSuccess('Usuário cadastrado com sucesso!');
 			goto('/login');
 		} catch (error) {
@@ -79,9 +85,11 @@
 				constraints={$constraints.curso}
 			>
 				{#snippet opcoes()}
-					{#each cursos as curso}
-						<option value={curso.id}>{curso.nome}</option>
-					{/each}
+					{#if cursos}
+						{#each cursos as curso}
+							<option value={curso.id}>{curso.nome}</option>
+						{/each}
+					{/if}
 				{/snippet}
 			</FormSelectComponent>
 		{/if}

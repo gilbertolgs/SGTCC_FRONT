@@ -1,4 +1,5 @@
 import FileHandler from "$lib/FileHandler";
+import { textoEnumFuncaoUsuario, type EnumFuncaoUsuario } from "./EnumFuncaoUsuario";
 import { textoEnumPapel, type EnumPapel } from "./EnumPapel";
 import Imagem from "./Imagem";
 
@@ -11,6 +12,7 @@ class Usuario {
   papel: EnumPapel;
   imagem: Imagem | null;
   nomeCurso: string | null;
+  funcao: EnumFuncaoUsuario | null;
 
   ExibeImagem() {
     return FileHandler.ExibeImagem(this.imagem);
@@ -18,6 +20,14 @@ class Usuario {
 
   ExibePapel() {
     return textoEnumPapel[this.papel];
+  }
+
+  ExibeFuncao() {
+    if (this.funcao) {
+
+      return textoEnumFuncaoUsuario[this.funcao];
+    }
+    return '-';
   }
 
   constructor(
@@ -29,6 +39,7 @@ class Usuario {
     papel: EnumPapel,
     imagem: Imagem | null = null,
     nomeCurso: string | null = null,
+    funcao: EnumFuncaoUsuario | null = null,
   ) {
     this.id = id;
     this.idCurso = idCurso;
@@ -38,10 +49,11 @@ class Usuario {
     this.papel = papel;
     this.imagem = imagem;
     this.nomeCurso = nomeCurso;
+    this.funcao = funcao;
   }
 
   static CriaDeDados(data: Usuario): Usuario {
-    return new Usuario(data.id, data.idCurso, data.nome, data.email, data.senha, data.papel, data.imagem, data.nomeCurso);
+    return new Usuario(data.id, data.idCurso, data.nome, data.email, data.senha, data.papel, data.imagem, data.nomeCurso, data.funcao);
   }
 }
 

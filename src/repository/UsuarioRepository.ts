@@ -56,6 +56,14 @@ class UsuarioRepository {
         return usuario;
     }
 
+    async PegarTodosPorProjeto(idProjeto: number): Promise<Usuario[]> {
+        const response = await Api.get(`usuarios/${idProjeto}/usuarioPorProjeto`);
+
+        const usuario = response.map(Usuario.CriaDeDados);
+
+        return usuario;
+    }
+
     async CriarUsuario(idCurso: number, nome: string, email: string, senha: string, papel: EnumPapel) {
         const data = {
             "idCurso": idCurso,

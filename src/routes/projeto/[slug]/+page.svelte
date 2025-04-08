@@ -46,11 +46,15 @@
 	}
 
 	onMount(async () => {
-		projeto = await ProjetoRepository.PegarPorId(idProjeto);
+		await getProjeto();
 		console.log(projeto);
+	});
+
+	async function getProjeto() {
+		projeto = await ProjetoRepository.PegarPorId(idProjeto);
 
 		defineImagem(projeto);
-	});
+	}
 
 	let abaAtual = $state('informacoes');
 </script>
@@ -101,7 +105,7 @@
 				{/snippet}
 				{#snippet content()}
 					{#if projeto}
-						<Tabs.Panel value="informacoes"><Informacoes {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="informacoes"><Informacoes {projeto} {getProjeto} /></Tabs.Panel>
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="atividades"><Atividades {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
