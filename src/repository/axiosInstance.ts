@@ -32,6 +32,18 @@ class ApiClient {
     }
   }
 
+  async getBlob(endpoint: string, params?: any) {
+    try {
+      const response = await this.instance.get(endpoint, {
+        responseType: 'blob',
+        params
+      });
+      return response;
+    } catch (error: any) {
+      this.errorHandler(error);
+    }
+  }
+
   async post(endpoint: string, data: any, config: AxiosRequestConfig<any> | undefined = undefined) {
     try {
       const response = await this.instance.post(endpoint, data, config);

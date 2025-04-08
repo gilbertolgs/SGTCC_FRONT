@@ -82,7 +82,7 @@
 	</thead>
 {/snippet}
 {#if usuariosFiltrados}
-	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={usuariosFiltrados.length}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={usuariosFiltrados.length} labelObjeto="Usuários">
 		{#snippet cabecalho()}
 			{@render cabecalhoUsuarios()}
 		{/snippet}
@@ -113,7 +113,7 @@
 		{/snippet}
 	</TableBaseComponent>
 {:else}
-	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1} labelObjeto="Usuários">
 		{#snippet cabecalho()}
 			{@render cabecalhoUsuarios()}
 		{/snippet}

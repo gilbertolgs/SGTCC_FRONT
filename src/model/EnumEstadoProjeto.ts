@@ -1,20 +1,18 @@
-enum Estado {
-    Aluno = 1,
-    Professor = 2,
-    Admin = 3
+export enum EnumEstadoProjeto {
+    Criado = 0,
+    EmProgresso = 1,
+    Cancelado = 2,
+    Finalizado = 3
 }
 
-function PegarEstadoProjeto(estado: Estado): string {
-    switch (estado) {
-        case Estado.Aluno:
-            return 'Aluno';
-        case Estado.Professor:
-            return 'Professor';
-        case Estado.Admin:
-            return 'Administrador';
-        default:
-            return 'Sem Papel';
-    }
-}
+export const textoEnumEstadoProjeto: Record<EnumEstadoProjeto, string> = {
+    [EnumEstadoProjeto.Criado]: "Criado",
+    [EnumEstadoProjeto.EmProgresso]: "Em Progresso",
+    [EnumEstadoProjeto.Cancelado]: "Cancelado",
+    [EnumEstadoProjeto.Finalizado]: "Finalizado",
+};
 
-export default PegarEstadoProjeto;
+export const EnumEstadoProjetoTodosPapeis = Object.entries(textoEnumEstadoProjeto).map(([key, label]) => ({
+    valor: Number(key),
+    label
+}));

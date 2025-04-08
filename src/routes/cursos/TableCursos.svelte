@@ -53,7 +53,7 @@
 	</thead>
 {/snippet}
 {#if cursosFiltrados}
-	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={cursosFiltrados.length}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={cursosFiltrados.length} labelObjeto="Cursos">
 		{#snippet cabecalho()}
 			{@render cabecalhoCursos()}
 		{/snippet}
@@ -103,7 +103,7 @@
 		{/snippet}
 	</TableBaseComponent>
 {:else}
-	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1}>
+	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1} labelObjeto="Cursos">
 		{#snippet cabecalho()}
 			{@render cabecalhoCursos()}
 		{/snippet}

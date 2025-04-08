@@ -29,7 +29,7 @@
 	</script>
 </svelte:head>
 
-<div class="grid gap-1">
+<div class="flex gap-1">
 	<div class="">
 		{#if globalMode == 'light'}
 			<Sun />

@@ -44,7 +44,7 @@
 
 		<div class="mb-4">
 			<span class="text-surface-700-300 font-bold">Estado:</span>
-			<p class="">{projeto.estado}</p>
+			<p class="">{projeto.ExibeStatus()}</p>
 		</div>
 	</div>
 	<div class="m-2 grid h-1/2 gap-2">

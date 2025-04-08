@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { camposCabecalho, arrObjetosTamanho, cabecalho, corpo } = $props();
+	let { camposCabecalho, arrObjetosTamanho, labelObjeto, cabecalho, corpo } = $props();
 </script>
 
 <div class="table-wrap">
@@ -11,7 +11,7 @@
 		<tfoot>
 			<tr>
 				<td colspan={camposCabecalho.length - 1}>Total</td>
-				<td class="text-right">{arrObjetosTamanho} Cursos</td>
+				<td class="text-right">{arrObjetosTamanho} {labelObjeto}</td>
 			</tr>
 		</tfoot>
 	</table>

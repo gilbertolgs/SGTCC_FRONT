@@ -22,6 +22,17 @@ class FileHandler {
         }
         return imagem;
     }
+
+    FormataArquivoBaixado(response: any) {
+        const contentDisposition = response.headers['content-disposition'];
+        // const fileName = contentDisposition
+        //     ? contentDisposition.split('filename=')[1]
+        //     : nomeArquivo;
+        
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+        return blob
+    }
 }
 
 export default new FileHandler();

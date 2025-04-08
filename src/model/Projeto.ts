@@ -1,4 +1,5 @@
 import FileHandler from "$lib/FileHandler";
+import { textoEnumEstadoProjeto, type EnumEstadoProjeto } from "./EnumEstadoProjeto";
 import type Imagem from "./Imagem";
 import Tag from "./Tag";
 import Usuario from "./Usuario";
@@ -14,7 +15,7 @@ class Projeto {
   imagem: Imagem | null;
   tags: Tag[];
   usuarios: Usuario[];
-  estado: number;
+  estado: EnumEstadoProjeto;
 
   constructor(
     id: number,
@@ -22,7 +23,7 @@ class Projeto {
     nome: string,
     descricao: string,
     justificativa: string,
-    estado: number,
+    estado: EnumEstadoProjeto,
     dataInicio: string = "",
     imagem: Imagem | null = null,
     tags: Tag[] = [],
@@ -54,6 +55,10 @@ class Projeto {
 
   ExibeImagem() {
     return FileHandler.ExibeImagem(this.imagem);
+  }
+
+  ExibeStatus() {
+    return textoEnumEstadoProjeto[this.estado]
   }
 }
 

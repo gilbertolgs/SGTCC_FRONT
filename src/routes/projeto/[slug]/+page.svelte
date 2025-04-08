@@ -56,7 +56,7 @@
 </script>
 
 {#if projeto}
-	<div class="md:grid items-center justify-items-center">
+	<div class="items-center justify-items-center md:grid">
 		<div class="relative flex w-full justify-center">
 			<img
 				src={imagemProjeto}
@@ -67,7 +67,7 @@
 				{projeto.nome}
 			</div>
 		</div>
-		<div class="md:m-2 md:w-3/4 w-full">
+		<div class="w-full md:m-2 md:w-3/4">
 			<Tabs
 				listJustify="justify-between"
 				value={abaAtual}
@@ -75,31 +75,37 @@
 			>
 				{#snippet list()}
 					<Tabs.Control value="informacoes">
-						<span class="flex items-center md:gap-2"><Info />
-						<span class="md:block hidden">Informações</span>
+						<span class="flex items-center md:gap-2"
+							><Info />
+							<span class="hidden md:block">Informações</span>
 						</span>
 					</Tabs.Control>
 					<Tabs.Control value="participantes">
-						<span class="flex items-center md:gap-2"><Users />
-						<span class="md:block hidden">Participantes</span>
+						<span class="flex items-center md:gap-2"
+							><Users />
+							<span class="hidden md:block">Participantes</span>
 						</span>
 					</Tabs.Control>
 					<Tabs.Control value="atividades">
-						<span class="flex items-center md:gap-2"><ListTodo />
-						<span class="md:block hidden">Atividades</span>
+						<span class="flex items-center md:gap-2"
+							><ListTodo />
+							<span class="hidden md:block">Atividades</span>
 						</span>
 					</Tabs.Control>
 					<Tabs.Control value="arquivos">
-						<span class="flex items-center md:gap-2"><FolderOpen />
-						<span class="md:block hidden">Arquivos</span>
+						<span class="flex items-center md:gap-2"
+							><FolderOpen />
+							<span class="hidden md:block">Arquivos</span>
 						</span>
 					</Tabs.Control>
 				{/snippet}
 				{#snippet content()}
-					<Tabs.Panel value="informacoes"><Informacoes {projeto} /></Tabs.Panel>
-					<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
-					<Tabs.Panel value="atividades"><Atividades {projeto} /></Tabs.Panel>
-					<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
+					{#if projeto}
+						<Tabs.Panel value="informacoes"><Informacoes {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="atividades"><Atividades {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
+					{/if}
 				{/snippet}
 			</Tabs>
 		</div>
