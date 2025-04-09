@@ -98,7 +98,7 @@
 			<Tabs
 				listJustify="justify-between"
 				value={abaAtual}
-				onValueChange={(e) => (handleTabChange(e.value))}
+				onValueChange={(e) => handleTabChange(e.value)}
 			>
 				{#snippet list()}
 					<Tabs.Control value="informacoes">
@@ -128,7 +128,9 @@
 				{/snippet}
 				{#snippet content()}
 					{#if projeto}
-						<Tabs.Panel value="informacoes"><Informacoes {projeto} {getProjeto} /></Tabs.Panel>
+						<Tabs.Panel value="informacoes"
+							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
+						>
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="atividades"><Atividades {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>

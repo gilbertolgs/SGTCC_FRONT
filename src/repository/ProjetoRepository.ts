@@ -5,6 +5,7 @@ import type { EnumTipoFiltro } from "$model/EnumTipoFiltro";
 import type { EnumTipoOrdenacao } from "$model/EnumTipoOrdenacao";
 import Projeto from "$model/Projeto";
 import type Usuario from "$model/Usuario";
+import { number } from "zod";
 import Api from "./axiosInstance";
 
 class ProjetoRepository {
@@ -58,6 +59,23 @@ class ProjetoRepository {
         };
 
         const response = await Api.post(`projetos/criarProjeto`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async AlterarProjeto(idProjeto: number, nome: string, descricao: string, justificativa: string, tags: string[]) {
+        const data = {
+            id: idProjeto,
+            nome: nome,
+            descricao: descricao,
+            justificativa: justificativa,
+            tags: tags.map(tag => ({ nome: tag }))
+        };
+
+        const response = await Api.put(`projetos/${idProjeto}/atualizarProjeto`, data)
             .catch((error) => {
                 throw new Error(error);
             });

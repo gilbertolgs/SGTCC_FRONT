@@ -8,18 +8,23 @@
 	import { Check, X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import AlterarImagemProjeto from './AlterarImagemProjeto.svelte';
+	import FormAlterarProjeto from './FormAlterarProjeto.svelte';
+	import { storeLogin } from '../../../../stores';
+	import type LoggedUser from '$model/LoggedUser';
 
 	const toast = new Toaster(getContext);
 
 	interface Props {
 		projeto: Projeto;
 		getProjeto: Function;
+		data: any;
 	}
-	let { projeto, getProjeto }: Props = $props();
+	let { projeto, getProjeto, data }: Props = $props();
 
 	let openStateFinalizar = $state(false);
 	let openStateCancelar = $state(false);
 	let openStateImagem = $state(false);
+	let openStateAlterar = $state(false);
 
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
@@ -32,9 +37,39 @@
 			case 'Imagem':
 				openStateImagem = !openStateImagem;
 				break;
+			case 'Alterar':
+				openStateAlterar = !openStateAlterar;
+				break;
 
 			default:
 				break;
+		}
+	}
+
+	async function alterarProjeto(
+		idProjeto: number,
+		nome: string,
+		descricao: string,
+		justificativa: string,
+		tags: string[]
+	) {
+		console.log('tags', tags);
+
+		try {
+			const response = await ProjetoRepository.AlterarProjeto(
+				idProjeto,
+				nome,
+				descricao,
+				justificativa,
+				tags
+			);
+			openStateAlterar = false;
+			toast.triggerSuccess('Projeto alterado com sucesso!');
+			await getProjeto();
+		} catch (error) {
+			openStateAlterar = false;
+			toast.triggerError('Ocorreu um erro ao tentar alterar projeto!');
+			console.log(error);
 		}
 	}
 
@@ -78,6 +113,12 @@
 />
 
 <AlterarImagemProjeto bind:openState={openStateImagem} {projeto} {getProjeto} />
+<FormAlterarProjeto
+	AlterarCadastro={alterarProjeto}
+	bind:openState={openStateAlterar}
+	{projeto}
+	{data}
+/>
 
 <div class="grid justify-center md:flex">
 	<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
@@ -119,7 +160,12 @@
 	</div>
 	{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
 		<div class="m-2 grid h-1/2 gap-2">
-			<button class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button>
+			<button
+				onclick={() => {
+					abrirModal('Alterar');
+				}}
+				class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button
+			>
 			<button
 				onclick={() => {
 					abrirModal('Imagem');
