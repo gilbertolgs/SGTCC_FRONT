@@ -12,9 +12,7 @@
 	}
 
 	async function defineImagem(imgOriginal: string, idObjeto: number) {
-		console.log(objeto.nome);
 		if (imagemExiste(imgOriginal)) {
-			console.log('caiu aki');
 			return imgOriginal;
 		}
 

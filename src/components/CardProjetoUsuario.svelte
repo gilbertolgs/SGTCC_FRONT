@@ -22,8 +22,6 @@
 	}
 
 	function defineImagem() {
-		console.log('teste', imagemProjeto);
-		
 		if (imagemExiste(imagemProjeto)) {
 			return imagemProjeto;
 		}

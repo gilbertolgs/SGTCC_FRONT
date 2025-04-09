@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { Popover, Avatar } from '@skeletonlabs/skeleton-svelte';
-
-	import { ChevronsUpDown, CircleUser, LogOut, X as IconX } from 'lucide-svelte';
-
 	import type LoggedUser from '$model/LoggedUser';
 	import Usuario from '$model/Usuario';
+	import { Avatar, Popover } from '@skeletonlabs/skeleton-svelte';
+	import { ChevronsUpDown, CircleUser, X as IconX, LogOut } from 'lucide-svelte';
 
 	let openState = $state(false);
 
@@ -14,13 +12,14 @@
 
 	interface Props {
 		usuarioLogado: LoggedUser | null;
+		imagemDoUsuairo: string | undefined;
 	}
 
-	let { usuarioLogado }: Props = $props();
+	let { usuarioLogado, imagemDoUsuairo }: Props = $props();
 </script>
 
 {#snippet nomeUsuario(usuario: LoggedUser | Usuario)}
-	<Avatar classes="select-none" src={usuario.ExibeImagem()} name={usuario.nome} />
+	<Avatar classes="select-none" src={imagemDoUsuairo} name={usuario.nome} />
 	<span class="text-xl font-bold">{usuario.nome}</span>
 {/snippet}
 
@@ -35,7 +34,7 @@
 		onOpenChange={(e) => (openState = e.open)}
 		positioning={{ placement: 'top' }}
 		triggerBase="btn preset-tonal"
-		contentBase="card bg-surface-200-800 p-4 space-y-4 max-w-[320px]"
+		contentBase="card bg-surface-200-800 p-4 space-y-4 max-w-[320px] mt-5"
 	>
 		{#snippet trigger()}
 			{@render nomeUsuario(usuarioLogado)}

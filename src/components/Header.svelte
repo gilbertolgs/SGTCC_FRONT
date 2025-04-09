@@ -1,20 +1,27 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { storeLogin } from '../stores';
-
 	import LogoMono from '$images/LogoMono.svelte';
 	import { NavigationLinks } from '$lib/Navigation';
 	import type LoggedUser from '$model/LoggedUser';
-
+	import { storeLogin } from '../stores';
+	import HeaderMobile from './HeaderMobile.svelte';
 	import LightSwitch from './LightSwitch.svelte';
 	import PerfilHeader from './PerfilHeader.svelte';
-	import HeaderMobile from './HeaderMobile.svelte';
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+	//Gambiarra pro Typescript não reclamar
+	let imagemDoUsuairo: string = $derived(
+		(usuarioLogado as LoggedUser | null)?.ExibeImagem?.() ?? ''
+	);
 
 	storeLogin.subscribe((value) => {
 		usuarioLogado = value;
+
+		if (usuarioLogado) {
+			imagemDoUsuairo = usuarioLogado.ExibeImagem();
+		}
 	});
+
 	let links = $derived(new NavigationLinks(usuarioLogado).PegarLinks());
 </script>
 
@@ -63,7 +70,7 @@
 		</div>
 		<div class="grid grid-flow-col items-center gap-1">
 			<LightSwitch />
-			<PerfilHeader {usuarioLogado} />
+			<PerfilHeader {usuarioLogado} {imagemDoUsuairo} />
 		</div>
 	</section>
 </header>
