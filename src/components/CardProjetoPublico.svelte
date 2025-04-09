@@ -51,7 +51,7 @@
 	class="card group m-2 mx-auto flex w-full border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
 >
 	<div class="m-2 overflow-hidden">
-		<img src={imagem} alt="Imagem do Projeto" class="rounded-xl md:min-w-30" />
+		<img src={imagem} alt="Imagem do Projeto" class="rounded-xl md:min-w-[300px]" />
 	</div>
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">

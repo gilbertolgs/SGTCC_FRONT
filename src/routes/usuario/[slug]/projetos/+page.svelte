@@ -51,7 +51,6 @@
 		justificativa: string,
 		tags: string[]
 	) {
-		console.log('tags', tags);
 		try {
 			if (usuarioLogado) {
 				const response = await ProjetoRepository.CriarProjeto(usuarioLogado.id, usuarioLogado.idCurso, nome, descricao, justificativa, tags);

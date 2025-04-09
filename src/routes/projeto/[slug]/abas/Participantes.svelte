@@ -75,7 +75,7 @@
 	}
 </script>
 
-<div class="m-2 flex gap-3">
+<div class="m-2 flex gap-3 mt-10">
 	<FormInputComponent
 		label="Email"
 		placeholder="email"

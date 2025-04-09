@@ -6,10 +6,10 @@
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 	import { FolderOpen, Info, ListTodo, Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import Informacoes from './components/Informacoes.svelte';
-	import Participantes from './components/Participantes.svelte';
-	import Atividades from './components/Atividades.svelte';
-	import Arquivos from './components/Arquivos.svelte';
+	import Informacoes from './abas/Informacoes.svelte';
+	import Participantes from './abas/Participantes.svelte';
+	import Atividades from './abas/Atividades.svelte';
+	import Arquivos from './abas/Arquivos.svelte';
 	import { pageName } from '../../../stores';
 
 	let { data } = $props();
@@ -84,10 +84,10 @@
 {#if projeto}
 	<div class="items-center justify-items-center md:grid">
 		<div class="relative flex w-full justify-center">
-			<!-- style={`view-transition-name: item-image-${projeto.id};`} -->
+			<!-- style={`view-transition-name: item-image-${data.idProjeto};`} -->
 			<img
-				src={imagemProjeto}
-				alt="Imagem do Projeto"
+			src={imagemProjeto}
+			alt="Imagem do Projeto"
 				class="rounded-xl inset-shadow-sm md:w-1/2"
 			/>
 			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">

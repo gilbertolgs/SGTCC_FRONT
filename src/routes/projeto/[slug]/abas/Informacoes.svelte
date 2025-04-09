@@ -7,8 +7,8 @@
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Check, X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
-	import AlterarImagemProjeto from './AlterarImagemProjeto.svelte';
-	import FormAlterarProjeto from './FormAlterarProjeto.svelte';
+	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
+	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
 	import { storeLogin } from '../../../../stores';
 	import type LoggedUser from '$model/LoggedUser';
 
