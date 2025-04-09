@@ -4,14 +4,17 @@
 
 	let { objeto } = $props();
 
-	let imgUrl: null | string = $state(null);
+	//Gambiarra pro Typescript não reclamar
+	let imgUrl: string | null = $derived(objeto.ExibeImagem() ?? null);
 
 	function imagemExiste(imgUrl: string) {
 		return imgUrl.trim() !== '';
 	}
 
 	async function defineImagem(imgOriginal: string, idObjeto: number) {
+		console.log(objeto.nome);
 		if (imagemExiste(imgOriginal)) {
+			console.log('caiu aki');
 			return imgOriginal;
 		}
 
@@ -23,8 +26,10 @@
 		return imagemGerada.imageUrl;
 	}
 
-	onMount(async () => {
-		imgUrl = await defineImagem(objeto.ExibeImagem(), objeto.id);
+	$effect(() => {
+		defineImagem(objeto.ExibeImagem(), objeto.id).then((novaImagem) => {
+			imgUrl = novaImagem;
+		});
 	});
 </script>
 
