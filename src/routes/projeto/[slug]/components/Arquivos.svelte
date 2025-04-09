@@ -6,11 +6,12 @@
 	import Arquivo from '$model/Arquivo';
 	import type Projeto from '$model/Projeto';
 	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
-	import { FileUpload } from '@skeletonlabs/skeleton-svelte';
+	import { FileUpload, type FileUploadApi } from '@skeletonlabs/skeleton-svelte';
 	import { Download, FilePlus2, X as IconX, Trash } from 'lucide-svelte';
 	import IconRemove from 'lucide-svelte/icons/circle-x';
 	import IconFile from 'lucide-svelte/icons/paperclip';
 	import { getContext, onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const toast = new Toaster(getContext);
 
@@ -29,7 +30,7 @@
 		arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
 
 		const tamanhoTotalBytes = arquivos.reduce((acc, file) => acc + file.tamanho, 0);
-		tamanhoTotal = DataFormatHandler.FormatBytes(tamanhoTotalBytes);
+		tamanhoTotal = DataFormatHandler.FormatBytes(tamanhoTotalBytes, 1);
 	}
 
 	const camposCabecalho = ['ID', 'Extensão', 'Nome', 'Ultima Alteração', 'Tamanho'];
@@ -85,6 +86,7 @@
 				toast.triggerError('Erro ao tentar enviar Arquivo');
 				console.error('Error uploading file:', error);
 			}
+			fileUploadApi.clearFiles();
 		} else {
 			console.error('No file selected.');
 		}
@@ -93,6 +95,7 @@
 	}
 
 	let arquivoSelecionado = $state(new Arquivo(0, 0, '', '', '', '', '', 0));
+	let fileUploadApi: FileUploadApi;
 </script>
 
 <FileUpload
@@ -102,14 +105,18 @@
 	onFileChange={onFileSelected}
 	onFileReject={console.error}
 	classes="w-full"
+	onApiReady={(_api) => (fileUploadApi = _api)}
 >
 	{#snippet iconInterface()}<FilePlus2 class="size-8" />{/snippet}
 	{#snippet iconFile()}<IconFile class="size-4" />{/snippet}
 	{#snippet iconFileRemove()}<IconRemove class="size-4" />{/snippet}
 </FileUpload>
 
-{#if linhaSelecionada !== 0}
-	<div class="preset-tonal grid w-full grid-flow-col rounded md:w-min">
+{#if linhaSelecionada}
+	<div
+		in:fade={{ duration: 200 }}
+		class=" preset-tonal mt-2 grid w-full grid-flow-col rounded md:w-min"
+	>
 		<button
 			onclick={() => {
 				selecionaLinha(0);
@@ -127,6 +134,15 @@
 				apagaArquivo();
 			}}
 			class="btn hover:text-error-500 flex"><Trash /> Excluir</button
+		>
+	</div>
+{:else}
+	<div class=" mt-2 grid w-full grid-flow-col rounded opacity-0 md:w-min">
+		<button
+			onclick={() => {
+				selecionaLinha(0);
+			}}
+			class="btn hover:text-primary-500 flex cursor-default"><IconX /> Cancelar</button
 		>
 	</div>
 {/if}
@@ -166,7 +182,7 @@
 						<td>{arquivo.extensao}</td>
 						<td>{arquivo.nomeOriginal}</td>
 						<td>{arquivo.ExibeUltimaAlteracao()}</td>
-						<td>{DataFormatHandler.FormatBytes(arquivo.tamanho, 2)}</td>
+						<td>{DataFormatHandler.FormatBytes(arquivo.tamanho, 1)}</td>
 					</tr>
 				{/each}
 			{/if}

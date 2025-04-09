@@ -15,7 +15,11 @@ class DataFormatHandler {
 
         const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + sizes[i];
+        const value = bytes / Math.pow(k, i);
+
+        const rounded = Number(value.toFixed(decimals));
+
+        return `${rounded} ${sizes[i]}`;
     }
 
 }

@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import CardProjetoUsuario from '$components/CardProjetoUsuario.svelte';
+	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import UsuarioRepository from '$repository/UsuarioRepository';
+	import { Plus } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
 	import { pageName, storeLogin } from '../../../../stores';
-	import type LoggedUser from '$model/LoggedUser';
-	import { goto } from '$app/navigation';
-	import { Plus } from 'lucide-svelte';
 	import FormCadastroProjeto from './FormCadastroProjeto.svelte';
 
 	import Toaster from '$lib/ToastHandler';
@@ -38,7 +38,7 @@
 	});
 
 	async function getProjetos() {
-		projetos = await ProjetoRepository.PegarTodosPorIdUsuario(idUsuario);
+		projetos = await ProjetoRepository.PegarTodosNaoCanceladosPorIdUsuario(idUsuario);
 	}
 
 	function abrirModal() {
@@ -64,6 +64,7 @@
 			console.log(error);
 		}
 	}
+
 </script>
 
 <svelte:head>

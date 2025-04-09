@@ -24,8 +24,8 @@ class ProjetoRepository {
         return projeto;
     }
 
-    async PegarTodosPorIdUsuario(idUsuario: number): Promise<Projeto[]> {
-        const response = await Api.get(`projetos/porUsuario/${idUsuario}`);
+    async PegarTodosNaoCanceladosPorIdUsuario(idUsuario: number): Promise<Projeto[]> {
+        const response = await Api.get(`projetos/projetosNaoCancelados/${idUsuario}`);
 
         const projeto = response.map(Projeto.CriaDeDados);
 
@@ -158,6 +158,15 @@ class ProjetoRepository {
 
     async FinalizarProjeto(idProjeto: number) {
         const response = await Api.put(`projetos/${idProjeto}/finalizarProjeto`, null)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async CancelarProjeto(idProjeto: number) {
+        const response = await Api.put(`projetos/${idProjeto}/cancelarProjeto`, null)
             .catch((error) => {
                 throw new Error(error);
             });

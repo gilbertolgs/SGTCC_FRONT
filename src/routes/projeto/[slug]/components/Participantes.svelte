@@ -2,6 +2,8 @@
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import TableBaseComponent from '$components/TableBaseComponent.svelte';
 	import Toaster from '$lib/ToastHandler';
+	import { EnumFuncaoUsuario } from '$model/EnumFuncaoUsuario';
+	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import ProjetoRepository from '$repository/ProjetoRepository';
@@ -9,8 +11,16 @@
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { Ban, Plus } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import { storeLogin } from '../../../../stores';
 
 	const toast = new Toaster(getContext);
+
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+
+	storeLogin.subscribe((value) => {
+		usuarioLogado = value;
+	});
 
 	interface Props {
 		projeto: Projeto;
@@ -25,6 +35,12 @@
 
 	async function getParticipantes() {
 		participantes = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
+
+		if (usuarioLogado) {
+			const usuarioLogadoDados = participantes.filter((p) => p.id === usuarioLogado?.id)[0];
+
+			usuarioLogado.funcao = usuarioLogadoDados.funcao;
+		}
 	}
 
 	let txtNovoParticipanteEmail = $state('');
@@ -93,7 +109,7 @@
 		{#snippet corpo()}
 			{#if participantes}
 				{#each participantes as participante}
-					<tr>
+					<tr out:fade={{ duration: 400 }} in:fade={{ duration: 400 }}>
 						<td>{participante.id}</td>
 						<td>
 							<a
@@ -113,12 +129,21 @@
 						</td>
 						<td>{participante.ExibeFuncao()}</td>
 						<td>
-							<button
-								onclick={() => {
-									removerParticipante(participante.id);
-								}}
-								class="btn preset-filled-error-500 flex"><Ban />Remover</button
-							>
+							{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
+								<button
+									onclick={() => {
+										removerParticipante(participante.id);
+									}}
+									class="btn preset-filled-error-500 flex"><Ban />Remover</button
+								>
+							{:else if usuarioLogado && usuarioLogado.id === participante.id && usuarioLogado.funcao !== EnumFuncaoUsuario.LiderProjeto}
+								<button
+									onclick={() => {
+										removerParticipante(participante.id);
+									}}
+									class="btn preset-filled-error-500 flex"><Ban />Sair</button
+								>
+							{/if}
 						</td>
 					</tr>
 				{/each}

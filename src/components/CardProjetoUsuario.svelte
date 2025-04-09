@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto, preloadCode, preloadData } from '$app/navigation';
 	import { generateRandomCanvas } from '$lib/canvasUtils';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
@@ -12,7 +13,8 @@
 	}
 	let { projeto, usuario }: Props = $props();
 
-	let imagem = $state(projeto.ExibeImagem());
+	//Gambiarra pro Typescript não reclamar
+	let imagemProjeto: string = $derived((projeto as Projeto | null)?.ExibeImagem?.() ?? '');
 	let progresso = $state(50);
 
 	function imagemExiste(imgUrl: string) {
@@ -20,23 +22,25 @@
 	}
 
 	function defineImagem() {
-		if (imagemExiste(imagem)) {
-			return imagem;
+		console.log('teste', imagemProjeto);
+		
+		if (imagemExiste(imagemProjeto)) {
+			return imagemProjeto;
 		}
 
 		CursoRepository.PegarPorId(usuario.idCurso).then((curso) => {
-			imagem = curso.ExibeImagem();
+			imagemProjeto = curso.ExibeImagem();
 
-			if (imagemExiste(imagem)) {
-				return imagem;
+			if (imagemExiste(imagemProjeto)) {
+				return imagemProjeto;
 			}
 
 			generateRandomCanvas(projeto.id, usuario.idCurso).then((imagemGerada) => {
 				if (!imagemGerada) {
-					return imagem;
+					return imagemProjeto;
 				}
 
-				imagem = imagemGerada.imageUrl;				
+				imagemProjeto = imagemGerada.imageUrl;
 			});
 		});
 	}
@@ -44,6 +48,23 @@
 	onMount(() => {
 		defineImagem();
 	});
+
+	async function navigateToFoo() {
+		const target = '/projeto/1';
+
+		// Preload code and data
+		await preloadCode(target);
+		await preloadData(target);
+
+		// If view transitions are supported
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				goto(target);
+			});
+		} else {
+			goto(target);
+		}
+	}
 </script>
 
 <div
@@ -52,14 +73,15 @@
 	<div>
 		<div class="overflow-hidden rounded-t-xl">
 			<img
-				src={imagem}
+				src={imagemProjeto}
 				alt="Imagem do Projeto"
+				style={`view-transition-name: item-image-${projeto.id};`}
 				class="w-full transition-all delay-100 duration-300 group-hover:scale-110 md:min-w-30"
 			/>
 		</div>
 		<hr class="text-stone-800" />
 
-		<div class="grid items-center justify-between p-4 overflow-hidden">
+		<div class="grid items-center justify-between overflow-hidden p-4">
 			<div>
 				<a href={`/projeto/${projeto.id}`} class="anchor font-bold">
 					{projeto.nome}
@@ -73,7 +95,7 @@
 		<Progress value={progresso} max={100} meterBg="bg-primary-500" />
 	</div>
 	{#if projeto.tags.length > 0}
-		<div class="p-2 flex flex-wrap gap-2">
+		<div class="flex flex-wrap gap-2 p-2">
 			{#each projeto.tags as tag}
 				<div class="preset-filled-primary-500 chip">
 					{tag.nome}

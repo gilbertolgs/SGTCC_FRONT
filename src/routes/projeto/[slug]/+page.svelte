@@ -10,14 +10,31 @@
 	import Participantes from './components/Participantes.svelte';
 	import Atividades from './components/Atividades.svelte';
 	import Arquivos from './components/Arquivos.svelte';
+	import { pageName } from '../../../stores';
 
 	let { data } = $props();
 
 	let idProjeto = data.idProjeto;
 	let projeto: Projeto | null = $state(null);
-	let imagemProjeto: string = $state('');
 
-	function imagemExiste(imgUrl: string) {
+	//Gambiarra pro Typescript não reclamar
+	let imagemProjeto: string | null = $derived((projeto as Projeto | null)?.ExibeImagem?.() ?? null);
+
+	function handleTabChange(newTabValue: string) {
+		if (!document.startViewTransition) {
+			abaAtual = newTabValue;
+			return;
+		}
+
+		document.startViewTransition(() => {
+			abaAtual = newTabValue;
+		});
+	}
+
+	function imagemExiste(imgUrl: string | null) {
+		if (!imgUrl) {
+			return false;
+		}
 		return imgUrl.trim() !== '';
 	}
 
@@ -59,12 +76,18 @@
 	let abaAtual = $state('informacoes');
 </script>
 
+<svelte:head>
+	<title>{pageName} - {projeto ? projeto.nome : 'Projeto'}</title>
+	<meta name="Exibindo informações de projeto" content="Exibindo projeto" />
+</svelte:head>
+
 {#if projeto}
 	<div class="items-center justify-items-center md:grid">
 		<div class="relative flex w-full justify-center">
 			<img
 				src={imagemProjeto}
 				alt="Imagem do Projeto"
+				style={`view-transition-name: item-image-${projeto.id};`}
 				class="rounded-xl inset-shadow-sm md:w-1/2"
 			/>
 			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">
@@ -75,7 +98,7 @@
 			<Tabs
 				listJustify="justify-between"
 				value={abaAtual}
-				onValueChange={(e) => (abaAtual = e.value)}
+				onValueChange={(e) => (handleTabChange(e.value))}
 			>
 				{#snippet list()}
 					<Tabs.Control value="informacoes">

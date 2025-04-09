@@ -7,6 +7,7 @@
 	import Cookie from '$model/Cookie';
 	import UsuarioRepository from '$repository/UsuarioRepository';
 	import { storeLogin } from '../stores';
+	import { onNavigate } from '$app/navigation';
 	let { children } = $props();
 
 	async function reautenticar() {
@@ -25,6 +26,17 @@
 		}
 	}
 	onMount(reautenticar);
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve()
+				await navigation.complete
+			})
+		})
+	});
 </script>
 
 <Header />

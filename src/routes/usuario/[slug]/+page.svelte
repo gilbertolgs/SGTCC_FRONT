@@ -29,7 +29,7 @@
 		usuario = await UsuarioRepository.PegarPorId(idUsuario);
 
 		if (usuarioLogado && usuario.id === usuarioLogado.id) {
-			projetos = await ProjetoRepository.PegarTodosPorIdUsuario(idUsuario);
+			projetos = await ProjetoRepository.PegarTodosNaoCanceladosPorIdUsuario(idUsuario);
 		}
 	});
 </script>
