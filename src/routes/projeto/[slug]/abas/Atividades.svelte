@@ -6,12 +6,27 @@
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Plus } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
 
 	interface Props {
 		projeto: Projeto;
+		data: any;
 	}
-	let { projeto }: Props = $props();
+	let { projeto, data }: Props = $props();
 	let atividades: Atividade[] | null = $state(null);
+
+	let openStateAdicionar = $state(false);
+
+	function abrirModal(modal: string, argumentos: any = null) {
+		switch (modal) {
+			case 'Adicionar':
+				openStateAdicionar = !openStateAdicionar;
+				break;
+
+			default:
+				break;
+		}
+	}
 
 	onMount(async () => {
 		await getAtividates();
@@ -19,14 +34,8 @@
 
 	let todos = $state([
 		{ id: 1, estado: 0, nome: 'write some docs' },
-		{ id: 2, estado: 0, nome: 'start writing blog post' },
-		{ id: 3, estado: 1, nome: 'buy some milk' },
-		{ id: 4, estado: 0, nome: 'mow the lawn' },
-		{ id: 5, estado: 0, nome: 'feed the turtle' },
-		{ id: 6, estado: 0, nome: 'fix some bugs' }
+		{ id: 2, estado: 0, nome: 'start writing blog post' }
 	]);
-
-	let uid = $derived(todos.length + 1);
 
 	function remove(todo: { id: number; estado: number; nome: string }) {
 		const index = todos.indexOf(todo);
@@ -65,9 +74,19 @@
 	}
 </script>
 
+<FormAdicionarAtividade
+	AdicionarAtividade={adicionarAtividade}
+	bind:openState={openStateAdicionar}
+	atividade={null}
+	{data}
+/>
+
 <div class="flex flex-col">
-	<button onclick={adicionarAtividade} class="btn preset-filled-success-500 mt-auto md:ml-auto"
-		><Plus />Adicionar</button
+	<button
+		onclick={() => {
+			abrirModal('Adicionar');
+		}}
+		class="btn preset-filled-success-500 mt-auto md:ml-auto"><Plus />Adicionar</button
 	>
 	<div class="grid grid-flow-col justify-items-center">
 		<div class="preset-tonal m-2 rounded p-5">

@@ -11,15 +11,15 @@
 
 	const toast = new Toaster(getContext);
 
-	let { AlterarCadastro, openState = $bindable(), projeto, data } = $props();
+	let { AdicionarAtividade, openState = $bindable(), atividade, data } = $props();
 
 	const { form, errors, message, constraints, enhance } = superForm(data.form, {
 		SPA: true,
 		validators: zod(_alterProjectSchema),
 		onUpdate({ form }) {
 			if (form.valid) {
-				AlterarCadastro(
-					projeto.id,
+				AdicionarAtividade(
+					atividade.id,
 					form.data.nome,
 					form.data.descricao,
 					form.data.justificativa,
@@ -29,19 +29,14 @@
 		}
 	});
 	$effect(() => {
-		if (projeto) {
-			$form.id = projeto.id;
-			$form.nome = projeto.nome.trim();
-			$form.descricao = projeto.descricao.trim();
-			$form.justificativa = projeto.justificativa.trim();
-			const tags: string[] = projeto.tags.map((tag: { nome: string }) => tag.nome);
-			$form.tags = tags;
+		if (atividade) {
+			$form.id = atividade.id;
+			$form.nome = atividade.nome.trim();
+			$form.descricao = atividade.descricao.trim();
 		} else {
 			$form.id = 0;
 			$form.nome = '';
 			$form.descricao = '';
-			$form.justificativa = '';
-			$form.tags = [];
 		}
 	});
 </script>
@@ -55,7 +50,7 @@
 			class="card bg-surface-100-900 mx-auto space-y-5 p-1 md:w-1/2"
 		>
 			<fieldset class="space-y-2">
-				<h2 class="h2">Alterar</h2>
+				<h2 class="h2">Adicionar</h2>
 			</fieldset>
 			<fieldset class="space-y-2">
 				<FormInputComponent
