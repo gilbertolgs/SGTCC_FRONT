@@ -5,8 +5,11 @@
 	import type Projeto from '$model/Projeto';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Plus } from 'lucide-svelte';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
+	import Toaster from '$lib/ToastHandler';
+
+	const toast = new Toaster(getContext);
 
 	interface Props {
 		projeto: Projeto;
@@ -32,10 +35,7 @@
 		await getAtividates();
 	});
 
-	let todos = $state([
-		{ id: 1, estado: 0, nome: 'write some docs' },
-		{ id: 2, estado: 0, nome: 'start writing blog post' }
-	]);
+	let todos: { id: number; estado: number; nome: string }[] = $state([]);
 
 	function remove(todo: { id: number; estado: number; nome: string }) {
 		const index = todos.indexOf(todo);
@@ -69,8 +69,26 @@
 		});
 	}
 
-	function adicionarAtividade() {
-		throw new Error('Function not implemented.');
+	async function adicionarAtividade(idAtividade: number, nome: string, descricao: string) {
+		try {
+			if (idAtividade !== 0) {
+				const response = await ProjetoRepository.AtualizarAtividade(
+					projeto.id,
+					idAtividade,
+					nome,
+					descricao
+				);
+			} else {
+				const response = await ProjetoRepository.AdicionarAtividade(projeto.id, nome, descricao);
+			}
+			openStateAdicionar = false;
+			toast.triggerSuccess('Projeto alterado com sucesso!');
+			await getAtividates();
+		} catch (error) {
+			openStateAdicionar = false;
+			toast.triggerError('Ocorreu um erro ao tentar alterar projeto!');
+			console.log(error);
+		}
 	}
 </script>
 

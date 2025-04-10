@@ -7,29 +7,25 @@
 	import { getContext } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { _alterProjectSchema } from '../+page';
+	import { _addActivitySchema } from '../+page';
 
 	const toast = new Toaster(getContext);
 
 	let { AdicionarAtividade, openState = $bindable(), atividade, data } = $props();
 
-	const { form, errors, message, constraints, enhance } = superForm(data.form, {
+	const { form, errors, message, constraints, enhance } = superForm(data.activityForm, {
 		SPA: true,
-		validators: zod(_alterProjectSchema),
+		validators: zod(_addActivitySchema),
 		onUpdate({ form }) {
 			if (form.valid) {
-				AdicionarAtividade(
-					atividade.id,
-					form.data.nome,
-					form.data.descricao,
-					form.data.justificativa,
-					form.data.tags
-				);
+				AdicionarAtividade(form.data.id, form.data.nome, form.data.descricao);
 			}
 		}
 	});
 	$effect(() => {
 		if (atividade) {
+			console.log('aki');
+			
 			$form.id = atividade.id;
 			$form.nome = atividade.nome.trim();
 			$form.descricao = atividade.descricao.trim();
@@ -68,21 +64,6 @@
 					bind:valor={$form.descricao}
 					erros={$errors.descricao}
 					constraints={$constraints.descricao}
-				/>
-				<FormTextAreaComponent
-					label="Justificativa"
-					placeholder="justificativa"
-					tipo="text"
-					bind:valor={$form.justificativa}
-					erros={$errors.justificativa}
-					constraints={$constraints.justificativa}
-				/>
-				<FormInputTagComponent
-					label="Tags"
-					placeholder="tags"
-					bind:valor={$form.tags}
-					erros={$errors.tags}
-					constraints={$constraints.tags}
 				/>
 			</fieldset>
 			<fieldset>

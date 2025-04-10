@@ -83,8 +83,8 @@ class ProjetoRepository {
         return response;
     }
 
-    async TornarPublico(idProjeto: number) {
-        const response = await Api.put(`projetos/${idProjeto}/tornarPublico`, null)
+    async FinalizarProjeto(idProjeto: number) {
+        const response = await Api.put(`projetos/${idProjeto}/finalizarProjeto`, null)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -92,13 +92,17 @@ class ProjetoRepository {
         return response;
     }
 
-    async AtualizarUsuario(id: number, nome: string, email: string) {
-        const data = {
-            "nome": nome,
-            "email": email
-        };
+    async CancelarProjeto(idProjeto: number) {
+        const response = await Api.put(`projetos/${idProjeto}/cancelarProjeto`, null)
+            .catch((error) => {
+                throw new Error(error);
+            });
 
-        const response = await Api.put(`/usuarios/${id}/atualizarUsuario`, data)
+        return response;
+    }
+
+    async TornarPublico(idProjeto: number) {
+        const response = await Api.put(`projetos/${idProjeto}/tornarPublico`, null)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -163,6 +167,7 @@ class ProjetoRepository {
         return response;
     }
 
+
     async PegarAtividades(idProjeto: number) {
         const response = await Api.get(`atividade/projetos/${idProjeto}/atividades`)
             .catch((error) => {
@@ -174,8 +179,14 @@ class ProjetoRepository {
         return atividades;
     }
 
-    async FinalizarProjeto(idProjeto: number) {
-        const response = await Api.put(`projetos/${idProjeto}/finalizarProjeto`, null)
+    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string) {
+        const data = {
+            idProjeto: idProjeto,
+            nome: nome,
+            descricao: descricao
+        }
+
+        const response = await Api.post(`atividade/criarAtividade`, data)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -183,15 +194,21 @@ class ProjetoRepository {
         return response;
     }
 
-    async CancelarProjeto(idProjeto: number) {
-        const response = await Api.put(`projetos/${idProjeto}/cancelarProjeto`, null)
+    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string) {
+        const data = {
+            idProjeto: idProjeto,
+            idAtividade: idAtividade,
+            nome: nome,
+            descricao: descricao
+        }
+
+        const response = await Api.post(`atividade/atualizarAtividade`, data)
             .catch((error) => {
                 throw new Error(error);
             });
 
         return response;
     }
-
 }
 
 export default new ProjetoRepository();

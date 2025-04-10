@@ -13,7 +13,7 @@
 
 	let { AlterarCadastro, openState = $bindable(), projeto, data } = $props();
 
-	const { form, errors, message, constraints, enhance } = superForm(data.form, {
+	const { form, errors, message, constraints, enhance } = superForm(data.alterProjectForm, {
 		SPA: true,
 		validators: zod(_alterProjectSchema),
 		onUpdate({ form }) {
