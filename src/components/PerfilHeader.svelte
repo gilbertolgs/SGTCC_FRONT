@@ -12,14 +12,14 @@
 
 	interface Props {
 		usuarioLogado: LoggedUser | null;
-		imagemDoUsuairo: string | undefined;
+		imagemDoUsuario: string | undefined;
 	}
 
-	let { usuarioLogado, imagemDoUsuairo }: Props = $props();
+	let { usuarioLogado, imagemDoUsuario }: Props = $props();
 </script>
 
 {#snippet nomeUsuario(usuario: LoggedUser | Usuario)}
-	<Avatar classes="select-none" src={imagemDoUsuairo} name={usuario.nome} />
+	<Avatar classes="select-none" src={imagemDoUsuario} name={usuario.nome} />
 	<span class="text-xl font-bold">{usuario.nome}</span>
 {/snippet}
 

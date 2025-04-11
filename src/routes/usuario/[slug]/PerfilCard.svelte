@@ -43,7 +43,7 @@
 			if (usuario.id === usuarioLogado.id) {
 				usuarioLogado.imagem = usuario.imagem;
 
-				storeLogin.set(usuarioLogado);
+				storeLogin.update(value => usuarioLogado);
 			}
 		}
 	}

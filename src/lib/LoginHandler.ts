@@ -43,7 +43,7 @@ class LoginHandler {
         console.log(saveCookieUser);
         
 
-        storeLogin.set(saveCookieUser);
+        storeLogin.update(value => saveCookieUser);
         this.SalvarCookie(login, saveCookieUser);
         return user;
     }
@@ -52,7 +52,7 @@ class LoginHandler {
         Cookie.removeCookie("email");
         Cookie.removeCookie("token");
         Cookie.removeCookie("login");
-        storeLogin.set(null);
+        storeLogin.update(value => null);
     }
 
     private SalvarCookie(login: any, user: LoggedUser) {

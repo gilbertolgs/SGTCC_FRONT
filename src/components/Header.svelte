@@ -10,15 +10,17 @@
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
 	//Gambiarra pro Typescript não reclamar
-	let imagemDoUsuairo: string = $derived(
+	let imagemDoUsuario: string = $derived(
 		(usuarioLogado as LoggedUser | null)?.ExibeImagem?.() ?? ''
 	);
 
 	storeLogin.subscribe((value) => {
+		console.log(value);
+		
 		usuarioLogado = value;
 
 		if (usuarioLogado) {
-			imagemDoUsuairo = usuarioLogado.ExibeImagem();
+			imagemDoUsuario = usuarioLogado.ExibeImagem();
 		}
 	});
 
@@ -70,7 +72,7 @@
 		</div>
 		<div class="grid grid-flow-col items-center gap-1">
 			<LightSwitch />
-			<PerfilHeader {usuarioLogado} {imagemDoUsuairo} />
+			<PerfilHeader {usuarioLogado} {imagemDoUsuario} />
 		</div>
 	</section>
 </header>

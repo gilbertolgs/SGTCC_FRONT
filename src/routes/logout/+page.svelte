@@ -7,9 +7,8 @@
 	storeLogin.subscribe((value) => {
 		if (value == null) {
 			goto('/');
+		} else {
+			invalidateAll();
 		}
-        else {
-            invalidateAll();
-        }
 	});
 </script>

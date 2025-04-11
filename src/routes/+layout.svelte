@@ -19,7 +19,7 @@
 				if (!value) {
 					const user = await UsuarioRepository.PegarPorEmailLogin(userEmail);
 					if (user) {
-						storeLogin.set(user);
+						storeLogin.update(value => user);
 					}
 				}
 			})
