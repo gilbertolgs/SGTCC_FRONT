@@ -48,7 +48,7 @@
 			Pesquisar
 		</button>
 	</div>
-	<div class="m-2 ml-auto flex gap-2 md:w-1/3">
+	<div class="m-2 ml-auto flex gap-2 md:w-3/5">
 		<FormInputComponent
 			label="Ano"
 			placeholder="ano"

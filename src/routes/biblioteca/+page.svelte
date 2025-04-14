@@ -1,14 +1,15 @@
 <script lang="ts">
-	import type Projeto from '$model/Projeto';
-	import { onMount } from 'svelte';
-	import { pageName } from '../../stores';
-	import ProjetoRepository from '$repository/ProjetoRepository';
+	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
 	import { EnumTipoFiltro } from '$model/EnumTipoFiltro';
 	import { EnumTipoOrdenacao } from '$model/EnumTipoOrdenacao';
-	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
+	import type Projeto from '$model/Projeto';
+	import ProjetoRepository from '$repository/ProjetoRepository';
+	import { onMount } from 'svelte';
+	import { pageName } from '../../stores';
 	import PesquisaProjetoPublico from './PesquisaProjetoPublico.svelte';
 
 	let projetos: Projeto[] | null = $state(null);
+
 
 	onMount(() => {
 		getProjetos(

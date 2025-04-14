@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { cn } from "$lib/merge-anim";
+	import { cn } from '$lib/merge-anim';
 
 	export let img: string;
 	export let name: string;
-	export let username: string;
 	export let body: string;
 </script>
 
@@ -23,7 +22,6 @@
 			<figcaption class="text-sm font-medium dark:text-white">
 				{name}
 			</figcaption>
-			<p class="text-xs font-medium dark:text-white/40">{username}</p>
 		</div>
 	</div>
 	<blockquote class="mt-2 text-sm">{body}</blockquote>

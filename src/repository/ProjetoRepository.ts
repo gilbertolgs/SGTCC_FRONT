@@ -209,6 +209,31 @@ class ProjetoRepository {
 
         return response;
     }
+
+    async PegarEstrelas(idProjeto: number) {
+        const response = await Api.get(`avaliacoes/porProjeto/${idProjeto}`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async Avaliar(idProjeto: number, idUsuario: number) {
+        const data = {
+            idUsuario: idUsuario,
+            idProjeto: idProjeto,
+            avaliacao: 1
+
+        }
+        const response = await Api.post(`avaliacoes/criarAvaliacao`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
 }
 
 export default new ProjetoRepository();

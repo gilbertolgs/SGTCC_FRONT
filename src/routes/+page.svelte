@@ -10,40 +10,29 @@
 
 	const reviews = [
 		{
-			name: 'Bhide',
-			username: '@Bhide',
-			body: 'Noicee work. I love it. Keep it up.',
-			img: 'https://avatar.vercel.sh/jack'
+			name: 'Carla Souza',
+			body: 'O SGTCC facilitou demais o acompanhamento dos meus orientandos. Interface intuitiva e prática.',
+			img: 'https://avatar.vercel.sh/carla'
 		},
 		{
-			name: 'Jodd',
-			username: '@Jodd',
-			body: 'Wooww, this is what I was looking for. Great work.',
-			img: 'https://avatar.vercel.sh/jill'
+			name: 'Ricardo Lima',
+			body: 'Excelente sistema! Automatizou todo o fluxo de entrega e correção dos TCCs.',
+			img: 'https://avatar.vercel.sh/ricardo'
 		},
 		{
-			name: 'Pokie',
-			username: '@Pokie',
-			body: 'Svelte is Amazing and so are you. Keep it up.',
-			img: 'https://avatar.vercel.sh/john'
+			name: 'Juliana Mendes',
+			body: 'Como aluna, achei incrível ter tudo organizado em um só lugar. Parabéns pelo sistema!',
+			img: 'https://avatar.vercel.sh/juliana'
 		},
 		{
-			name: 'pablo',
-			username: '@pablo',
-			body: 'Remarkable Stuff broooo. Added to my favourites.',
-			img: 'https://avatar.vercel.sh/jane'
+			name: 'Marcos Tavares',
+			body: 'O SGTCC resolveu muitos dos nossos problemas de comunicação entre alunos e orientadores.',
+			img: 'https://avatar.vercel.sh/marcos'
 		},
 		{
-			name: 'Saloni',
-			username: '@Saloni',
-			body: 'Acche hai, Chal mera Portfolio banade.',
-			img: 'https://avatar.vercel.sh/jenny'
-		},
-		{
-			name: 'Bhai',
-			username: '@Bhai',
-			body: 'Svelte made easy with these components. Great work.',
-			img: 'https://avatar.vercel.sh/james'
+			name: 'Ana Clara',
+			body: 'Além de funcional, o sistema é bonito e leve. Dá gosto de usar!',
+			img: 'https://avatar.vercel.sh/ana'
 		}
 	];
 
@@ -103,7 +92,7 @@
 
 			<BoxReveal boxColor={'#5046e6'} duration={0.5}>
 				<div class="grid grid-flow-col gap-2">
-					<button class="btn preset-filled-primary-500"> Comece Já </button>
+					<a href="/login" class="btn preset-filled-primary-500"> Comece Já </a>
 				</div>
 			</BoxReveal>
 		</div>
@@ -268,7 +257,7 @@
 			O SGTCC já está ajudando cursos a economizar tempo, melhorar a organização e facilitar a
 			comunicação entre alunos, orientadores e coordenação.
 		</p>
-		<a href="#contato" class="btn preset-filled-primary-500 p-5 px-10"> Iniciar Agora </a>
+		<a href="/login" class="btn preset-filled-primary-500 p-5 px-10"> Iniciar Agora </a>
 	</div>
 </section>
 <section class="body-font relative text-gray-700">

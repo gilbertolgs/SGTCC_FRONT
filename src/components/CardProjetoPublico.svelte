@@ -1,20 +1,30 @@
 <script lang="ts">
 	import { generateRandomCanvas } from '$lib/canvasUtils';
 	import DataFormatHandler from '$lib/DataFormatHandler';
-	import type Projeto from '$model/Projeto';
+	import type LoggedUser from '$model/LoggedUser';
+	import Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import CursoRepository from '$repository/CursoRepository';
+	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 	import { Download, Star } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { storeLogin } from '../stores';
 
 	interface Props {
 		projeto: Projeto;
 	}
+
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+
+	storeLogin.subscribe((value) => {
+		usuarioLogado = value;
+	});
 	let { projeto }: Props = $props();
 
 	let imagem = $state(projeto.ExibeImagem());
-	let progresso = $state(50);
+	let avaliarChecado = $state(false);
+	let estrelas = $derived(0);
 
 	function imagemExiste(imgUrl: string) {
 		return imgUrl.trim() !== '';
@@ -44,14 +54,38 @@
 
 	onMount(() => {
 		defineImagem();
+		pegaEstrelas();
 	});
+
+	async function pegaEstrelas() {
+		try {
+			const novasEstrelas = await ProjetoRepository.PegarEstrelas(projeto.id);
+			if (novasEstrelas) {
+				if (usuarioLogado !== null) {
+					const exists = novasEstrelas.some(
+						(item: { idUsuario: number }) => item.idUsuario === usuarioLogado?.id
+					);
+					avaliarChecado = true;
+				}
+				console.log(novasEstrelas);
+				estrelas = novasEstrelas.length;
+			}
+		} catch (error) {}
+	}
+
+	async function avaliar() {
+		if (avaliarChecado === false && usuarioLogado) {
+			await ProjetoRepository.Avaliar(projeto.id, usuarioLogado.id);
+		}
+		pegaEstrelas();
+	}
 </script>
 
 <div
-	class="card group m-2 mx-auto flex w-full border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
+	class="card group m-2 mx-auto grid w-full grid-cols-4 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
 >
 	<div class="m-2 overflow-hidden">
-		<img src={imagem} alt="Imagem do Projeto" class="rounded-xl md:min-w-[300px]" />
+		<img src={imagem} alt="Imagem do Projeto" class="w-full rounded-xl" />
 	</div>
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">
@@ -94,14 +128,14 @@
 		>
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">
-		<button class="group/estrela m-2 brightness-125 hover:text-[#e3d664]">
-			<Star class="hidden group-hover/estrela:block" fill="#e3d664" />
-			<Star class="block group-hover/estrela:hidden" />
-		</button>
+		<label class="relative m-2 cursor-pointer brightness-125 hover:text-[#e3d664]">
+			<input bind:checked={avaliarChecado} onclick={avaliar} type="checkbox" class="peer hidden" />
+			<Star class="hidden peer-checked:block" fill="#e3d664" />
+			<Star class="block peer-checked:hidden" />
+		</label>
+
 		<div class="m-2">
-			<span>
-				<span class="text-[#e3d664] brightness-125">X</span>Estrelas
-			</span>
+			<span>{estrelas} Estrelas </span>
 			{#if projeto.dataFim}
 				<span class="font-sans font-extralight"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span
