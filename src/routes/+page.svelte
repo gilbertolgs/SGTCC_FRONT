@@ -1,11 +1,78 @@
 <script>
 	import BoxReveal from '$components/animation/BoxReveal.svelte';
 	import CommentCard from '$components/CommentCard.svelte';
+	import Marquee from '$components/Marquee.svelte';
 	import ImgLandingPage from '$images/img_landing_page3x.png';
 	import LogoMono from '$images/LogoMono.svelte';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Github, ListTodo } from 'lucide-svelte';
+	import { File, FolderOpen, ListTodo, User } from 'lucide-svelte';
 	import { pageName } from '../stores';
+
+	const reviews = [
+		{
+			name: 'Bhide',
+			username: '@Bhide',
+			body: 'Noicee work. I love it. Keep it up.',
+			img: 'https://avatar.vercel.sh/jack'
+		},
+		{
+			name: 'Jodd',
+			username: '@Jodd',
+			body: 'Wooww, this is what I was looking for. Great work.',
+			img: 'https://avatar.vercel.sh/jill'
+		},
+		{
+			name: 'Pokie',
+			username: '@Pokie',
+			body: 'Svelte is Amazing and so are you. Keep it up.',
+			img: 'https://avatar.vercel.sh/john'
+		},
+		{
+			name: 'pablo',
+			username: '@pablo',
+			body: 'Remarkable Stuff broooo. Added to my favourites.',
+			img: 'https://avatar.vercel.sh/jane'
+		},
+		{
+			name: 'Saloni',
+			username: '@Saloni',
+			body: 'Acche hai, Chal mera Portfolio banade.',
+			img: 'https://avatar.vercel.sh/jenny'
+		},
+		{
+			name: 'Bhai',
+			username: '@Bhai',
+			body: 'Svelte made easy with these components. Great work.',
+			img: 'https://avatar.vercel.sh/james'
+		}
+	];
+
+	let firstRow = reviews.slice(0, reviews.length / 2);
+	let secondRow = reviews.slice(reviews.length / 2);
+
+	const funcionalidades = [
+		{
+			icone: FolderOpen,
+			titulo: 'Armazenamento e Compartilhamento de Documentos',
+			descricao: 'Armazene e compartilhe seus documentos diretamente na plataforma.'
+		},
+		{
+			icone: ListTodo,
+			titulo: 'Acompanhamento do Andamento',
+			descricao: 'Visualize o progresso do seu TCC em tempo real.'
+		},
+		{
+			icone: File,
+			titulo: 'Suporte a Diversos Formatos de Arquivos',
+			descricao: 'Envie e receba arquivos nos formatos mais comuns.'
+		},
+		{
+			icone: User,
+			titulo: 'Acesso Fácil e Intuitivo',
+			descricao:
+				'A interface intuitiva permite que alunos e orientadores se adaptem rapidamente ao sistema.'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -36,8 +103,7 @@
 
 			<BoxReveal boxColor={'#5046e6'} duration={0.5}>
 				<div class="grid grid-flow-col gap-2">
-					<button class="btn preset-filled-primary-500"> Saiba mais </button>
-					<button class="btn preset-filled-surface-500"> Contato </button>
+					<button class="btn preset-filled-primary-500"> Comece Já </button>
 				</div>
 			</BoxReveal>
 		</div>
@@ -56,31 +122,34 @@
 			<LogoMono />
 		</div>
 		<div class="-mb-10 flex flex-col flex-wrap text-center lg:w-1/2 lg:py-6 lg:pl-12 lg:text-left">
-			<div class="mb-10 flex flex-col items-center lg:items-start">
-				{#snippet descricaoFuncoes()}
-					<div
-						class="bg-primary-100 text-primary-500 mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full"
-					>
-						<ListTodo />
-					</div>
-					<div class="flex-grow">
-						<h2 class="title-font text-tertiary-500 mb-3 text-lg font-medium">
-							Gestão de Atividades
-						</h2>
-						<p class="text-base leading-relaxed">
-							Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
-							indxgo juice poutine.
-						</p>
+			<div class="justify-items-between grid h-full items-center lg:items-start">
+				{#snippet descricaoFuncoes(
+					/** @type {{ icone: any; titulo: string; descricao: string; }} */ funcionalidade
+				)}
+					<div class="h-full">
+						<div
+							class="bg-primary-100 text-primary-500 flex items-center justify-start gap-2 rounded-full"
+						>
+							<funcionalidade.icone />
+							<h2 class="title-font text-tertiary-500 text-lg font-medium">
+								{funcionalidade.titulo}
+							</h2>
+						</div>
+						<div class="flex-grow">
+							<p class="text-base leading-relaxed">
+								{funcionalidade.descricao}
+							</p>
+						</div>
 					</div>
 				{/snippet}
-				{#each [1, 2, 3, 4] as nada}
-					{@render descricaoFuncoes()}
+				{#each funcionalidades as funcionalidade}
+					{@render descricaoFuncoes(funcionalidade)}
 				{/each}
 			</div>
 		</div>
 	</div>
 </section>
-<section class="body-font border-t border-gray-200 text-gray-700">
+<!-- <section class="body-font border-t border-gray-200 text-gray-700">
 	<hr class="hr" />
 	<div class="container mx-auto px-5 py-24">
 		<div class="mb-5 text-center">
@@ -93,30 +162,50 @@
 			</p>
 		</div>
 		<div class="-m-4 flex flex-wrap">
-			{#snippet cardFeatured()}
+			{#snippet cardFeatured(/** @type {{ icone: any; titulo: string; descricao: string; }} */ funcionalidade)}
 				<div class="p-4 md:w-1/2 xl:w-1/3">
 					<div class="preset-tonal rounded-lg border border-gray-300 p-6">
 						<div
 							class="bg-primary-100 mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-indigo-500"
 						>
-							<ListTodo />
+							<funcionalidade.icone />
 						</div>
 						<h2 class="title-font text-tertiary-500 mb-2 text-lg font-medium">
-							Gestão de Atividades
+							{funcionalidade.titulo}
 						</h2>
 						<p class="text-base leading-relaxed">
-							Fingerstache flexitarian street art 8-bit waist co, subway tile poke farm.
+							{funcionalidade.descricao}
 						</p>
 					</div>
 				</div>
 			{/snippet}
-			{#each [1, 2, 3, 4, 5, 6] as nada}
-				{@render cardFeatured()}
+			{#each funcionalidades as funcionalidade}
+				{@render cardFeatured(funcionalidade)}
 			{/each}
 		</div>
 	</div>
+</section> -->
+<section
+	class="bg-background relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border py-20 md:shadow-xl"
+>
+	<Marquee pauseOnHover class="[--duration:20s]">
+		{#each firstRow as item}
+			<CommentCard {...item} />
+		{/each}
+	</Marquee>
+	<Marquee reverse pauseOnHover class="[--duration:20s]">
+		{#each secondRow as item}
+			<CommentCard {...item} />
+		{/each}
+	</Marquee>
+	<div
+		class="dark:from-background pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white"
+	></div>
+	<div
+		class="dark:from-background pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white"
+	></div>
 </section>
-<section class="body-font text-gray-700">
+<!-- <section class="body-font text-gray-700">
 	<hr class="hr" />
 	<div class="container mx-auto px-5 py-24">
 		<div class="mb-12 text-center">
@@ -169,7 +258,7 @@
 			)}
 		</div>
 	</div>
-</section>
+</section> -->
 <section class="body-font">
 	<div class="container mx-auto flex flex-col items-center px-5 py-12 text-center">
 		<h2 class="text-tertiary-500 mb-4 text-2xl font-semibold">
