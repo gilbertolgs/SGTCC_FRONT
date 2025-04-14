@@ -67,7 +67,9 @@
   "dependencies": {
     "axios": "^1.8.4",
     "lucide-svelte": "^0.483.0",
-    "svelte-easy-crop": "^4.0.1"
+    "svelte-easy-crop": "^4.0.1",
+    "svelte-inview": "^4.0.4",
+    "svelte-motion": "^0.12.2"
   },
   "eslintConfig": {
     "extends": [

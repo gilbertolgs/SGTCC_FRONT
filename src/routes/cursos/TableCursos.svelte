@@ -73,7 +73,7 @@
 					<td>
 						<div class="grid grid-flow-col gap-2">
 							<button
-								class="btn preset-filled-success-500"
+								class="btn preset-filled-primary-500"
 								onclick={() => {
 									abrirModal('Insert', cursoAtual);
 								}}
@@ -81,7 +81,7 @@
 								<Pencil /> Editar
 							</button>
 							<button
-								class="btn preset-filled-warning-500"
+								class="btn preset-filled-primary-500"
 								onclick={() => {
 									abrirModal('Imagem', cursoAtual);
 								}}

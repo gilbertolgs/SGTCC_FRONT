@@ -16,6 +16,7 @@ const config = {
 			$model: 'src/model',
 			$lib: 'src/lib',
 			$images: 'src/images',
+			$static: 'static/'
 		}
 	},
 
