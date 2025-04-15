@@ -53,7 +53,14 @@
 	) {
 		try {
 			if (usuarioLogado) {
-				const response = await ProjetoRepository.CriarProjeto(usuarioLogado.id, usuarioLogado.idCurso, nome, descricao, justificativa, tags);
+				const response = await ProjetoRepository.CriarProjeto(
+					usuarioLogado.id,
+					usuarioLogado.idCurso,
+					nome,
+					descricao,
+					justificativa,
+					tags
+				);
 			}
 			openState = false;
 			toast.triggerSuccess('Projeto cadastrado com sucesso!');
@@ -64,7 +71,6 @@
 			console.log(error);
 		}
 	}
-
 </script>
 
 <svelte:head>
@@ -88,10 +94,16 @@
 	</div>
 
 	{#if projetos && usuario}
-		<div class="preset-tonal grid gap-2 rounded p-3 md:m-5 md:grid-cols-3">
-			{#each projetos as projeto}
-				<CardProjetoUsuario {projeto} {usuario} />
-			{/each}
-		</div>
+		{#if projetos.length < 1}
+			<div class="flex w-full items-center justify-center">
+				<span class="preset-tonal rounded p-5">Ainda não há projetos aqui.</span>
+			</div>
+		{:else}
+			<div class="preset-tonal grid gap-2 rounded p-3 md:m-5 md:grid-cols-3">
+				{#each projetos as projeto}
+					<CardProjetoUsuario {projeto} {usuario} />
+				{/each}
+			</div>
+		{/if}
 	{/if}
 </div>

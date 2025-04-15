@@ -3,24 +3,18 @@
 	import DataFormatHandler from '$lib/DataFormatHandler';
 	import type LoggedUser from '$model/LoggedUser';
 	import Projeto from '$model/Projeto';
-	import type Usuario from '$model/Usuario';
 	import CursoRepository from '$repository/CursoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
+	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { Download, Star } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { storeLogin } from '../stores';
 
 	interface Props {
 		projeto: Projeto;
+		usuarioLogado: LoggedUser | null;
 	}
 
-	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
-
-	storeLogin.subscribe((value) => {
-		usuarioLogado = value;
-	});
-	let { projeto }: Props = $props();
+	let { projeto, usuarioLogado }: Props = $props();
 
 	let imagem = $state(projeto.ExibeImagem());
 	let avaliarChecado = $state(false);
@@ -65,7 +59,11 @@
 					const exists = novasEstrelas.some(
 						(item: { idUsuario: number }) => item.idUsuario === usuarioLogado?.id
 					);
-					avaliarChecado = true;
+					console.log('existe', exists);
+
+					if (exists) {
+						avaliarChecado = true;
+					}
 				}
 				console.log(novasEstrelas);
 				estrelas = novasEstrelas.length;
@@ -122,20 +120,29 @@
 	</div>
 	<div class="m-2 flex flex-col">
 		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
-		<button class="btn preset-filled-secondary-500 mt-auto">
-			<Download />
-			Baixar PDF</button
-		>
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">
-		<label class="relative m-2 cursor-pointer brightness-125 hover:text-[#e3d664]">
-			<input bind:checked={avaliarChecado} onclick={avaliar} type="checkbox" class="peer hidden" />
-			<Star class="hidden peer-checked:block" fill="#e3d664" />
-			<Star class="block peer-checked:hidden" />
-		</label>
+		<div class="m-2 grid grid-flow-col gap-2 items-center">
+			<span>{estrelas} Estrelas </span>
+			{#if usuarioLogado}
+				<label class="relative cursor-pointer brightness-125 hover:text-[#e3d664]">
+					<input
+						bind:checked={avaliarChecado}
+						onclick={avaliar}
+						type="checkbox"
+						class="peer hidden"
+					/>
+					<Star class="hidden peer-checked:block" fill="#e3d664" />
+					<Star class="block peer-checked:hidden" />
+				</label>
+			{/if}
+		</div>
 
 		<div class="m-2">
-			<span>{estrelas} Estrelas </span>
+			<button class="btn preset-filled-secondary-500">
+				<Download />
+				Baixar PDF</button
+			>
 			{#if projeto.dataFim}
 				<span class="font-sans font-extralight"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span

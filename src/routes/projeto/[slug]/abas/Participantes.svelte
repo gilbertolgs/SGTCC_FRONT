@@ -31,7 +31,7 @@
 	onMount(async () => {
 		await getParticipantes();
 	});
-	const camposCabecalho = ['ID', 'Nome', 'Função', 'Ações'];
+	const camposCabecalho = ['Nome', 'Função', 'Ações'];
 
 	async function getParticipantes() {
 		participantes = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
@@ -110,7 +110,6 @@
 			{#if participantes}
 				{#each participantes as participante}
 					<tr out:fade={{ duration: 400 }} in:fade={{ duration: 400 }}>
-						<td>{participante.id}</td>
 						<td>
 							<a
 								href={`/usuario/${participante.id}`}
@@ -157,9 +156,6 @@
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
 				<td class="flex items-center gap-2">
 					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
 					<div class="placeholder h-2 w-full animate-pulse"></div>
