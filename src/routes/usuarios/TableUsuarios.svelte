@@ -44,7 +44,7 @@
 		}
 	}
 
-	const camposCabecalho = ['ID', 'Nome', 'Email', 'Papel'];
+	const camposCabecalho = ['Nome', 'Email', 'Papel'];
 </script>
 
 <div class="m-2 flex items-end gap-2">
@@ -89,7 +89,6 @@
 		{#snippet corpo()}
 			{#each usuariosFiltrados as usuarioAtual}
 				<tr class="even:preset-tonal">
-					<td>{usuarioAtual.id}</td>
 					<td>
 						<a
 							href={`/usuario/${usuarioAtual.id}`}
@@ -119,9 +118,6 @@
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
 				<td class="flex items-center gap-2">
 					<div class="placeholder-circle size-10 animate-pulse"></div>
 					<div class="placeholder h-2 w-full animate-pulse"></div>

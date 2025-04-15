@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { pageName, storeLogin } from '../../../stores';
-
-	import Toaster from '$lib/ToastHandler';
-	import { getContext, onMount } from 'svelte';
-
 	import CardProjetoUsuario from '$components/CardProjetoUsuario.svelte';
+	import Toaster from '$lib/ToastHandler';
 	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import UsuarioRepository from '$repository/UsuarioRepository';
+	import { getContext, onMount } from 'svelte';
+	import { pageName, storeLogin } from '../../../stores';
 	import PerfilCard from './PerfilCard.svelte';
 	const toast = new Toaster(getContext);
 
@@ -43,7 +41,7 @@
 	<PerfilCard {idUsuario} {data} />
 </div>
 
-{#if projetos && usuario}
+{#if usuario && projetos && projetos.length > 0}
 	<div class="preset-tonal grid gap-2 rounded p-3 md:m-5 md:grid-cols-3">
 		{#each projetos as projeto}
 			<CardProjetoUsuario {projeto} {usuario} />

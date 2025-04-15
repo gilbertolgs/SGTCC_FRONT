@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ConfirmDialog from '$components/ConfirmDialog.svelte';
 	import ModalBase from '$components/ModalBase.svelte';
 	import Toaster from '$lib/ToastHandler';
 	import ProjetoRepository from '$repository/ProjetoRepository';
@@ -23,26 +24,12 @@
 </script>
 
 {#if projeto}
-	<ModalBase bind:openState>
-		{#snippet conteudo()}
-			<div class="mx-5 grid gap-2">
-				<h5 class="h5">Tem certeza que deseja publicar esse Projeto?</h5>
-				<span>Projeto: {projeto.nome}</span>
-				<div class="m-2 grid grid-flow-col gap-3">
-					<button
-						class="btn preset-filled-success-500"
-						onclick={() => {
-							ExcluirProjeto(projeto.id);
-						}}>Confirma</button
-					>
-					<button
-						class="btn preset-filled-error-500"
-						onclick={() => {
-							openState = false;
-						}}>Cancela</button
-					>
-				</div>
-			</div>
-		{/snippet}
-	</ModalBase>
+	<ConfirmDialog
+		bind:openState
+		titulo="Tem certeza que deseja publicar esse Projeto?"
+		texto="Projeto: {projeto.nome}"
+		funcao={() => {
+			ExcluirProjeto(projeto.id);
+		}}
+	/>
 {/if}

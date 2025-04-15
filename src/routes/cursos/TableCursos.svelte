@@ -28,7 +28,7 @@
 			);
 		}
 	}
-	const camposCabecalho = ['ID', 'Nome', 'Descrição', 'Ações'];
+	const camposCabecalho = ['Nome', 'Descrição', 'Ações'];
 </script>
 
 <div class="m-2 flex items-end gap-2">
@@ -60,7 +60,6 @@
 		{#snippet corpo()}
 			{#each cursosFiltrados as cursoAtual}
 				<tr class="even:preset-tonal">
-					<td>{cursoAtual.id}</td>
 					<td>
 						<span class="inline-flex w-min items-center gap-1 whitespace-nowrap">
 							<ImageComponent objeto={cursoAtual} />
@@ -109,9 +108,6 @@
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
 				<td class="flex items-center gap-2">
 					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
 					<div class="placeholder h-2 w-full animate-pulse"></div>

@@ -2,14 +2,20 @@
 	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
 	import { EnumTipoFiltro } from '$model/EnumTipoFiltro';
 	import { EnumTipoOrdenacao } from '$model/EnumTipoOrdenacao';
+	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { onMount } from 'svelte';
-	import { pageName } from '../../stores';
+	import { pageName, storeLogin } from '../../stores';
 	import PesquisaProjetoPublico from './PesquisaProjetoPublico.svelte';
 
-	let projetos: Projeto[] | null = $state(null);
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
 
+	storeLogin.subscribe((value) => {
+		usuarioLogado = value;
+	});
+
+	let projetos: Projeto[] | null = $state(null);
 
 	onMount(() => {
 		getProjetos(
@@ -49,6 +55,6 @@
 
 {#if projetos}
 	{#each projetos as projeto}
-		<CardProjetoPublico {projeto} />
+		<CardProjetoPublico {projeto} {usuarioLogado} />
 	{/each}
 {/if}
