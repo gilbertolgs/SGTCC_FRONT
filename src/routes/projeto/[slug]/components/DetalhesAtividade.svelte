@@ -8,7 +8,17 @@
 	import AtividadeRepository from '$repository/AtividadeRepository';
 	import { X as IconX, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
+	import { storeLogin } from '../../../../stores';
+	import type LoggedUser from '$model/LoggedUser';
 	const toast = new Toaster(getContext);
+
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+
+	storeLogin.subscribe((value) => {
+		console.log(value);
+
+		usuarioLogado = value;
+	});
 
 	let { openState = $bindable(), idAtividade, abrirModal, getAtividades } = $props();
 	let atividade: Atividade | null = $derived(null);
@@ -47,12 +57,17 @@
 	}
 
 	async function EnviarComentario() {
-		if (txtComentario.trim() == '') {
+		if (txtComentario.trim() == '' || usuarioLogado == null) {
 			return;
 		}
-		await AtividadeRepository.AdicionarComentario(2, idAtividade, txtComentario);
+		await AtividadeRepository.AdicionarComentario(usuarioLogado.id, idAtividade, txtComentario);
 		pegaComentarios();
 		txtComentario = '';
+	}
+
+	async function ExcluirComentario(idComentario: number) {
+		await AtividadeRepository.ExcluirComentario(idComentario);
+		pegaComentarios();
 	}
 </script>
 
@@ -91,15 +106,20 @@
 				{#if comentarios === null || comentarios.length < 1}
 					<span class="preset-tonal m-2 italic opacity-70">Ainda não há comentários</span>
 				{:else}
-					<ul class="preset-tonal mb-3 grid h-1/2 gap-2 overflow-auto">
+					<ul class="preset-tonal mb-3 grid h-1/2 gap-2 overflow-auto shadow-xl">
 						{#each comentarios as comentario}
 							<li class="rounded border p-2">
-								<div class="w-full">
+								<div class="flex w-full gap-1">
 									<a href="/usuario/{comentario.idUsuario}" class="anchor mr-auto"
 										>{comentario.nomeUsuario}</a
 									>
-									<!-- <button class="btn preset-filled-primary-500">Alterar</button>
-									<button class="btn preset-filled-error-500">Excluir</button> -->
+									<button class="btn preset-filled-primary-500"><Pencil /> Alterar</button>
+									<button
+										class="btn preset-filled-error-500"
+										onclick={() => {
+											ExcluirComentario(comentario.id);
+										}}><IconX /> Excluir</button
+									>
 								</div>
 								<p>{comentario.comentario}</p>
 							</li>
@@ -116,10 +136,12 @@
 						erros={null}
 						constraints={null}
 					/>
-					<button class="btn preset-filled-primary-500 mt-auto"
-					onclick={() => {
-						EnviarComentario();
-					}}>Enviar</button>
+					<button
+						class="btn preset-filled-primary-500 mt-auto"
+						onclick={() => {
+							EnviarComentario();
+						}}>Enviar</button
+					>
 				</div>
 			</div>
 		{/if}

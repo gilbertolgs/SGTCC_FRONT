@@ -100,6 +100,14 @@ class AtividadeRepository {
 
         return response;
     }
+    async ExcluirComentario(idComentario: number) {
+        const response = await Api.delete(`atividadeComentarios/${idComentario}/deletarComentarioAtividade`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
 }
 
 export default new AtividadeRepository();
