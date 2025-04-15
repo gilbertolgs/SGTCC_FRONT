@@ -24,6 +24,7 @@
 	let atividade: Atividade | null = $derived(null);
 	let comentarios: ComentarioAtividade[] | null = $derived(null);
 	let txtComentario: string = $state('');
+	let idComentarioSelecionado: number = $state(0);
 
 	let openStateApagar = $state(false);
 
@@ -60,14 +61,25 @@
 		if (txtComentario.trim() == '' || usuarioLogado == null) {
 			return;
 		}
-		await AtividadeRepository.AdicionarComentario(usuarioLogado.id, idAtividade, txtComentario);
+		if (idComentarioSelecionado === 0) {
+			await AtividadeRepository.AdicionarComentario(usuarioLogado.id, idAtividade, txtComentario);
+		} else {
+			await AtividadeRepository.AtualizarComentario(idComentarioSelecionado, usuarioLogado.id, idAtividade, txtComentario);
+		}
 		pegaComentarios();
 		txtComentario = '';
+		idComentarioSelecionado = 0;
 	}
 
 	async function ExcluirComentario(idComentario: number) {
 		await AtividadeRepository.ExcluirComentario(idComentario);
 		pegaComentarios();
+	}
+
+	async function AlterarComentario(idComentario: number, texto: string) {
+		idComentarioSelecionado = idComentario;
+		txtComentario = texto;
+		
 	}
 </script>
 
@@ -113,7 +125,10 @@
 									<a href="/usuario/{comentario.idUsuario}" class="anchor mr-auto"
 										>{comentario.nomeUsuario}</a
 									>
-									<button class="btn preset-filled-primary-500"><Pencil /> Alterar</button>
+									<button class="btn preset-filled-primary-500"
+									onclick={() => {
+										AlterarComentario(comentario.id, comentario.comentario);
+									}}><Pencil /> Alterar</button>
 									<button
 										class="btn preset-filled-error-500"
 										onclick={() => {

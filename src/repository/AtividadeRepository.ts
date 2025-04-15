@@ -100,6 +100,21 @@ class AtividadeRepository {
 
         return response;
     }
+    async AtualizarComentario(idComentario:number, idUsuario: number, idAtividade: number, comentario: string) {
+        const data = {
+            id: idComentario,
+            idUsuario: idUsuario,
+            idAtividade: idAtividade,
+            comentario: comentario
+        }
+
+        const response = await Api.put(`atividadeComentarios/atualizarComentarioAtividade`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
     async ExcluirComentario(idComentario: number) {
         const response = await Api.delete(`atividadeComentarios/${idComentario}/deletarComentarioAtividade`)
             .catch((error) => {
