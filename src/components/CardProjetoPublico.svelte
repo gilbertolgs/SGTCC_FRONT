@@ -59,13 +59,11 @@
 					const exists = novasEstrelas.some(
 						(item: { idUsuario: number }) => item.idUsuario === usuarioLogado?.id
 					);
-					console.log('existe', exists);
 
 					if (exists) {
 						avaliarChecado = true;
 					}
 				}
-				console.log(novasEstrelas);
 				estrelas = novasEstrelas.length;
 			}
 		} catch (error) {
