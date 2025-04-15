@@ -4,6 +4,7 @@
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import CursoRepository from '$repository/CursoRepository';
+	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Progress } from '@skeletonlabs/skeleton-svelte';
 	import { onMount } from 'svelte';
 
@@ -45,7 +46,31 @@
 
 	onMount(() => {
 		defineImagem();
+		calculaProgresso();
 	});
+
+	async function calculaProgresso() {
+		const atividades = await ProjetoRepository.PegarAtividades(projeto.id);
+
+		const totalPoints = atividades.length;
+		let earnedPoints = atividades.reduce((sum: number, task: { estado: number; }) => {
+			if (task.estado === 2) return sum + 2;
+			if (task.estado === 1) return sum + 1;
+			return sum;
+		}, 0);
+
+		if (totalPoints === 0) {
+			progresso = 0;
+			return;
+		}
+		console.log("earnedPoints");
+		console.log(earnedPoints);
+		console.log(totalPoints);
+		earnedPoints = earnedPoints / 2;
+		
+
+		progresso = Math.round((earnedPoints / totalPoints) * 100);
+	}
 
 	async function navigateToFoo() {
 		const target = '/projeto/1';
