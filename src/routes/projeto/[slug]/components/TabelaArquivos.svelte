@@ -34,7 +34,7 @@
 {#if arquivos}
 	<TableBaseComponent
 		{camposCabecalho}
-		arrObjetosTamanho={arquivos.length + 1}
+		arrObjetosTamanho={arquivos.length}
 		labelObjeto="Arquivos, {tamanhoTotal} Utilizados"
 	>
 		{#snippet cabecalho()}

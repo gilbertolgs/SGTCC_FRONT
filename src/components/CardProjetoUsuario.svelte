@@ -44,7 +44,7 @@
 		});
 	}
 
-	onMount(() => {
+	$effect(() => {
 		defineImagem();
 		calculaProgresso();
 	});
