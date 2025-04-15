@@ -65,7 +65,7 @@
 
 	async function removerParticipante(idUsuario: number) {
 		try {
-			const response = await ProjetoRepository.RemoverUsuarioAoProjeto(projeto.id, idUsuario);
+			const response = await ProjetoRepository.RemoverUsuarioDoProjeto(projeto.id, idUsuario);
 			toast.triggerSuccess('Usuário removido com sucesso!');
 			await getParticipantes();
 		} catch (error) {
