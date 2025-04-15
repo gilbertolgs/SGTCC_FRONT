@@ -7,6 +7,7 @@ import Projeto from "$model/Projeto";
 import type Usuario from "$model/Usuario";
 import { number } from "zod";
 import Api from "./axiosInstance";
+import type { EnumAtividade } from "$model/EnumAtividade";
 
 class ProjetoRepository {
     async PegarPorId(id: number): Promise<Projeto> {
@@ -169,7 +170,7 @@ class ProjetoRepository {
 
 
     async PegarAtividades(idProjeto: number) {
-        const response = await Api.get(`atividade/projetos/${idProjeto}/atividades`)
+        const response = await Api.get(`atividade/projetos/${idProjeto}/atividades/semFiltro`)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -208,6 +209,16 @@ class ProjetoRepository {
             });
 
         return response;
+    }
+
+    async AtualizarStatusAtividade(idAtividade: number, estado: EnumAtividade) {
+        const response = await Api.put(`atividade/${idAtividade}/status/${estado}`, null)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+
     }
 
     async PegarEstrelas(idProjeto: number) {
