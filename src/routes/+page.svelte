@@ -120,12 +120,12 @@
 							class="bg-primary-100 text-primary-500 flex items-center justify-start gap-2 rounded-full"
 						>
 							<funcionalidade.icone />
-							<h2 class="title-font text-tertiary-500 text-lg font-medium">
+							<h2 class="title-font text-tertiary-500 text-2xl font-medium">
 								{funcionalidade.titulo}
 							</h2>
 						</div>
 						<div class="flex-grow">
-							<p class="text-base leading-relaxed">
+							<p class=" leading-relaxed text-3xl">
 								{funcionalidade.descricao}
 							</p>
 						</div>
@@ -279,7 +279,7 @@
 <footer class="body-font text-gray-700">
 	<div class="">
 		<div class="container mx-auto flex flex-col flex-wrap px-5 py-4 sm:flex-row">
-			<p class="text-center text-sm text-gray-500 sm:text-left">© 2025 SGTCC</p>
+			<p class="text-center text-sm text-gray-500 sm:text-left">© 2025 SGTCC - Sistema de Gestão de Trabalhos de Conclusão de Curso</p>
 		</div>
 	</div>
 </footer>

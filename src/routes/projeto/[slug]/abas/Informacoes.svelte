@@ -158,7 +158,7 @@
 			<p class="">{projeto.ExibeStatus()}</p>
 		</div>
 	</div>
-	{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
+	<!-- {#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado} -->
 		<div class="m-2 grid h-1/2 gap-2">
 			<button
 				onclick={() => {
@@ -185,5 +185,5 @@
 				class="btn preset-filled-error-500"><IconX /> Cancelar Projeto</button
 			>
 		</div>
-	{/if}
+	<!-- {/if} -->
 </div>
