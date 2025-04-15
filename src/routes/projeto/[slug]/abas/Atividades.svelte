@@ -8,6 +8,7 @@
 	import { getContext, onMount } from 'svelte';
 	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
 	import Toaster from '$lib/ToastHandler';
+	import DetalhesAtividade from '../components/DetalhesAtividade.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -17,15 +18,20 @@
 	}
 	let { projeto, data }: Props = $props();
 	let atividades: Atividade[] | null = $state(null);
+	let idAtividadeAberta: number = $state(0);
 
 	let openStateAdicionar = $state(false);
+	let openStateDetalhes = $state(false);
 
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
 			case 'Adicionar':
 				openStateAdicionar = !openStateAdicionar;
 				break;
-
+			case 'Detalhes':
+				idAtividadeAberta = argumentos;
+				openStateDetalhes = !openStateDetalhes;
+				break;
 			default:
 				break;
 		}
@@ -83,8 +89,6 @@
 	function mudaEstado(idAtividade: number, estado: EnumAtividade) {
 		ProjetoRepository.AtualizarStatusAtividade(idAtividade, estado);
 	}
-
-	function abreDetalhes() {}
 </script>
 
 <FormAdicionarAtividade
@@ -92,6 +96,10 @@
 	bind:openState={openStateAdicionar}
 	atividade={null}
 	{data}
+/>
+<DetalhesAtividade
+bind:openState={openStateDetalhes}
+idAtividade={idAtividadeAberta}
 />
 
 <div class="flex flex-col">
@@ -109,7 +117,7 @@
 					todos={todos.filter((t) => t.estado === EnumAtividade.Created)}
 					{remove}
 					{mudaEstado}
-					{abreDetalhes}
+					abreDetalhes={abrirModal}
 				/>
 			</div>
 		</div>
@@ -121,7 +129,7 @@
 					todos={todos.filter((t) => t.estado === EnumAtividade.InProgress)}
 					{remove}
 					{mudaEstado}
-					{abreDetalhes}
+					abreDetalhes={abrirModal}
 				/>
 			</div>
 		</div>
@@ -133,7 +141,7 @@
 					todos={todos.filter((t) => t.estado === EnumAtividade.Finished)}
 					{remove}
 					{mudaEstado}
-					{abreDetalhes}
+					abreDetalhes={abrirModal}
 				/>
 			</div>
 		</div>

@@ -16,7 +16,7 @@
 
 	//Gambiarra pro Typescript não reclamar
 	let imagemProjeto: string = $derived((projeto as Projeto | null)?.ExibeImagem?.() ?? '');
-	let progresso = $state(50);
+	let progresso = $state(0);
 
 	function imagemExiste(imgUrl: string) {
 		return imgUrl.trim() !== '';
@@ -63,9 +63,6 @@
 			progresso = 0;
 			return;
 		}
-		console.log("earnedPoints");
-		console.log(earnedPoints);
-		console.log(totalPoints);
 		earnedPoints = earnedPoints / 2;
 		
 

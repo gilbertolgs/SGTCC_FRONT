@@ -22,7 +22,10 @@
 					<option value={EnumAtividade.InProgress}>Em Progresso</option>
 					<option value={EnumAtividade.Finished}>Finalizado</option>
 				</select>
-				<button class="btn hover:preset-filled-primary-500 w-full">
+				<button class="btn hover:preset-filled-primary-500 w-full" 
+				onclick={() => {
+					abreDetalhes("Detalhes", todo.id);
+				}}>
 					{todo.nome}
 				</button>
 			</label>
