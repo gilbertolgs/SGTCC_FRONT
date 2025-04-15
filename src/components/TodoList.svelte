@@ -12,7 +12,7 @@
 				class="preset-tonal-surface flex items-center justify-between gap-1 rounded border p-1"
 			>
 				<select
-					class="select light:bg-surface-50"
+					class="md:w-full w-min select light:bg-surface-50"
 					bind:value={todo.estado}
 					onchange={() => {
 						mudaEstado(todo.id, todo.estado);

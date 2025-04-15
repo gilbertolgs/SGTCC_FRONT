@@ -130,7 +130,7 @@
 			</div>
 		{/if}
 	</div>
-	<div class="m-2 flex flex-col">
+	<div class="m-2 hidden flex-col md:flex">
 		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">

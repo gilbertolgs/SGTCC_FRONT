@@ -102,24 +102,39 @@
 		class="btn preset-filled-success-500 mt-auto md:ml-auto"><Plus />Adicionar</button
 	>
 	<div class="justify-items-between grid grid-flow-col overflow-auto">
-		<div class="bg-primary-400-600 m-2 grid justify-items-center rounded border p-5">
+		<div class="bg-primary-400-600 m-2 flex flex-col items-center rounded border p-5">
 			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CirclePause /> A Fazer</h2>
-			<div class="preset-tonal w-full rounded p-5">
-				<TodoList todos={todos.filter((t) => t.estado === EnumAtividade.Created)} {remove} {mudaEstado} {abreDetalhes}/>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.Created)}
+					{remove}
+					{mudaEstado}
+					{abreDetalhes}
+				/>
 			</div>
 		</div>
 
-		<div class="bg-warning-400-600 m-2 grid justify-items-center rounded border p-5">
+		<div class="bg-warning-400-600 m-2 flex flex-col items-center rounded border p-5">
 			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CirclePlay /> Em Progresso</h2>
-			<div class="preset-tonal w-full rounded p-5">
-				<TodoList todos={todos.filter((t) => t.estado === EnumAtividade.InProgress)} {remove} {mudaEstado} {abreDetalhes}/>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.InProgress)}
+					{remove}
+					{mudaEstado}
+					{abreDetalhes}
+				/>
 			</div>
 		</div>
 
-		<div class="bg-success-400-600 m-2 grid justify-items-center rounded border p-5">
-			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CircleCheck /> Concluída</h2>
-			<div class="preset-tonal w-full rounded p-5">
-				<TodoList todos={todos.filter((t) => t.estado === EnumAtividade.Finished)} {remove} {mudaEstado} {abreDetalhes}/>
+		<div class="bg-success-400-600 m-2 flex flex-col items-center rounded border p-5">
+			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CircleCheck /> Finalizado</h2>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.Finished)}
+					{remove}
+					{mudaEstado}
+					{abreDetalhes}
+				/>
 			</div>
 		</div>
 	</div>
