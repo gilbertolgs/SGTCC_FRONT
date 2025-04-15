@@ -120,7 +120,7 @@
 	{data}
 />
 
-<div class="grid justify-center md:flex">
+<div class="grid md:justify-center md:flex">
 	<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
 		<div class="mb-4">
 			<span class="text-surface-700-300 font-bold">Nome:</span>

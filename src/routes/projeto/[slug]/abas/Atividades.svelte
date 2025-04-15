@@ -4,10 +4,11 @@
 	import { EnumAtividade } from '$model/EnumAtividade';
 	import type Projeto from '$model/Projeto';
 	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { Plus } from 'lucide-svelte';
+	import { CircleCheck, CirclePause, CirclePlay, Plus } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
 	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
 	import Toaster from '$lib/ToastHandler';
+	import DetalhesAtividade from '../components/DetalhesAtividade.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -17,15 +18,20 @@
 	}
 	let { projeto, data }: Props = $props();
 	let atividades: Atividade[] | null = $state(null);
+	let idAtividadeAberta: number = $state(0);
 
 	let openStateAdicionar = $state(false);
+	let openStateDetalhes = $state(false);
 
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
 			case 'Adicionar':
 				openStateAdicionar = !openStateAdicionar;
 				break;
-
+			case 'Detalhes':
+				idAtividadeAberta = argumentos;
+				openStateDetalhes = !openStateDetalhes;
+				break;
 			default:
 				break;
 		}
@@ -50,20 +56,9 @@
 		}
 
 		todos = atividades.map((atividade) => {
-			let estado: number;
-
-			// Reverse the logic: if estado is Pendente, make it 0; if Concluida, make it 1
-			if (atividade.estado === EnumAtividade.Created) {
-				estado = 0;
-			} else if (atividade.estado === EnumAtividade.InProgress) {
-				estado = 1;
-			} else {
-				estado = 0; // Default to 0 if it’s EmProgresso or other states
-			}
-
 			return {
 				id: atividade.id,
-				estado: estado,
+				estado: atividade.estado,
 				nome: atividade.nome
 			};
 		});
@@ -90,6 +85,10 @@
 			console.log(error);
 		}
 	}
+
+	function mudaEstado(idAtividade: number, estado: EnumAtividade) {
+		ProjetoRepository.AtualizarStatusAtividade(idAtividade, estado);
+	}
 </script>
 
 <FormAdicionarAtividade
@@ -97,6 +96,10 @@
 	bind:openState={openStateAdicionar}
 	atividade={null}
 	{data}
+/>
+<DetalhesAtividade
+bind:openState={openStateDetalhes}
+idAtividade={idAtividadeAberta}
 />
 
 <div class="flex flex-col">
@@ -106,15 +109,41 @@
 		}}
 		class="btn preset-filled-success-500 mt-auto md:ml-auto"><Plus />Adicionar</button
 	>
-	<div class="grid grid-flow-col justify-items-center">
-		<div class="preset-tonal m-2 rounded p-5">
-			<h2 class="h2">Em Progresso</h2>
-			<TodoList todos={todos.filter((t) => !t.estado)} {remove} />
+	<div class="justify-items-between grid grid-flow-col overflow-auto">
+		<div class="bg-primary-400-600 m-2 flex flex-col items-center rounded border p-5">
+			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CirclePause /> A Fazer</h2>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.Created)}
+					{remove}
+					{mudaEstado}
+					abreDetalhes={abrirModal}
+				/>
+			</div>
 		</div>
 
-		<div class="preset-tonal m-2 rounded p-5">
-			<h2 class="h2">Concluída</h2>
-			<TodoList todos={todos.filter((t) => t.estado)} {remove} />
+		<div class="bg-warning-400-600 m-2 flex flex-col items-center rounded border p-5">
+			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CirclePlay /> Em Progresso</h2>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.InProgress)}
+					{remove}
+					{mudaEstado}
+					abreDetalhes={abrirModal}
+				/>
+			</div>
+		</div>
+
+		<div class="bg-success-400-600 m-2 flex flex-col items-center rounded border p-5">
+			<h2 class="h2 flex items-center gap-2 whitespace-nowrap"><CircleCheck /> Finalizado</h2>
+			<div class="preset-tonal h-full w-full rounded p-5">
+				<TodoList
+					todos={todos.filter((t) => t.estado === EnumAtividade.Finished)}
+					{remove}
+					{mudaEstado}
+					abreDetalhes={abrirModal}
+				/>
+			</div>
 		</div>
 	</div>
 </div>

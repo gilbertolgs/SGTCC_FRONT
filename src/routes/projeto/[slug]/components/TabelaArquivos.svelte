@@ -5,12 +5,11 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		camposCabecalho: string[];
 		arquivos: Arquivo[] | null;
 		selecionaLinha: Function;
 		linhaSelecionada: number;
 	}
-	let { camposCabecalho, arquivos, selecionaLinha, linhaSelecionada }: Props = $props();
+	let { arquivos, selecionaLinha, linhaSelecionada }: Props = $props();
 	let tamanhoTotal = $state('0');
 
 	$effect(() => {
@@ -19,6 +18,8 @@
 			tamanhoTotal = DataFormatHandler.FormatBytes(tamanhoTotalBytes, 1);
 		}
 	});
+
+	const camposCabecalho = ['Extensão', 'Nome', 'Ultima Alteração', 'Tamanho'];
 </script>
 
 {#snippet cabecalhoArquivos()}
@@ -45,12 +46,11 @@
 					<tr
 						class=" {linhaSelecionada === arquivo.idExterno
 							? 'preset-filled-primary-500'
-							: 'even:preset-tonal'}"
+							: 'even:preset-tonal'} hover:cursor-pointer"
 						onclick={() => {
 							selecionaLinha(arquivo);
 						}}
 					>
-						<td>{arquivo.idExterno}</td>
 						<td>{arquivo.extensao}</td>
 						<td>{arquivo.nomeOriginal}</td>
 						<td>{arquivo.ExibeUltimaAlteracao()}</td>
@@ -71,9 +71,6 @@
 		{/snippet}
 		{#snippet corpo()}
 			<tr class="">
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
 				<td class="flex items-center gap-2">
 					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
 					<div class="placeholder h-2 w-full animate-pulse"></div>

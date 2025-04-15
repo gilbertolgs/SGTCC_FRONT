@@ -45,7 +45,6 @@
 		arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
 	}
 
-	const camposCabecalho = ['ID', 'Extensão', 'Nome', 'Ultima Alteração', 'Tamanho'];
 
 	function selecionaLinha(arquivo: Arquivo) {
 		linhaSelecionada = arquivo.idExterno;
@@ -131,4 +130,4 @@
 
 <BotoesArquivo {linhaSelecionada} {selecionaLinha} {baixaArquivo} {abrirModal} />
 
-<TabelaArquivos {camposCabecalho} {arquivos} {linhaSelecionada} {selecionaLinha} />
+<TabelaArquivos {arquivos} {linhaSelecionada} {selecionaLinha} />
