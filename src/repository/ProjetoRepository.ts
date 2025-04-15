@@ -130,6 +130,7 @@ class ProjetoRepository {
         return response;
     }
 
+    // ------------------- Usuários ----------------------- //
     async AdicionarUsuarioAoProjeto(idProjeto: number, emailUsuario: string) {
         const usuario: Usuario = await Api.get(`usuarios/email?email=${emailUsuario}`)
             .catch((error) => {
@@ -154,7 +155,7 @@ class ProjetoRepository {
         return response;
     }
 
-    async RemoverUsuarioAoProjeto(idProjeto: number, idUsuario: number) {
+    async RemoverUsuarioDoProjeto(idProjeto: number, idUsuario: number) {
         const data = {
             idUsuario: idUsuario,
             idProjeto: idProjeto,
@@ -168,7 +169,7 @@ class ProjetoRepository {
         return response;
     }
 
-
+    // ------------------- Atividades ----------------------- //
     async PegarAtividades(idProjeto: number) {
         const response = await Api.get(`atividade/projetos/${idProjeto}/atividades/semFiltro`)
             .catch((error) => {
@@ -221,6 +222,8 @@ class ProjetoRepository {
 
     }
 
+    // ------------------- Avaliações ----------------------- //
+
     async PegarEstrelas(idProjeto: number) {
         const response = await Api.get(`avaliacoes/porProjeto/${idProjeto}`)
             .catch((error) => {
@@ -235,9 +238,22 @@ class ProjetoRepository {
             idUsuario: idUsuario,
             idProjeto: idProjeto,
             avaliacao: 1
-
         }
         const response = await Api.post(`avaliacoes/criarAvaliacao`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async RemoverAvaliacao(idProjeto: number, idUsuario: number) {
+        const data = {
+            idUsuario: idUsuario,
+            idProjeto: idProjeto,
+        }
+
+        const response = await Api.delete(`avaliacoes/removerAvaliacao`, data)
             .catch((error) => {
                 throw new Error(error);
             });

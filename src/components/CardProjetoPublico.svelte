@@ -68,14 +68,26 @@
 				console.log(novasEstrelas);
 				estrelas = novasEstrelas.length;
 			}
-		} catch (error) {}
+		} catch (error) {
+			estrelas = 0;
+		}
 	}
 
 	async function avaliar() {
-		if (avaliarChecado === false && usuarioLogado) {
-			await ProjetoRepository.Avaliar(projeto.id, usuarioLogado.id);
+		if (usuarioLogado) {
+			switch (avaliarChecado) {
+				case true:
+					await ProjetoRepository.RemoverAvaliacao(projeto.id, usuarioLogado.id);
+					break;
+				case false:
+					await ProjetoRepository.Avaliar(projeto.id, usuarioLogado.id);
+					break;
+
+				default:
+					break;
+			}
+			pegaEstrelas();
 		}
-		pegaEstrelas();
 	}
 </script>
 
@@ -122,7 +134,7 @@
 		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">
-		<div class="m-2 grid grid-flow-col gap-2 items-center">
+		<div class="m-2 grid grid-flow-col items-center gap-2">
 			<span>{estrelas} Estrelas </span>
 			{#if usuarioLogado}
 				<label class="relative cursor-pointer brightness-125 hover:text-[#e3d664]">
