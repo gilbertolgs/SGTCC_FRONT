@@ -198,13 +198,13 @@ class ProjetoRepository {
 
     async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string) {
         const data = {
+            id: idAtividade,
             idProjeto: idProjeto,
-            idAtividade: idAtividade,
             nome: nome,
             descricao: descricao
         }
 
-        const response = await Api.post(`atividade/atualizarAtividade`, data)
+        const response = await Api.put(`atividade/atualizarAtividade`, data)
             .catch((error) => {
                 throw new Error(error);
             });

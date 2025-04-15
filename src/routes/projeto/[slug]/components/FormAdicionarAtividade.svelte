@@ -24,8 +24,6 @@
 	});
 	$effect(() => {
 		if (atividade) {
-			console.log('aki');
-			
 			$form.id = atividade.id;
 			$form.nome = atividade.nome.trim();
 			$form.descricao = atividade.descricao.trim();

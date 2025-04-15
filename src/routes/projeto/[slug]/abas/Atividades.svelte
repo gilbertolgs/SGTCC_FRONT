@@ -19,6 +19,7 @@
 	let { projeto, data }: Props = $props();
 	let atividades: Atividade[] | null = $state(null);
 	let idAtividadeAberta: number = $state(0);
+	let atividadeASerAlterada: Atividade | null = $state(null);
 
 	let openStateAdicionar = $state(false);
 	let openStateDetalhes = $state(false);
@@ -26,6 +27,7 @@
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
 			case 'Adicionar':
+				atividadeASerAlterada = argumentos;
 				openStateAdicionar = !openStateAdicionar;
 				break;
 			case 'Detalhes':
@@ -38,7 +40,7 @@
 	}
 
 	onMount(async () => {
-		await getAtividates();
+		await getAtividades();
 	});
 
 	let todos: { id: number; estado: number; nome: string }[] = $state([]);
@@ -48,11 +50,11 @@
 		todos.splice(index, 1);
 	}
 
-	async function getAtividates() {
-		atividades = await ProjetoRepository.PegarAtividades(projeto.id);
+	async function getAtividades() {
+		atividades = await ProjetoRepository.PegarAtividades(projeto.id);		
 
 		if (!atividades || atividades.length < 1) {
-			return;
+			atividades = [];
 		}
 
 		todos = atividades.map((atividade) => {
@@ -78,7 +80,7 @@
 			}
 			openStateAdicionar = false;
 			toast.triggerSuccess('Projeto alterado com sucesso!');
-			await getAtividates();
+			await getAtividades();
 		} catch (error) {
 			openStateAdicionar = false;
 			toast.triggerError('Ocorreu um erro ao tentar alterar projeto!');
@@ -94,12 +96,14 @@
 <FormAdicionarAtividade
 	AdicionarAtividade={adicionarAtividade}
 	bind:openState={openStateAdicionar}
-	atividade={null}
+	atividade={atividadeASerAlterada}
 	{data}
 />
 <DetalhesAtividade
-bind:openState={openStateDetalhes}
-idAtividade={idAtividadeAberta}
+	bind:openState={openStateDetalhes}
+	idAtividade={idAtividadeAberta}
+	{abrirModal}
+	{getAtividades}
 />
 
 <div class="flex flex-col">

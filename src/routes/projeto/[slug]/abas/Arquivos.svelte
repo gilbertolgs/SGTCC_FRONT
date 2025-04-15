@@ -63,7 +63,7 @@
 
 			await getArquivos();
 		} catch (error) {
-			toast.triggerError('Ocorreu um erro ao tentar excluir arquivo!');
+			toast.triggerError('Ocorreu um erro ao tentar apagar arquivo!');
 			console.log(error);
 		}
 	}
@@ -109,7 +109,7 @@
 
 <ConfirmDialog
 	bind:openState={openStateApagar}
-	titulo="Tem certeza que deseja excluir esse arquivo"
+	titulo="Tem certeza que deseja apagar esse arquivo"
 	texto="Arquivo: {arquivoSelecionado.nomeOriginal}"
 	funcao={apagaArquivo}
 />

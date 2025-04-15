@@ -17,7 +17,7 @@
 			getCursos();
 		} catch (error) {
 			openState = false;
-			toast.triggerError('Ocorreu um erro ao tentar excluir curso!');
+			toast.triggerError('Ocorreu um erro ao tentar apagar curso!');
 			console.log(error);
 		}
 	}
@@ -25,7 +25,7 @@
 
 <ConfirmDialog
 	bind:openState
-	titulo="Tem certeza que deseja excluir esse Curso?"
+	titulo="Tem certeza que deseja apagar esse Curso?"
 	texto="Curso: {curso.nome}"
 	funcao={() => {
 		ExcluirCurso(curso.id);

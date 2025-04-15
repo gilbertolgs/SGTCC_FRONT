@@ -64,6 +64,15 @@ class AtividadeRepository {
 
         return atividade;
     }
+
+    async ExcluirAtividade(idAtividade: number) {
+        const response = await Api.delete(`atividade/${idAtividade}/deletarAtividades`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
 }
 
 export default new AtividadeRepository();

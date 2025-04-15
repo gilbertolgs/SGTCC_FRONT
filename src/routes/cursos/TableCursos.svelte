@@ -77,7 +77,7 @@
 									abrirModal('Insert', cursoAtual);
 								}}
 							>
-								<Pencil /> Editar
+								<Pencil /> Alterar
 							</button>
 							<button
 								class="btn preset-filled-primary-500"
@@ -85,7 +85,7 @@
 									abrirModal('Imagem', cursoAtual);
 								}}
 							>
-								<ImagePlus /> Editar Imagem
+								<ImagePlus /> Alterar Imagem
 							</button>
 							<button
 								class="btn preset-filled-error-500"
