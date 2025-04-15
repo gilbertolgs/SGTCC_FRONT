@@ -1,4 +1,6 @@
 import Atividade from "$model/Atividade";
+import Comentario from "$model/Comentario";
+import ComentarioAtividade from "$model/ComentarioAtividade";
 import type { EnumAtividade } from "$model/EnumAtividade";
 import Api from "./axiosInstance";
 
@@ -67,6 +69,31 @@ class AtividadeRepository {
 
     async ExcluirAtividade(idAtividade: number) {
         const response = await Api.delete(`atividade/${idAtividade}/deletarAtividades`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async PegarComentariosAtividade(idAtividade: number) {
+        const response = await Api.get(`atividadeComentarios/projetoAtividade/${idAtividade}/comentarios`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        const comentario = response.map(ComentarioAtividade.CriaDeDados);
+
+        return comentario;
+    }
+    async AdicionarComentario(idUsuario: number, idAtividade: number, comentario: string) {
+        const data = {
+            idUsuario: idUsuario,
+            idAtividade: idAtividade,
+            comentario: comentario
+        }
+
+        const response = await Api.post(`atividadeComentarios/criarComentarioAtividade`, data)
             .catch((error) => {
                 throw new Error(error);
             });

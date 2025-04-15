@@ -4,6 +4,7 @@
 	import ModalBase from '$components/ModalBase.svelte';
 	import Toaster from '$lib/ToastHandler';
 	import type Atividade from '$model/Atividade';
+	import type ComentarioAtividade from '$model/ComentarioAtividade';
 	import AtividadeRepository from '$repository/AtividadeRepository';
 	import { X as IconX, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
@@ -11,6 +12,7 @@
 
 	let { openState = $bindable(), idAtividade, abrirModal, getAtividades } = $props();
 	let atividade: Atividade | null = $derived(null);
+	let comentarios: ComentarioAtividade[] | null = $derived(null);
 	let txtComentario: string = $state('');
 
 	let openStateApagar = $state(false);
@@ -19,6 +21,7 @@
 		console.log(idAtividade);
 		if (idAtividade !== 0) {
 			pegaAtividade();
+			pegaComentarios();
 		}
 	});
 
@@ -37,6 +40,19 @@
 			return;
 		}
 		toast.triggerError('Ocorreu um erro ao tentar Excluir atividade');
+	}
+
+	async function pegaComentarios() {
+		comentarios = await AtividadeRepository.PegarComentariosAtividade(idAtividade);
+	}
+
+	async function EnviarComentario() {
+		if (txtComentario.trim() == '') {
+			return;
+		}
+		await AtividadeRepository.AdicionarComentario(2, idAtividade, txtComentario);
+		pegaComentarios();
+		txtComentario = '';
 	}
 </script>
 
@@ -72,9 +88,24 @@
 						>
 					</div>
 				</div>
-				<ul class="preset-tonal h-1/2">
-					<li></li>
-				</ul>
+				{#if comentarios === null || comentarios.length < 1}
+					<span class="preset-tonal m-2 italic opacity-70">Ainda não há comentários</span>
+				{:else}
+					<ul class="preset-tonal mb-3 grid h-1/2 gap-2 overflow-auto">
+						{#each comentarios as comentario}
+							<li class="rounded border p-2">
+								<div class="w-full">
+									<a href="/usuario/{comentario.idUsuario}" class="anchor mr-auto"
+										>{comentario.nomeUsuario}</a
+									>
+									<!-- <button class="btn preset-filled-primary-500">Alterar</button>
+									<button class="btn preset-filled-error-500">Excluir</button> -->
+								</div>
+								<p>{comentario.comentario}</p>
+							</li>
+						{/each}
+					</ul>
+				{/if}
 				<div class="flex gap-2">
 					<FormInputComponent
 						classe="col-span-3"
@@ -85,7 +116,10 @@
 						erros={null}
 						constraints={null}
 					/>
-					<button class="btn preset-filled-primary-500 mt-auto">Enviar</button>
+					<button class="btn preset-filled-primary-500 mt-auto"
+					onclick={() => {
+						EnviarComentario();
+					}}>Enviar</button>
 				</div>
 			</div>
 		{/if}
