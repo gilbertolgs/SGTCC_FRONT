@@ -4,7 +4,7 @@
 	import CursoRepository from '$repository/CursoRepository.js';
 	import ProjetoRepository from '$repository/ProjetoRepository.js';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
-	import { FolderOpen, Info, ListTodo, Users } from 'lucide-svelte';
+	import { CalendarDays, FolderOpen, Info, ListTodo, NotebookPen, ScrollText, Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import Informacoes from './abas/Informacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
@@ -83,8 +83,8 @@
 
 {#if projeto}
 	<div class="items-center justify-items-center md:grid">
-		<div class="relative flex w-full justify-center">
-			<!-- style={`view-transition-name: item-image-${data.idProjeto};`} -->
+		<!-- <div class="relative flex w-full justify-center">
+			style={`view-transition-name: item-image-${data.idProjeto};`}
 			<img
 				src={imagemProjeto}
 				alt="Imagem do Projeto"
@@ -93,7 +93,7 @@
 			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">
 				{projeto.nome}
 			</div>
-		</div>
+		</div> -->
 		<div class="w-full md:m-2 md:w-3/4">
 			<Tabs
 				listJustify="justify-between"
@@ -121,8 +121,26 @@
 					</Tabs.Control>
 					<Tabs.Control value="arquivos">
 						<span class="flex items-center md:gap-2"
+							><ScrollText />
+							<span class="hidden md:block">Documentação</span>
+						</span>
+					</Tabs.Control>
+					<Tabs.Control value="anotacoes">
+						<span class="flex items-center md:gap-2"
+							><NotebookPen />
+							<span class="hidden md:block">Anotações</span>
+						</span>
+					</Tabs.Control>
+					<Tabs.Control value="duvidas">
+						<span class="flex items-center md:gap-2"
 							><FolderOpen />
-							<span class="hidden md:block">Arquivos</span>
+							<span class="hidden md:block">Dúvidas</span>
+						</span>
+					</Tabs.Control>
+					<Tabs.Control value="calendario">
+						<span class="flex items-center md:gap-2"
+							><CalendarDays />
+							<span class="hidden md:block">Calendário</span>
 						</span>
 					</Tabs.Control>
 				{/snippet}

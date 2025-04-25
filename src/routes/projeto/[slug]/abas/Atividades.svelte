@@ -1,14 +1,17 @@
 <script lang="ts">
 	import TodoList from '$components/TodoList.svelte';
+	import Toaster from '$lib/ToastHandler';
 	import type Atividade from '$model/Atividade';
 	import { EnumAtividade } from '$model/EnumAtividade';
 	import type Projeto from '$model/Projeto';
-	import ProjetoRepository from '$repository/ProjetoRepository';
+	import type Usuario from '$model/Usuario';
+	import AtividadeRepository from '$repository/AtividadeRepository';
+	import UsuarioRepository from '$repository/UsuarioRepository';
 	import { CircleCheck, CirclePause, CirclePlay, Plus } from 'lucide-svelte';
-	import { getContext, onMount } from 'svelte';
-	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
-	import Toaster from '$lib/ToastHandler';
+	import { getContext } from 'svelte';
 	import DetalhesAtividade from '../components/DetalhesAtividade.svelte';
+	import FormAdicionarAtividade from '../components/FormAdicionarAtividade.svelte';
+	import type { EnumPrioridadeAtividade } from '$model/EnumPrioridadeAtividade';
 
 	const toast = new Toaster(getContext);
 
@@ -20,6 +23,7 @@
 	let atividades: Atividade[] | null = $state(null);
 	let idAtividadeAberta: number = $state(0);
 	let atividadeASerAlterada: Atividade | null = $state(null);
+	let usuariosDisponiveis: Usuario[] | null = $state(null);
 
 	let openStateAdicionar = $state(false);
 	let openStateDetalhes = $state(false);
@@ -39,19 +43,20 @@
 		}
 	}
 
-	onMount(async () => {
-		await getAtividades();
+	$effect(() => {
+		getAtividades();
+		getUsuariosDisponiveis();
 	});
 
-	let todos: { id: number; estado: number; nome: string }[] = $state([]);
+	let todos: { id: number; estado: number; nome: string; prioridade: EnumPrioridadeAtividade }[] = $state([]);
 
-	function remove(todo: { id: number; estado: number; nome: string }) {
+	function remove(todo: { id: number; estado: number; nome: string; prioridade: EnumPrioridadeAtividade }) {
 		const index = todos.indexOf(todo);
 		todos.splice(index, 1);
 	}
 
 	async function getAtividades() {
-		atividades = await ProjetoRepository.PegarAtividades(projeto.id);		
+		atividades = await AtividadeRepository.PegarAtividadesPorProjeto(projeto.id);
 
 		if (!atividades || atividades.length < 1) {
 			atividades = [];
@@ -61,35 +66,69 @@
 			return {
 				id: atividade.id,
 				estado: atividade.estado,
-				nome: atividade.nome
+				nome: atividade.nome,
+				prioridade: atividade.prioridade
 			};
 		});
+
+		todos = todos.sort((a, b) => {
+			return b.prioridade - a.prioridade;
+		})
 	}
 
-	async function adicionarAtividade(idAtividade: number, nome: string, descricao: string) {
+	async function adicionarAtividade(
+		idAtividade: number,
+		nome: string,
+		descricao: string,
+		idUsuario: number,
+		prioridade: number,
+		duracaoEstimada: number,
+		dataInicio: string,
+		dataEntrega: string
+	) {
 		try {
 			if (idAtividade !== 0) {
-				const response = await ProjetoRepository.AtualizarAtividade(
+				const response = await AtividadeRepository.AtualizarAtividade(
 					projeto.id,
 					idAtividade,
 					nome,
-					descricao
+					descricao,
+					idUsuario,
+					duracaoEstimada,
+					prioridade,
+					dataInicio,
+					dataEntrega
 				);
+				atividadeASerAlterada = null;
+				idAtividadeAberta = 0;
 			} else {
-				const response = await ProjetoRepository.AdicionarAtividade(projeto.id, nome, descricao);
+				const response = await AtividadeRepository.AdicionarAtividade(
+					projeto.id,
+					nome,
+					descricao,
+					idUsuario,
+					duracaoEstimada,
+					prioridade,
+					dataInicio,
+					dataEntrega
+				);
 			}
 			openStateAdicionar = false;
-			toast.triggerSuccess('Projeto alterado com sucesso!');
+			toast.triggerSuccess('Atividade criada com sucesso!');
 			await getAtividades();
 		} catch (error) {
 			openStateAdicionar = false;
-			toast.triggerError('Ocorreu um erro ao tentar alterar projeto!');
+			toast.triggerError('Ocorreu um erro ao tentar criar atividade!');
 			console.log(error);
 		}
 	}
 
 	function mudaEstado(idAtividade: number, estado: EnumAtividade) {
-		ProjetoRepository.AtualizarStatusAtividade(idAtividade, estado);
+		AtividadeRepository.AtualizarStatusAtividade(idAtividade, estado);
+	}
+
+	async function getUsuariosDisponiveis() {
+		usuariosDisponiveis = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
 	}
 </script>
 
@@ -97,6 +136,7 @@
 	AdicionarAtividade={adicionarAtividade}
 	bind:openState={openStateAdicionar}
 	atividade={atividadeASerAlterada}
+	{usuariosDisponiveis}
 	{data}
 />
 <DetalhesAtividade

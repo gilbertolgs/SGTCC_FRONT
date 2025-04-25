@@ -14,7 +14,13 @@ export const _alterProjectSchema = z.object({
 export const _addActivitySchema = z.object({
     id: number(),
     nome: z.string().min(3, "Insira um nome"),
-    descricao: z.string().min(5, "Insira uma descrição").max(300, "Descrição muito longa"),
+    descricao: z.string().max(300, "Descrição muito longa").nullish(),
+    idUsuario: z.number().min(1, "Selecione um usuario"),
+    usuarioEncarregado: z.string(),
+    duracaoEstimada: z.number().min(1, "Atividade deve ter no mínimo 1 hora"),
+    prioridade: z.number(),
+    dataInicio: z.string({ invalid_type_error: "Insira uma data de início" }).date().min(4, "Insira uma data de início"),
+    dataFim: z.string().nullish()
 });
 
 export const load = async ({ params, fetch }) => {

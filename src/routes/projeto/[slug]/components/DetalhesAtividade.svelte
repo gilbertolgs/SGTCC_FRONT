@@ -6,10 +6,18 @@
 	import type Atividade from '$model/Atividade';
 	import type ComentarioAtividade from '$model/ComentarioAtividade';
 	import AtividadeRepository from '$repository/AtividadeRepository';
-	import { X as IconX, Pencil } from 'lucide-svelte';
+	import { CircleDot, X as IconX, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import { storeLogin } from '../../../../stores';
 	import type LoggedUser from '$model/LoggedUser';
+	import {
+		EnumPrioridadeAtividade,
+		textoEnumPrioridadeAtividade
+	} from '$model/EnumPrioridadeAtividade';
+	import UsuarioRepository from '$repository/UsuarioRepository';
+	import type Usuario from '$model/Usuario';
+	import DataFormatHandler from '$lib/DataFormatHandler';
+	import { fade } from 'svelte/transition';
 	const toast = new Toaster(getContext);
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
@@ -22,6 +30,7 @@
 
 	let { openState = $bindable(), idAtividade, abrirModal, getAtividades } = $props();
 	let atividade: Atividade | null = $derived(null);
+	let usuarioEncarregado: Usuario | null = $derived(null);
 	let comentarios: ComentarioAtividade[] | null = $derived(null);
 	let txtComentario: string = $state('');
 	let idComentarioSelecionado: number = $state(0);
@@ -38,7 +47,7 @@
 
 	async function pegaAtividade() {
 		atividade = await AtividadeRepository.PegarAtividadePorId(idAtividade);
-		console.log(atividade);
+		usuarioEncarregado = await UsuarioRepository.PegarPorId(atividade.idUsuario);
 	}
 
 	async function apagaAtividade() {
@@ -54,7 +63,11 @@
 	}
 
 	async function pegaComentarios() {
-		comentarios = await AtividadeRepository.PegarComentariosAtividade(idAtividade);
+		try {
+			comentarios = await AtividadeRepository.PegarComentariosAtividade(idAtividade);
+		} catch (error) {
+			comentarios = [];
+		}
 	}
 
 	async function EnviarComentario() {
@@ -64,7 +77,12 @@
 		if (idComentarioSelecionado === 0) {
 			await AtividadeRepository.AdicionarComentario(usuarioLogado.id, idAtividade, txtComentario);
 		} else {
-			await AtividadeRepository.AtualizarComentario(idComentarioSelecionado, usuarioLogado.id, idAtividade, txtComentario);
+			await AtividadeRepository.AtualizarComentario(
+				idComentarioSelecionado,
+				usuarioLogado.id,
+				idAtividade,
+				txtComentario
+			);
 		}
 		pegaComentarios();
 		txtComentario = '';
@@ -79,7 +97,6 @@
 	async function AlterarComentario(idComentario: number, texto: string) {
 		idComentarioSelecionado = idComentario;
 		txtComentario = texto;
-		
 	}
 </script>
 
@@ -96,39 +113,72 @@
 >
 	{#snippet conteudo()}
 		{#if atividade}
-			<div class="flex flex-col">
-				<div class="mb-5">
-					<h3 class="h3">{atividade.nome}</h3>
-					<span>{atividade.descricao}</span>
-					<div class="mt-5">
-						<button
-							class="btn preset-filled-primary-500"
-							onclick={() => {
-								abrirModal('Adicionar', atividade);
-							}}><Pencil /> Alterar</button
+			<div class="mx-5 flex flex-col overflow-auto">
+				<div class="mb-5 flex grid-cols-4 md:grid">
+					<div class="col-span-3 flex flex-col">
+						<h3 class="h3">{atividade.nome}</h3>
+						<span class="max-h-20 overflow-auto break-all">{atividade.descricao}</span>
+						<div class="mt-5">
+							<button
+								class="btn preset-filled-primary-500"
+								onclick={() => {
+									abrirModal('Adicionar', atividade);
+									openState = false;
+								}}><Pencil /> Alterar</button
+							>
+							<button
+								class="btn preset-filled-error-500"
+								onclick={() => {
+									openStateApagar = !openStateApagar;
+								}}><IconX />Excluir</button
+							>
+						</div>
+					</div>
+					<div class="ml-auto grid justify-start gap-2">
+						<span>Encarregado: {usuarioEncarregado?.nome}</span>
+						<span class="flex gap-2"
+							>Prioridade:
+							{#if atividade.prioridade === EnumPrioridadeAtividade.Baixa}
+								<CircleDot class="text-success-500 fill-current" />
+							{:else if atividade.prioridade === EnumPrioridadeAtividade.Media}
+								<CircleDot class="text-warning-500 fill-current" />
+							{:else if atividade.prioridade === EnumPrioridadeAtividade.Alta}
+								<CircleDot class="text-error-500 fill-current" />
+							{/if}
+							{textoEnumPrioridadeAtividade[atividade.prioridade]}</span
 						>
-						<button
-							class="btn preset-filled-error-500"
-							onclick={() => {
-								openStateApagar = !openStateApagar;
-							}}><IconX />Excluir</button
-						>
+						<span>Duração Estimada: {atividade.duracaoEstimada} Horas</span>
+						<span>Data Início: {DataFormatHandler.FormatDate(atividade.dataInicio)}</span>
+						{#if atividade.dataEntrega}
+							<span>Data Entrega: {DataFormatHandler.FormatDate(atividade.dataEntrega)}</span>
+						{/if}
 					</div>
 				</div>
 				{#if comentarios === null || comentarios.length < 1}
-					<span class="preset-tonal m-2 italic opacity-70">Ainda não há comentários</span>
+					<span class="preset-tonal m-2 p-2 italic opacity-70" in:fade={{ duration: 200 }}
+						>Ainda não há comentários</span
+					>
 				{:else}
-					<ul class="preset-tonal mb-3 grid h-1/2 gap-2 overflow-auto shadow-xl">
+					<ul
+						class="preset-tonal mb-3 grid h-1/2 gap-2 overflow-auto shadow-xl"
+						in:fade={{ duration: 200 }}
+					>
 						{#each comentarios as comentario}
-							<li class="rounded border p-2">
+							<li
+								class="rounded border p-2"
+								in:fade={{ duration: 400 }}
+								out:fade={{ duration: 100 }}
+							>
 								<div class="flex w-full gap-1">
 									<a href="/usuario/{comentario.idUsuario}" class="anchor mr-auto"
 										>{comentario.nomeUsuario}</a
 									>
-									<button class="btn preset-filled-primary-500"
-									onclick={() => {
-										AlterarComentario(comentario.id, comentario.comentario);
-									}}><Pencil /> Alterar</button>
+									<button
+										class="btn preset-filled-primary-500"
+										onclick={() => {
+											AlterarComentario(comentario.id, comentario.comentario);
+										}}><Pencil /> Alterar</button
+									>
 									<button
 										class="btn preset-filled-error-500"
 										onclick={() => {
@@ -141,7 +191,7 @@
 						{/each}
 					</ul>
 				{/if}
-				<div class="flex gap-2">
+				<div class="my-10 flex gap-2">
 					<FormInputComponent
 						classe="col-span-3"
 						label="Comentário"
@@ -155,7 +205,7 @@
 						class="btn preset-filled-primary-500 mt-auto"
 						onclick={() => {
 							EnviarComentario();
-						}}>Enviar</button
+						}}>{idComentarioSelecionado === 0 ? 'Enviar' : 'Alterar'}</button
 					>
 				</div>
 			</div>

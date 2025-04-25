@@ -3,6 +3,7 @@
 	import { generateRandomCanvas } from '$lib/canvasUtils';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
+	import AtividadeRepository from '$repository/AtividadeRepository';
 	import CursoRepository from '$repository/CursoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Progress } from '@skeletonlabs/skeleton-svelte';
@@ -50,7 +51,7 @@
 	});
 
 	async function calculaProgresso() {
-		const atividades = await ProjetoRepository.PegarAtividades(projeto.id);
+		const atividades = await AtividadeRepository.PegarAtividadesPorProjeto(projeto.id);
 
 		const totalPoints = atividades.length;
 		let earnedPoints = atividades.reduce((sum: number, task: { estado: number; }) => {

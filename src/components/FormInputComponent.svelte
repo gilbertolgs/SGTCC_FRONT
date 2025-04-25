@@ -6,7 +6,9 @@
 		valor = $bindable(),
 		erros,
 		constraints,
-		tipo
+		tipo,
+		min = null,
+		changeEvent = null
 	} = $props();
 </script>
 
@@ -20,6 +22,8 @@
 		autocomplete="off"
 		required
 		{...constraints}
+		{min}
+		onchange={changeEvent}
 	/>
 	{#if erros}<span class="text-error-400">{erros}</span>{/if}
 </label>

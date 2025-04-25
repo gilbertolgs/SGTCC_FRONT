@@ -169,60 +169,7 @@ class ProjetoRepository {
         return response;
     }
 
-    // ------------------- Atividades ----------------------- //
-    async PegarAtividades(idProjeto: number) {
-        const response = await Api.get(`atividade/projetos/${idProjeto}/atividades/semFiltro`)
-            .catch((error) => {
-                throw new Error(error);
-            });
-
-        const atividades = response.map(Atividade.CriaDeDados);
-
-        return atividades;
-    }
-
-    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string) {
-        const data = {
-            idProjeto: idProjeto,
-            nome: nome,
-            descricao: descricao
-        }
-
-        const response = await Api.post(`atividade/criarAtividade`, data)
-            .catch((error) => {
-                throw new Error(error);
-            });
-
-        return response;
-    }
-
-    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string) {
-        const data = {
-            id: idAtividade,
-            idProjeto: idProjeto,
-            nome: nome,
-            descricao: descricao
-        }
-
-        const response = await Api.put(`atividade/atualizarAtividade`, data)
-            .catch((error) => {
-                throw new Error(error);
-            });
-
-        return response;
-    }
-
-    async AtualizarStatusAtividade(idAtividade: number, estado: EnumAtividade) {
-        const response = await Api.put(`atividade/${idAtividade}/status/${estado}`, null)
-            .catch((error) => {
-                throw new Error(error);
-            });
-
-        return response;
-
-    }
-
-    // ------------------- Avaliações ----------------------- //
+    // ------------------- Favoritos ----------------------- //
 
     async PegarEstrelas(idProjeto: number) {
         const response = await Api.get(`avaliacoes/porProjeto/${idProjeto}`)

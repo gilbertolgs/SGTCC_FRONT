@@ -2,10 +2,11 @@ import Atividade from "$model/Atividade";
 import Comentario from "$model/Comentario";
 import ComentarioAtividade from "$model/ComentarioAtividade";
 import type { EnumAtividade } from "$model/EnumAtividade";
+import { number } from "zod";
 import Api from "./axiosInstance";
 
 class AtividadeRepository {
-    async PegarAtividades(idProjeto: number) {
+    async PegarAtividadesPorProjeto(idProjeto: number) {
         const response = await Api.get(`atividade/projetos/${idProjeto}/atividades/semFiltro`)
             .catch((error) => {
                 throw new Error(error);
@@ -16,11 +17,16 @@ class AtividadeRepository {
         return atividades;
     }
 
-    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string) {
+    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
         const data = {
             idProjeto: idProjeto,
+            idUsuario: idUsuario,
             nome: nome,
-            descricao: descricao
+            descricao: descricao,
+            duracaoEstimada: duracaoEstimada,
+            prioridade: prioridade,
+            dataInicio: dataInicio,
+            dataEntrega: dataEntrega
         }
 
         const response = await Api.post(`atividade/criarAtividade`, data)
@@ -31,15 +37,20 @@ class AtividadeRepository {
         return response;
     }
 
-    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string) {
+    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
         const data = {
+            id: idAtividade,
             idProjeto: idProjeto,
-            idAtividade: idAtividade,
+            idUsuario: idUsuario,
             nome: nome,
-            descricao: descricao
+            descricao: descricao,
+            duracaoEstimada: duracaoEstimada,
+            prioridade: prioridade,
+            dataInicio: dataInicio,
+            dataEntrega: dataEntrega
         }
 
-        const response = await Api.post(`atividade/atualizarAtividade`, data)
+        const response = await Api.put(`atividade/atualizarAtividade`, data)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -100,7 +111,7 @@ class AtividadeRepository {
 
         return response;
     }
-    async AtualizarComentario(idComentario:number, idUsuario: number, idAtividade: number, comentario: string) {
+    async AtualizarComentario(idComentario: number, idUsuario: number, idAtividade: number, comentario: string) {
         const data = {
             id: idComentario,
             idUsuario: idUsuario,
