@@ -40,7 +40,7 @@
 	</fieldset>
 	<fieldset>
 		<button type="submit" class="btn preset-filled-primary-500 w-full">Login</button>
-		<button type="button" class="anchor font-bold">Esqueceu a Senha?</button>
+		<a href="/resetarSenha/requisicao" class="anchor font-bold">Esqueceu a Senha?</a>
 	</fieldset>
 	<hr class="hr" />
 	<fieldset class="space-y-5">

@@ -25,6 +25,15 @@ class AuthRepository {
 
         return response;
     }
+
+    async PedirRedefinicaoDeSenha(email: string): Promise<boolean> {
+        const response = await Api.post(`auth/request-password-reset?email=${email}`, null).catch((error) => {
+            console.log(error);
+            return null;
+        });
+
+        return response;
+    }
 }
 
 export default new AuthRepository();
