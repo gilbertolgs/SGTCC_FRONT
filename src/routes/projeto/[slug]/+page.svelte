@@ -4,13 +4,14 @@
 	import CursoRepository from '$repository/CursoRepository.js';
 	import ProjetoRepository from '$repository/ProjetoRepository.js';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
-	import { CalendarDays, FolderOpen, Info, ListTodo, NotebookPen, ScrollText, Users } from 'lucide-svelte';
+	import { CalendarDays, FolderOpen, Info, ListTodo, MessageCircleQuestion, NotebookPen, ScrollText, Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import Informacoes from './abas/Informacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
 	import Atividades from './abas/Atividades.svelte';
 	import Arquivos from './abas/Arquivos.svelte';
 	import { pageName } from '../../../stores';
+	import Calendario from './abas/Calendario.svelte';
 
 	let { data } = $props();
 
@@ -133,7 +134,7 @@
 					</Tabs.Control>
 					<Tabs.Control value="duvidas">
 						<span class="flex items-center md:gap-2"
-							><FolderOpen />
+							><MessageCircleQuestion />
 							<span class="hidden md:block">Dúvidas</span>
 						</span>
 					</Tabs.Control>
@@ -152,6 +153,7 @@
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="atividades"><Atividades {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="calendario"><Calendario {projeto} /></Tabs.Panel>
 					{/if}
 				{/snippet}
 			</Tabs>
