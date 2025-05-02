@@ -39,6 +39,8 @@
 
 	async function getProjetos() {
 		projetos = await ProjetoRepository.PegarTodosNaoCanceladosPorIdUsuario(idUsuario);
+		console.log(projetos);
+		
 	}
 
 	function abrirModal() {

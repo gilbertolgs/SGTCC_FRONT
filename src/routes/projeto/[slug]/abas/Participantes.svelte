@@ -13,6 +13,7 @@
 	import { getContext, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { storeLogin } from '../../../../stores';
+	import { EnumConvite } from '$model/EnumConvite';
 
 	const toast = new Toaster(getContext);
 
@@ -34,7 +35,10 @@
 	const camposCabecalho = ['Nome', 'Função', 'Ações'];
 
 	async function getParticipantes() {
-		participantes = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
+		const participantesGerais = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
+		console.log(participantesGerais);
+		participantes = participantesGerais.filter((p) => p.estado == EnumConvite.Aceito);
+		
 
 		if (usuarioLogado) {
 			const usuarioLogadoDados = participantes.filter((p) => p.id === usuarioLogado?.id)[0];
