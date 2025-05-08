@@ -16,7 +16,7 @@
 
 	storeLogin.subscribe((value) => {
 		console.log(value);
-		
+
 		usuarioLogado = value;
 
 		if (usuarioLogado) {
@@ -30,7 +30,7 @@
 {#snippet rota(label: string, href: string)}
 	<a
 		{href}
-		class="btn {page.url.pathname === href ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
+		class="btn font-semibold {page.url.pathname === href ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
 	>
 		{label}
 	</a>
@@ -38,12 +38,12 @@
 {#snippet logo()}
 	<a
 		href="/"
-		class="hover:text-primary-500 flex fill-current font-sans text-5xl font-extrabold transition-all select-none"
+		class="hover:text-primary-500 flex fill-current font-sans text-5xl font-extrabold transition-all select-none gap-3"
 	>
-		<span class="w-20">
+		<span class="w-12">
 			<LogoMono />
 		</span>
-		<span class="my-auto antialiased"> SGTCC </span>
+		<span class="my-auto text-4xl antialiased"> SGTCC </span>
 	</a>
 {/snippet}
 
@@ -70,7 +70,7 @@
 				{/each}
 			</nav>
 		</div>
-		<div class="grid grid-flow-col items-center gap-1">
+		<div class="grid grid-flow-col items-center gap-5">
 			<LightSwitch />
 			<PerfilHeader {usuarioLogado} {imagemDoUsuario} />
 		</div>

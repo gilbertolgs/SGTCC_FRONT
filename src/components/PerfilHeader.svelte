@@ -19,8 +19,8 @@
 </script>
 
 {#snippet nomeUsuario(usuario: LoggedUser | Usuario)}
-	<Avatar classes="select-none" src={imagemDoUsuario} name={usuario.nome} />
-	<span class="text-xl font-bold">{usuario.nome}</span>
+	<Avatar size="size-8" classes="text-xs select-none" src={imagemDoUsuario} name={usuario.nome} />
+	<span class="text-xl font-normal">{usuario.nome}</span>
 {/snippet}
 
 {#if usuarioLogado == null}
@@ -33,7 +33,7 @@
 		open={openState}
 		onOpenChange={(e) => (openState = e.open)}
 		positioning={{ placement: 'top' }}
-		triggerBase="btn preset-tonal"
+		triggerBase="btn preset-tonal py-2"
 		contentBase="card bg-surface-200-800 p-4 space-y-4 max-w-[320px] mt-5"
 	>
 		{#snippet trigger()}

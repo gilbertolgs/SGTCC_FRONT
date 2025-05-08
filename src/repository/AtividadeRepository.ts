@@ -1,8 +1,6 @@
 import Atividade from "$model/Atividade";
-import Comentario from "$model/Comentario";
 import ComentarioAtividade from "$model/ComentarioAtividade";
 import type { EnumAtividade } from "$model/EnumAtividade";
-import { number } from "zod";
 import Api from "./axiosInstance";
 
 class AtividadeRepository {
