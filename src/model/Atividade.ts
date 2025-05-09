@@ -1,5 +1,5 @@
 import type { EnumAtividade } from "./EnumAtividade";
-import type { EnumPrioridadeAtividade } from "./EnumPrioridadeAtividade";
+import { EnumPrioridadeAtividade } from "./EnumPrioridadeAtividade";
 
 class Atividade {
   id: number;
@@ -20,7 +20,7 @@ class Atividade {
     descricao: string | null,
     estado: EnumAtividade,
     idUsuario: number,
-    prioridade: number,
+    prioridade: EnumPrioridadeAtividade,
     duracaoEstimada: number,
     dataInicio: string,
     dataEntrega: string | null
@@ -35,6 +35,20 @@ class Atividade {
     this.duracaoEstimada = duracaoEstimada;
     this.dataInicio = dataInicio;
     this.dataEntrega = dataEntrega;
+  }
+
+  CorPrioridade() {
+    switch (this.prioridade) {
+      case EnumPrioridadeAtividade.Baixa:
+        return 'text-success-500'
+      case EnumPrioridadeAtividade.Media:
+        return 'text-warning-500'
+      case EnumPrioridadeAtividade.Alta:
+        return 'text-error-500'
+      default:
+        return 'text-success-500'
+        break;
+    }
   }
 
   static CriaDeDados(data: Atividade): Atividade {

@@ -1,21 +1,56 @@
 <script lang="ts">
 	import CalendarHandler from '$lib/CalendarHandler';
+	import type Atividade from '$model/Atividade';
+	import { EnumAtividade } from '$model/EnumAtividade';
+	import { EnumPrioridadeAtividade } from '$model/EnumPrioridadeAtividade';
 	import type Projeto from '$model/Projeto';
+	import AtividadeRepository from '$repository/AtividadeRepository';
 	import { Combobox } from '@skeletonlabs/skeleton-svelte';
-	import { MoveLeft, MoveRight } from 'lucide-svelte';
+	import { CircleDot, MoveLeft, MoveRight } from 'lucide-svelte';
 
 	interface Props {
 		projeto: Projeto;
 	}
 	let { projeto }: Props = $props();
 
+	let atividades: Atividade[] | null = $state(null);
+	let atividadesPorDia = $derived(
+		(atividades as Atividade[] | null)?.reduce((mapa, atividade) => {
+			return mapeiaAtividades(atividade, mapa);
+		}, new Map<number, Atividade[]>())
+	);
+
 	let currentDate: Date = $state(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
 	let selectedDate: Date | null = $state(null);
 	let selectedTime: number | null = $derived((selectedDate as Date | null)?.getTime() ?? null);
 
+	$effect(() => {
+		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
+			if (atividades && atividades.length > 0) {
+				atividadesPorDia = atividades.reduce(
+					(mapa: Map<number, Atividade[]>, atividade: Atividade) => {
+						return mapeiaAtividades(atividade, mapa);
+					},
+					new Map<number, Atividade[]>()
+				);
+			}
+		});
+	});
+
 	let calendarDays: { date: Date; isCurrentMonth: boolean }[] = $derived(
 		CalendarHandler.getCalendarGrid(currentDate)
 	);
+
+	function mapeiaAtividades(atividade: Atividade, mapa: Map<number, Atividade[]>) {
+		const key = new Date(atividade.dataInicio).getTime();
+
+		if (!mapa.has(key)) {
+			mapa.set(key, []);
+		}
+		mapa.get(key)?.push(atividade);
+
+		return mapa;
+	}
 
 	function mudaMesRelativo(mesRelativo: number): void {
 		currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + mesRelativo, 1);
@@ -114,7 +149,7 @@
 
 		{#each calendarDays as { date, isCurrentMonth }}
 			<button
-				class={`grid cursor-pointer rounded p-2 transition-all
+				class={`grid cursor-pointer rounded p-2 transition-all md:min-h-[4rem]
                 ${isCurrentMonth ? '' : 'opacity-40'} 
                 ${selectedTime === date.getTime() ? 'bg-blue-600 text-white' : 'hover:bg-tertiary-500'}`}
 				onclick={() => selectDate(date)}
@@ -122,14 +157,15 @@
 				<span>
 					{date.getDate()}
 				</span>
-				{#if date.getDate() == 30}
-					<div class="grid">
-						<span class="truncate"> Atividade X </span>
-						<span class="truncate"> Atividade Y </span>
-					</div>
-				{:else}
-					<!-- Adiciona Altura nos dias vazios -->
-					<span class="opacity-0 select-none">.</span>
+				{#if atividadesPorDia}
+					{#each atividadesPorDia.get(date.getTime()) ?? [] as atividade}
+						<div class="flex gap-1 truncate">
+							<CircleDot class="fill-current {atividade.CorPrioridade()}" />
+							<span>
+								{atividade.nome}
+							</span>
+						</div>
+					{/each}
 				{/if}
 			</button>
 		{/each}
