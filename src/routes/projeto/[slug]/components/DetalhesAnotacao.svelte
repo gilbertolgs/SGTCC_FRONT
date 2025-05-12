@@ -34,9 +34,8 @@
 	});
 </script>
 
-<DrawerBase
+<ModalBase
 	bind:openState
-	classe="md:rounded-tl-lg grid bg-surface-100-900 md:p-4 md:w-1/2 w-full h-screen"
 >
 	{#snippet conteudo()}
 		{#if anotacao}
@@ -49,7 +48,7 @@
 					<button
 						class="btn preset-filled-primary-500"
 						onclick={() => {
-							abrirModal('Insert', anotacao);
+							abrirModal('Adicionar', anotacao);
 						}}
 					>
 						<Pencil /> Alterar
@@ -57,14 +56,14 @@
 					<button
 						class="btn preset-filled-error-500"
 						onclick={() => {
-							abrirModal('Delete', anotacao);
+							abrirModal('Apagar', anotacao);
 						}}
 					>
 						<Trash /> Excluir
 					</button>
 
 					<span class="md:ml-auto">
-						{anotacao.idUsuario} Gilberto Luis
+						{anotacao.nomeUsuario}
 					</span>
 				</div>
 				{#if anotacao.descricao.trim().length > 0}
@@ -76,4 +75,4 @@
 			</div>
 		{/if}
 	{/snippet}
-</DrawerBase>
+</ModalBase>

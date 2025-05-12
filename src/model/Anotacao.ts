@@ -7,6 +7,8 @@ class Anotacao {
   descricao: string;
   criadoEm: string;
 
+  nomeUsuario: string | undefined;
+
 
   constructor(
     id: number,

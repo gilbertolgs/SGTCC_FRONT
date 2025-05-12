@@ -23,11 +23,18 @@ export const _addActivitySchema = z.object({
     dataFim: z.string().nullish()
 });
 
+export const _addNoteSchema = z.object({
+    id: number(),
+    titulo: z.string(),
+    descricao: z.string().max(500, "Descrição muito longa").nullish(),
+});
+
 export const load = async ({ params, fetch }) => {
     const alterProjectForm = await superValidate(zod(_alterProjectSchema));
     const activityForm = await superValidate(zod(_addActivitySchema));
+    const noteForm = await superValidate(zod(_addNoteSchema));
 
     const idProjeto = parseInt(params.slug);
 
-    return { alterProjectForm, activityForm, idProjeto };
+    return { alterProjectForm, activityForm, noteForm, idProjeto };
 };

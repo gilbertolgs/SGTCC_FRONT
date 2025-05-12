@@ -36,6 +36,7 @@ export class NavigationLinks {
         return [
             { label: 'Biblioteca', href: '/biblioteca' },
             { label: 'Seus Projetos', href: `/usuario/${idUsuario}/projetos` },
+            { label: 'Convites', href: `/convites` },
             // { label: 'Atividades', href: '/atividades' },
         ];
     }

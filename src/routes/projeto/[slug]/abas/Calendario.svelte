@@ -42,7 +42,11 @@
 	);
 
 	function mapeiaAtividades(atividade: Atividade, mapa: Map<number, Atividade[]>) {
-		const key = new Date(atividade.dataInicio).getTime();
+		if (!atividade.dataEntrega) {
+			return mapa;
+		}
+
+		const key = new Date(atividade.dataEntrega).getTime();
 
 		if (!mapa.has(key)) {
 			mapa.set(key, []);
@@ -105,7 +109,7 @@
 			<button class="hover:preset-filled-primary-500 btn">
 				{currentDate.getFullYear()}
 			</button>
-			<Combobox
+			<!-- <Combobox
 				zIndex="99"
 				data={mesesData}
 				value={[currentDate.getMonth().toString()]}
@@ -130,7 +134,7 @@
 						<span>{item.label}</span>
 					</div>
 				{/snippet}
-			</Combobox>
+			</Combobox> -->
 		</h2>
 		<button
 			class="hover:preset-filled-primary-500 btn"
@@ -159,9 +163,8 @@
 				</span>
 				{#if atividadesPorDia}
 					{#each atividadesPorDia.get(date.getTime()) ?? [] as atividade}
-						<div class="flex gap-1 truncate">
-							<CircleDot class="fill-current {atividade.CorPrioridade()}" />
-							<span>
+						<div class="flex gap-1 overflow-hidden">
+							<span class="preset-filled-{atividade.CorPrioridade()}-500 rounded p-1">
 								{atividade.nome}
 							</span>
 						</div>

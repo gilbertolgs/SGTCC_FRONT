@@ -13,19 +13,44 @@ class AnotacaoRepository {
         return anotacoes;
     }
 
-    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
+    async AdicionarAnotacao(idUsuario: number,
+        idProjeto: number,
+        titulo: string,
+        descricao: string) {
         const data = {
-            idProjeto: idProjeto,
             idUsuario: idUsuario,
-            nome: nome,
-            descricao: descricao,
-            duracaoEstimada: duracaoEstimada,
-            prioridade: prioridade,
-            dataInicio: dataInicio,
-            dataEntrega: dataEntrega
+            idProjeto: idProjeto,
+            titulo: titulo,
+            descricao: descricao
         }
 
-        const response = await Api.post(`atividade/criarAtividade`, data)
+        const response = await Api.post(`anotacoes/criarAnotacao`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async AtualizarAnotacao(idAnotacao: number, idUsuario: number, idProjeto: number, titulo: string, descricao: string) {
+        const data = {
+            id: idAnotacao,
+            idUsuario: idUsuario,
+            idProjeto: idProjeto,
+            titulo: titulo,
+            descricao: descricao
+        }
+
+        const response = await Api.put(`anotacoes/atualizarAnotacao`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async DeletarAnotacao(idAnotacao: number) {
+        const response = await Api.delete(`anotacoes/deletarAnotacao?id=${idAnotacao}`)
             .catch((error) => {
                 throw new Error(error);
             });

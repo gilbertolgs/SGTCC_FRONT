@@ -28,6 +28,7 @@
 	}
 	let { projeto }: Props = $props();
 	let participantes: Usuario[] | null = $state(null);
+	let participantesPendentes: Usuario[] | null = $state(null);
 
 	onMount(async () => {
 		await getParticipantes();
@@ -38,7 +39,7 @@
 		const participantesGerais = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
 		console.log(participantesGerais);
 		participantes = participantesGerais.filter((p) => p.estado == EnumConvite.Aceito);
-		
+		participantesPendentes = participantesGerais.filter((p) => p.estado == EnumConvite.Pendente);
 
 		if (usuarioLogado) {
 			const usuarioLogadoDados = participantes.filter((p) => p.id === usuarioLogado?.id)[0];
@@ -79,7 +80,7 @@
 	}
 </script>
 
-<div class="m-2 flex gap-3 mt-10">
+<div class="m-2 mt-10 flex gap-3">
 	<FormInputComponent
 		label="Email"
 		placeholder="email"
@@ -176,4 +177,23 @@
 			</tr>
 		{/snippet}
 	</TableBaseComponent>
+{/if}
+
+{#if participantesPendentes}
+	<div class="grid mt-2 preset-tonal p-3">
+		<h3 class="h3">Pendentes</h3>
+		{#each participantesPendentes as participante}
+			<div class="flex gap-2 m-3 dark:bg-slate-900 bg-slate-400 p-2 rounded justify-between">
+				<span class="my-auto font-bold">{participante.nome}</span>
+				{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
+					<button
+						onclick={() => {
+							removerParticipante(participante.id);
+						}}
+						class="btn preset-filled-error-500 flex"><Ban />Cancelar</button
+					>
+				{/if}
+			</div>
+		{/each}
+	</div>
 {/if}

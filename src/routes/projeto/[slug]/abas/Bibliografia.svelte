@@ -10,8 +10,6 @@
 	import { storeLogin } from '../../../../stores';
 	import Toaster from '$lib/ToastHandler';
 	import { getContext } from 'svelte';
-	import ConfirmDialog from '$components/ConfirmDialog.svelte';
-	import UsuarioRepository from '$repository/UsuarioRepository';
 
 	const toast = new Toaster(getContext);
 
@@ -27,7 +25,6 @@
 	});
 
 	let openStateAdicionar = $state(false);
-	let openStateApagar = $state(false);
 	let openStateDetalhes = $state(false);
 
 	let anotacaoSelecionada: Anotacao | null = $state(null);
@@ -40,15 +37,6 @@
 
 	async function getAnotacoes() {
 		anotacoes = await AnotacaoRepository.PegarAnotacoesPorProjeto(projeto.id);
-
-		if (anotacoes) {
-			anotacoes = await Promise.all(
-				anotacoes.map(async (anotacao): Promise<Anotacao> => {
-					const apiData = await UsuarioRepository.PegarPorId(anotacao.idUsuario);
-					return { ...anotacao, nomeUsuario: apiData.nome }; // Overwrites nomeUsuario
-				})
-			);
-		}
 	}
 
 	function abrirModal(modal: string, argumentos: any = null) {
@@ -60,10 +48,6 @@
 			case 'Detalhes':
 				anotacaoSelecionada = argumentos;
 				openStateDetalhes = !openStateDetalhes;
-				break;
-			case 'Apagar':
-				anotacaoSelecionada = argumentos;
-				openStateApagar = !openStateApagar;
 				break;
 			default:
 				break;
@@ -94,35 +78,8 @@
 		}
 		getAnotacoes();
 	}
-
-	async function ExcluirAnotacao(idAnotacao: number | undefined) {
-		if (!idAnotacao) {
-			return;
-		}
-
-		try {
-			const response = await AnotacaoRepository.DeletarAnotacao(idAnotacao);
-			openStateApagar = false;
-			openStateDetalhes = false;
-			openStateAdicionar = false;
-			toast.triggerSuccess('Anotação excluída com sucesso!');
-			getAnotacoes();
-		} catch (error) {
-			openStateApagar = false;
-			toast.triggerError('Ocorreu um erro ao tentar apagar anotação!');
-			console.log(error);
-		}
-	}
 </script>
 
-<ConfirmDialog
-	bind:openState={openStateApagar}
-	titulo="Tem certeza que deseja apagar essa Anotação?"
-	texto="Anotação: {anotacaoSelecionada?.titulo}"
-	funcao={() => {
-		ExcluirAnotacao(anotacaoSelecionada?.id);
-	}}
-/>
 <FormAdicionarAnotacao
 	AdicionarAnotacao={adicionarAnotacao}
 	openState={openStateAdicionar}

@@ -1,3 +1,5 @@
+import Convite from "$model/Convite";
+import type { EnumConvite } from "$model/EnumConvite";
 import type { EnumPapel } from "$model/EnumPapel";
 import LoggedUser from "$model/LoggedUser";
 import Usuario from "$model/Usuario";
@@ -57,11 +59,25 @@ class UsuarioRepository {
     }
 
     async PegarTodosPorProjeto(idProjeto: number): Promise<Usuario[]> {
-        const response = await Api.get(`usuarios/${idProjeto}/usuarioPorProjeto`);
+        const response = await Api.get(`usuarios/${idProjeto}/usuarioPorProjeto/semFiltro`);
 
-        const usuario = response.map(Usuario.CriaDeDados);
+        const transformed = response.map(({ idUsuario, ...rest }: { idUsuario: number, id?: any, [key: string]: any }) => ({
+            ...rest,
+            id: idUsuario,
+        }));
+
+
+        const usuario = transformed.map(Usuario.CriaDeDados);
 
         return usuario;
+    }
+
+    async PegarTodosConvites(idUsuario: number): Promise<Convite[]> {
+        const response = await Api.get(`usuariosProjeto/convitesUsuario/${idUsuario}`);
+
+        const convites = response.map(Convite.CriaDeDados);
+
+        return response;
     }
 
     async CriarUsuario(idCurso: number, nome: string, email: string, senha: string, papel: EnumPapel) {
@@ -109,6 +125,20 @@ class UsuarioRepository {
         };
 
         const response = await Api.post(`usuarios/alterarImagem?idUsuario=${idUsuario}`, formData, config)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async ResponderConvite(idConvite: number, resposta: EnumConvite) {
+        const data = {
+            idConvite: idConvite,
+            resposta: resposta
+        }
+
+        const response = await Api.post(`usuariosProjeto/responderConviteProjeto`, data)
             .catch((error) => {
                 throw new Error(error);
             });

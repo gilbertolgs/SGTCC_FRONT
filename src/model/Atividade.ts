@@ -40,13 +40,13 @@ class Atividade {
   CorPrioridade() {
     switch (this.prioridade) {
       case EnumPrioridadeAtividade.Baixa:
-        return 'text-success-500'
+        return 'success'
       case EnumPrioridadeAtividade.Media:
-        return 'text-warning-500'
+        return 'warning'
       case EnumPrioridadeAtividade.Alta:
-        return 'text-error-500'
+        return 'error'
       default:
-        return 'text-success-500'
+        return 'success'
         break;
     }
   }

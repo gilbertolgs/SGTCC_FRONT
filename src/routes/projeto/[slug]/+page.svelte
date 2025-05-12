@@ -5,6 +5,7 @@
 	import ProjetoRepository from '$repository/ProjetoRepository.js';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 	import {
+	Album,
 		CalendarDays,
 		FolderOpen,
 		Info,
@@ -22,6 +23,7 @@
 	import { pageName } from '../../../stores';
 	import Calendario from './abas/Calendario.svelte';
 	import Anotacoes from './abas/Anotacoes.svelte';
+	import Bibliografia from './abas/Bibliografia.svelte';
 
 	let { data } = $props();
 
@@ -142,6 +144,12 @@
 							<span class="hidden md:block">Anotações</span>
 						</span>
 					</Tabs.Control>
+					<Tabs.Control value="bibliografia">
+						<span class="flex items-center md:gap-2"
+							><Album />
+							<span class="hidden md:block">Bibliografia</span>
+						</span>
+					</Tabs.Control>
 					<Tabs.Control value="duvidas">
 						<span class="flex items-center md:gap-2"
 							><MessageCircleQuestion />
@@ -163,7 +171,8 @@
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="atividades"><Atividades {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
-						<Tabs.Panel value="anotacoes"><Anotacoes {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="anotacoes"><Anotacoes {projeto} {data} /></Tabs.Panel>
+						<Tabs.Panel value="bibliografia"><Bibliografia {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="calendario"><Calendario {projeto} /></Tabs.Panel>
 					{/if}
 				{/snippet}
