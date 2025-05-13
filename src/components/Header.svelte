@@ -8,21 +8,20 @@
 	import LightSwitch from './LightSwitch.svelte';
 	import PerfilHeader from './PerfilHeader.svelte';
 
-	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+	// let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+	let usuarioLogado = $derived($storeLogin);
 	//Gambiarra pro Typescript não reclamar
 	let imagemDoUsuario: string = $derived(
 		(usuarioLogado as LoggedUser | null)?.ExibeImagem?.() ?? ''
 	);
 
-	storeLogin.subscribe((value) => {
-		console.log(value);
+	// storeLogin.subscribe((value) => {
+	// 	usuarioLogado = value;
 
-		usuarioLogado = value;
-
-		if (usuarioLogado) {
-			imagemDoUsuario = usuarioLogado.ExibeImagem();
-		}
-	});
+	// 	if (usuarioLogado) {
+	// 		imagemDoUsuario = usuarioLogado.ExibeImagem();
+	// 	}
+	// });
 
 	let links = $derived(new NavigationLinks(usuarioLogado).PegarLinks());
 </script>

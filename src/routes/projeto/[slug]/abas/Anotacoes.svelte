@@ -41,11 +41,18 @@
 	async function getAnotacoes() {
 		anotacoes = await AnotacaoRepository.PegarAnotacoesPorProjeto(projeto.id);
 
+		const userCache = new Map<number, string>();
+
 		if (anotacoes) {
 			anotacoes = await Promise.all(
 				anotacoes.map(async (anotacao): Promise<Anotacao> => {
-					const apiData = await UsuarioRepository.PegarPorId(anotacao.idUsuario);
-					return { ...anotacao, nomeUsuario: apiData.nome }; // Overwrites nomeUsuario
+					const nomeUsuario =
+						userCache.get(anotacao.idUsuario) ||
+						(await UsuarioRepository.PegarPorId(anotacao.idUsuario)).nome;
+
+					userCache.set(anotacao.idUsuario, nomeUsuario);
+
+					return { ...anotacao, nomeUsuario };
 				})
 			);
 		}

@@ -16,6 +16,12 @@
 	}
 
 	let { usuarioLogado, imagemDoUsuario }: Props = $props();
+
+	$effect(() => {
+		if (usuarioLogado === null) {
+			openState = false;
+		}
+	});
 </script>
 
 {#snippet nomeUsuario(usuario: LoggedUser | Usuario)}

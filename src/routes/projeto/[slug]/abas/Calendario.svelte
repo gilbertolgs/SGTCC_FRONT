@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PopoverBase from '$components/PopoverBase.svelte';
 	import CalendarHandler from '$lib/CalendarHandler';
 	import type Atividade from '$model/Atividade';
 	import { EnumAtividade } from '$model/EnumAtividade';
@@ -23,6 +24,9 @@
 	let currentDate: Date = $state(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
 	let selectedDate: Date | null = $state(null);
 	let selectedTime: number | null = $derived((selectedDate as Date | null)?.getTime() ?? null);
+
+	let openStateMes = $state(false);
+	let openStateAno = $state(false);
 
 	$effect(() => {
 		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
@@ -82,7 +86,7 @@
 	const currentYear = new Date().getFullYear();
 	const endYear = currentYear + 20;
 
-	for (let year = 1900; year <= endYear; year++) {
+	for (let year = 2000; year <= endYear; year++) {
 		const valor = year.toString();
 		anosData.push({ label: valor, value: valor });
 	}
@@ -103,38 +107,56 @@
 			<MoveLeft />
 		</button>
 		<h2 class="text-lg font-semibold">
-			<button class="hover:preset-filled-primary-500 btn">
-				{CalendarHandler.getMonthName(currentDate)}
-			</button>
-			<button class="hover:preset-filled-primary-500 btn">
-				{currentDate.getFullYear()}
-			</button>
-			<!-- <Combobox
-				zIndex="99"
-				data={mesesData}
-				value={[currentDate.getMonth().toString()]}
-				onValueChange={(e) => mudaMesAbsoluto(parseInt(e.value[0]))}
-				placeholder="Select..."
+			{#snippet scrollConteudo(valores: ComboboxData[], funcao: Function, valorAtual: number)}
+				{#each valores as valor}
+					{#if valorAtual.toString() === valor.value}
+						<button class="bg-secondary-500 flex w-full justify-between space-x-2 p-2" disabled>
+							<span>{valor.label}</span>
+						</button>
+					{:else}
+						<button
+							class="hover:bg-primary-500 flex w-full justify-between space-x-2 p-2 px-3"
+							onclick={() => {
+								openStateMes = false;
+								openStateAno = false;
+								funcao(valor.value);
+							}}
+						>
+							<span>{valor.label}</span>
+						</button>
+					{/if}
+				{/each}
+			{/snippet}
+			<PopoverBase
+				bind:openState={openStateMes}
+				posicao="bottom"
+				classe="overflow-auto rounded bg-surface-200-800 grid h-[30vh]"
 			>
-				{#snippet item(item)}
-					<div class="flex w-full justify-between space-x-2">
-						<span>{item.label}</span>
-					</div>
+				{#snippet botao()}
+					<button class="hover:preset-filled-primary-500 btn" onclick={() => {
+						
+					}}>
+						{CalendarHandler.getMonthName(currentDate)}
+					</button>
 				{/snippet}
-			</Combobox>
-			<Combobox
-				zIndex="99"
-				data={anosData}
-				value={[currentDate.getFullYear().toString()]}
-				onValueChange={(e) => mudaAno(parseInt(e.value[0]))}
-				placeholder="Select..."
+				{#snippet conteudo()}
+					{@render scrollConteudo(mesesData, mudaMesAbsoluto, currentDate.getMonth())}
+				{/snippet}
+			</PopoverBase>
+			<PopoverBase
+				bind:openState={openStateAno}
+				posicao="bottom"
+				classe="overflow-auto rounded bg-surface-200-800 grid h-[30vh]"
 			>
-				{#snippet item(item)}
-					<div class="flex w-full justify-between space-x-2">
-						<span>{item.label}</span>
-					</div>
+				{#snippet botao()}
+					<button class="hover:preset-filled-primary-500 btn">
+						{currentDate.getFullYear()}
+					</button>
 				{/snippet}
-			</Combobox> -->
+				{#snippet conteudo()}
+					{@render scrollConteudo(anosData, mudaAno, currentDate.getFullYear())}
+				{/snippet}
+			</PopoverBase>
 		</h2>
 		<button
 			class="hover:preset-filled-primary-500 btn"
