@@ -8,6 +8,7 @@
 	import AtividadeRepository from '$repository/AtividadeRepository';
 	import { Combobox } from '@skeletonlabs/skeleton-svelte';
 	import { CircleDot, MoveLeft, MoveRight } from 'lucide-svelte';
+	import DetalhesDia from '../components/DetalhesDia.svelte';
 
 	interface Props {
 		projeto: Projeto;
@@ -20,6 +21,7 @@
 			return mapeiaAtividades(atividade, mapa);
 		}, new Map<number, Atividade[]>())
 	);
+	let diaSelecionado = $state(0);
 
 	let currentDate: Date = $state(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
 	let selectedDate: Date | null = $state(null);
@@ -27,6 +29,7 @@
 
 	let openStateMes = $state(false);
 	let openStateAno = $state(false);
+	let openStateDetalhes = $state(false);
 
 	$effect(() => {
 		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
@@ -96,6 +99,8 @@
 	}
 </script>
 
+<DetalhesDia bind:openState={openStateDetalhes} atividades={atividadesPorDia.get(diaSelecionado)} />
+
 <div class="preset-tonal mx-auto rounded-lg border p-4 shadow-md">
 	<div class="mb-4 flex items-center justify-between">
 		<button
@@ -133,9 +138,7 @@
 				classe="overflow-auto rounded bg-surface-200-800 grid h-[30vh]"
 			>
 				{#snippet botao()}
-					<button class="hover:preset-filled-primary-500 btn" onclick={() => {
-						
-					}}>
+					<button class="hover:preset-filled-primary-500 btn" onclick={() => {}}>
 						{CalendarHandler.getMonthName(currentDate)}
 					</button>
 				{/snippet}
