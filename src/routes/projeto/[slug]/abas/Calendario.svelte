@@ -2,12 +2,9 @@
 	import PopoverBase from '$components/PopoverBase.svelte';
 	import CalendarHandler from '$lib/CalendarHandler';
 	import type Atividade from '$model/Atividade';
-	import { EnumAtividade } from '$model/EnumAtividade';
-	import { EnumPrioridadeAtividade } from '$model/EnumPrioridadeAtividade';
 	import type Projeto from '$model/Projeto';
 	import AtividadeRepository from '$repository/AtividadeRepository';
-	import { Combobox } from '@skeletonlabs/skeleton-svelte';
-	import { CircleDot, MoveLeft, MoveRight } from 'lucide-svelte';
+	import { MoveLeft, MoveRight } from 'lucide-svelte';
 	import DetalhesDia from '../components/DetalhesDia.svelte';
 
 	interface Props {
@@ -22,10 +19,9 @@
 		}, new Map<number, Atividade[]>())
 	);
 	let diaSelecionado = $state(0);
+	let atividadesDiaSelecionado = $derived(atividadesPorDia?.get(diaSelecionado) ?? null);
 
 	let currentDate: Date = $state(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-	let selectedDate: Date | null = $state(null);
-	let selectedTime: number | null = $derived((selectedDate as Date | null)?.getTime() ?? null);
 
 	let openStateMes = $state(false);
 	let openStateAno = $state(false);
@@ -76,7 +72,8 @@
 	}
 
 	function selectDate(date: Date): void {
-		selectedDate = date;
+		openStateDetalhes = true;
+		diaSelecionado = date.getTime();
 	}
 
 	interface ComboboxData {
@@ -99,7 +96,11 @@
 	}
 </script>
 
-<DetalhesDia bind:openState={openStateDetalhes} atividades={atividadesPorDia.get(diaSelecionado)} />
+<DetalhesDia
+	bind:openState={openStateDetalhes}
+	atividades={atividadesDiaSelecionado}
+	dia={diaSelecionado}
+/>
 
 <div class="preset-tonal mx-auto rounded-lg border p-4 shadow-md">
 	<div class="mb-4 flex items-center justify-between">
@@ -178,9 +179,9 @@
 
 		{#each calendarDays as { date, isCurrentMonth }}
 			<button
-				class={`grid cursor-pointer rounded p-2 transition-all md:min-h-[4rem]
+				class={`hover:bg-tertiary-500 grid cursor-pointer rounded p-2 transition-all md:min-h-[4rem]
                 ${isCurrentMonth ? '' : 'opacity-40'} 
-                ${selectedTime === date.getTime() ? 'bg-blue-600 text-white' : 'hover:bg-tertiary-500'}`}
+                `}
 				onclick={() => selectDate(date)}
 			>
 				<span>

@@ -1,15 +1,14 @@
 <script lang="ts">
 	import DataFormatHandler from '$lib/DataFormatHandler';
-	import type Anotacao from '$model/Anotacao';
-	import type Projeto from '$model/Projeto';
-	import AnotacaoRepository from '$repository/AnotacaoRepository';
-	import { Plus } from 'lucide-svelte';
-	import DetalhesAnotacao from '../components/DetalhesAnotacao.svelte';
-	import FormAdicionarAnotacao from '../components/FormAdicionarAnotacao.svelte';
-	import type LoggedUser from '$model/LoggedUser';
-	import { storeLogin } from '../../../../stores';
 	import Toaster from '$lib/ToastHandler';
+	import type Bibliografia from '$model/Bibliografia';
+	import type LoggedUser from '$model/LoggedUser';
+	import type Projeto from '$model/Projeto';
+	import BibliografiaRepository from '$repository/BibliografiaRepository';
+	import { Copy, Plus } from 'lucide-svelte';
 	import { getContext } from 'svelte';
+	import { storeLogin } from '../../../../stores';
+	import FormAdicionarBibliografia from '../components/FormAdicionarBibliografia.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -25,72 +24,73 @@
 	});
 
 	let openStateAdicionar = $state(false);
-	let openStateDetalhes = $state(false);
 
-	let anotacaoSelecionada: Anotacao | null = $state(null);
+	let referenciaSelecionada: Bibliografia | null = $state(null);
 
-	let anotacoes: Anotacao[] | null = $state(null);
+	let referencias: Bibliografia[] | null = $state(null);
 
 	$effect(() => {
-		getAnotacoes();
+		getBibliografia();
 	});
 
-	async function getAnotacoes() {
-		anotacoes = await AnotacaoRepository.PegarAnotacoesPorProjeto(projeto.id);
+	async function getBibliografia() {
+		referencias = await BibliografiaRepository.PegarBibliografiaPorProjeto(projeto.id);
 	}
 
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
 			case 'Adicionar':
-				anotacaoSelecionada = argumentos;
+				referenciaSelecionada = argumentos;
 				openStateAdicionar = !openStateAdicionar;
-				break;
-			case 'Detalhes':
-				anotacaoSelecionada = argumentos;
-				openStateDetalhes = !openStateDetalhes;
 				break;
 			default:
 				break;
 		}
 	}
 
-	async function adicionarAnotacao(id: number, titulo: string, descricao: string) {
+	async function adicionarBibliografia(
+		id: number,
+		autores: string,
+		referencia: string,
+		acessadoEm: string
+	) {
 		if (!usuarioLogado) {
 			return;
 		}
 		try {
 			if (id === 0) {
-				await AnotacaoRepository.AdicionarAnotacao(usuarioLogado.id, projeto.id, titulo, descricao);
+				await BibliografiaRepository.AdicionarBibliografia(
+					usuarioLogado.id,
+					projeto.id,
+					autores,
+					referencia,
+					acessadoEm
+				);
 			} else {
-				await AnotacaoRepository.AtualizarAnotacao(
+				await BibliografiaRepository.AtualizarBibliografia(
 					id,
 					usuarioLogado.id,
 					projeto.id,
-					titulo,
-					descricao
+					autores,
+					referencia,
+					acessadoEm
 				);
 			}
 			openStateAdicionar = false;
-			toast.triggerSuccess('Anotação criada com sucesso!');
+			toast.triggerSuccess('Referência criada com sucesso!');
 		} catch (error) {
 			openStateAdicionar = false;
-			toast.triggerError('Erro ao criar Anotação');
+			toast.triggerError('Erro ao criar Referência');
 		}
-		getAnotacoes();
+		getBibliografia();
 	}
 </script>
 
-<FormAdicionarAnotacao
-	AdicionarAnotacao={adicionarAnotacao}
+<FormAdicionarBibliografia
+	AdicionarAnotacao={adicionarBibliografia}
 	openState={openStateAdicionar}
-	anotacao={anotacaoSelecionada}
+	referencia={referenciaSelecionada}
 	{data}
-/>
-<DetalhesAnotacao
-	bind:openState={openStateDetalhes}
-	anotacao={anotacaoSelecionada}
-	{abrirModal}
-	{getAnotacoes}
 />
 
 <div class="grid gap-4">
@@ -102,31 +102,30 @@
 	>
 		<Plus />Adicionar
 	</button>
-	<div class="preset-tonal grid gap-3 border p-4 shadow-md md:grid-cols-3">
-		{#if anotacoes && anotacoes.length > 0}
-			{#each anotacoes as anotacao}
-				<button
-					class="bg-primary-300 dark:bg-primary-950 rounded border p-2 shadow-2xl transition-all duration-500 hover:brightness-80"
-					onclick={() => {
-						abrirModal('Detalhes', anotacao);
-					}}
-				>
-					<div class="m-5 grid">
-						<h5 class="h5">
-							{anotacao.titulo}
-						</h5>
-						<hr class="mx-5 my-2 opacity-30" />
-						<span class="">
-							{anotacao.descricao}
-						</span>
-						<span class="ml-auto opacity-70">
-							{DataFormatHandler.FormatDate(anotacao.criadoEm)}
-						</span>
-					</div>
-				</button>
+	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
+		{#if referencias && referencias.length > 0}
+			{#each referencias as referencia, i}
+				<div class="grid">
+					{#if i >> 0}
+						<hr />
+					{/if}
+					<span class="text-primary-500">
+						{i + 1}
+					</span>
+					<span>
+						{referencia.autores}
+					</span>
+					<span class="font-bold">
+						{referencia.referencia}
+					</span>
+					<p class="mt-2 opacity-70">
+						Acessado em: {DataFormatHandler.FormatDate(referencia.acessadoEm)}
+					</p>
+				</div>
+					<button class="hover:text-primary-500 mb-auto ml-auto fill-current"><Copy /></button>
 			{/each}
 		{:else}
-			<span>Não há anotações no momento!</span>
+			<span>Não há referências no momento!</span>
 		{/if}
 	</div>
 </div>
