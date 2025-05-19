@@ -14,7 +14,7 @@
 			<h4 class="h4">{titulo}</h4>
 			<span>{texto}</span>
 			<div class="flex justify-end">
-				<button class="btn preset-filled-primary-500 m-2" onclick={funcao}>Confirma</button>
+				<button class="btn preset-tonal m-2" onclick={funcao}>Confirmar</button>
 				<button
 					class="btn preset-filled-error-500 m-2"
 					onclick={() => {

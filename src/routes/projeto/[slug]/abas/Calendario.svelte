@@ -27,6 +27,8 @@
 	let openStateAno = $state(false);
 	let openStateDetalhes = $state(false);
 
+	const hoje = new Date().getDate();
+
 	$effect(() => {
 		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
 			if (atividades && atividades.length > 0) {
@@ -181,6 +183,7 @@
 			<button
 				class={`hover:bg-tertiary-500 grid cursor-pointer rounded p-2 transition-all md:min-h-[4rem]
                 ${isCurrentMonth ? '' : 'opacity-40'} 
+				${(date.getDate() == hoje) ? 'bg-primary-500' : ''}
                 `}
 				onclick={() => selectDate(date)}
 			>

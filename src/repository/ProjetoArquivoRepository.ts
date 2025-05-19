@@ -28,7 +28,7 @@ class ProjetoArquivoRepository {
         return response;
     }
 
-    async EnviarArquivo(idProjeto: number, arquivo: File) {
+    async EnviarArquivo(idProjeto: number, idUsuario: number, arquivo: File) {
         const formData = new FormData();
         formData.append('file', arquivo, arquivo.name);
 
@@ -37,7 +37,7 @@ class ProjetoArquivoRepository {
                 'Content-Type': 'multipart/form-data',
             },
         };
-        const response = await Api.post(`projetos/arquivos/enviar?idProjeto=${idProjeto}`, formData, config)
+        const response = await Api.post(`projetos/arquivos/enviar?idProjeto=${idProjeto}&idUsuario=${idUsuario}`, formData, config)
             .catch((error) => {
                 throw new Error(error);
             });

@@ -5,7 +5,7 @@
 	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import BibliografiaRepository from '$repository/BibliografiaRepository';
-	import { Copy, Plus } from 'lucide-svelte';
+	import { Copy, Pencil, Plus, Trash } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import { storeLogin } from '../../../../stores';
 	import FormAdicionarBibliografia from '../components/FormAdicionarBibliografia.svelte';
@@ -107,7 +107,7 @@
 			{#each referencias as referencia, i}
 				<div class="grid">
 					{#if i >> 0}
-						<hr />
+						<hr class="my-3" />
 					{/if}
 					<span class="text-primary-500">
 						{i + 1}
@@ -122,7 +122,13 @@
 						Acessado em: {DataFormatHandler.FormatDate(referencia.acessadoEm)}
 					</p>
 				</div>
+				<div class="grid grid-flow-col justify-between gap-5">
+					<div class="flex gap-5">
+						<button class="hover:text-primary-500 mb-auto ml-auto fill-current"><Pencil /></button>
+						<button class="hover:text-error-500 mb-auto ml-auto fill-current"><Trash /></button>
+					</div>
 					<button class="hover:text-primary-500 mb-auto ml-auto fill-current"><Copy /></button>
+				</div>
 			{/each}
 		{:else}
 			<span>Não há referências no momento!</span>

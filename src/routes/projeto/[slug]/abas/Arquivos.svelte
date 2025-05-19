@@ -3,6 +3,7 @@
 	import FileHandler from '$lib/FileHandler';
 	import Toaster from '$lib/ToastHandler';
 	import Arquivo from '$model/Arquivo';
+	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
 	import { FileUpload, type FileUploadApi } from '@skeletonlabs/skeleton-svelte';
@@ -10,6 +11,7 @@
 	import IconRemove from 'lucide-svelte/icons/circle-x';
 	import IconFile from 'lucide-svelte/icons/paperclip';
 	import { getContext, onMount } from 'svelte';
+	import { storeLogin } from '../../../../stores';
 	import BotoesArquivo from '../components/BotoesArquivo.svelte';
 	import TabelaArquivos from '../components/TabelaArquivos.svelte';
 
@@ -18,6 +20,11 @@
 	interface Props {
 		projeto: Projeto;
 	}
+
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+	storeLogin.subscribe((value) => {
+		usuarioLogado = value;
+	});
 	let { projeto }: Props = $props();
 	let arquivos: Arquivo[] | null = $state(null);
 
@@ -44,7 +51,6 @@
 	async function getArquivos() {
 		arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
 	}
-
 
 	function selecionaLinha(arquivo: Arquivo) {
 		linhaSelecionada = arquivo.idExterno;
@@ -90,20 +96,24 @@
 	async function onFileSelected(e: { acceptedFiles: any[]; rejectedFiles: any[] }) {
 		let file = e.acceptedFiles[0];
 
-		if (file) {
-			try {
-				await ProjetoArquivoRepository.EnviarArquivo(projeto.id, file);
-				toast.triggerSuccess('Arquivo enviado com sucesso!');
-				linhaSelecionada = 0;
-				await getArquivos();
-			} catch (error) {
-				toast.triggerError('Erro ao tentar enviar Arquivo');
-				console.error('Error uploading file:', error);
-			}
-			fileUploadApi.clearFiles();
-		} else {
-			console.error('No file selected.');
+		if (!usuarioLogado) {
+			return;
 		}
+
+		if (!file) {
+			return;
+		}
+
+		try {
+			await ProjetoArquivoRepository.EnviarArquivo(projeto.id, usuarioLogado.id, file);
+			toast.triggerSuccess('Arquivo enviado com sucesso!');
+			linhaSelecionada = 0;
+			await getArquivos();
+		} catch (error) {
+			toast.triggerError('Erro ao tentar enviar Arquivo');
+			console.error('Error uploading file:', error);
+		}
+		fileUploadApi.clearFiles();
 	}
 </script>
 

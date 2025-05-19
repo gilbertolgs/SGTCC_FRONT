@@ -156,7 +156,7 @@
 		{#if anotacoes && anotacoes.length > 0}
 			{#each anotacoes as anotacao}
 				<button
-					class="bg-primary-300 dark:bg-primary-950 rounded border p-2 shadow-2xl transition-all duration-500 hover:brightness-80"
+					class="bg-primary-100 dark:preset-tonal rounded border p-2 shadow-2xl transition-all duration-500 hover:brightness-60"
 					onclick={() => {
 						abrirModal('Detalhes', anotacao);
 					}}

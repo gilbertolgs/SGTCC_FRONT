@@ -31,14 +31,14 @@ export const _addNoteSchema = z.object({
 
 export const _addBibliographySchema = z.object({
     id: number(),
-    autores: z.string().min(2, "Insira nomes de autores"),
-    referencia: z.string().min(2, "Insira a referência"),
+    autores: z.string().min(2, "Insira nomes de autores").max(255, "autores muito longo"),
+    referencia: z.string().min(2, "Insira a referência").max(400, "referência muito longa"),
     acessadoEm: z.string().date().min(4, "Insira uma Data de Acesso"),
 });
 
 export const _addDuvidaSchema = z.object({
     id: number(),
-    texto: z.string().min(2, "Insira um Texto para a dúvida"),
+    texto: z.string().min(2, "Insira um Texto para a dúvida").max(500, "Pergunta muito longa"),
     visibilidade: z.number(),
 });
 
