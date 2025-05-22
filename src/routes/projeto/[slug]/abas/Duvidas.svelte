@@ -5,10 +5,11 @@
 	import type LoggedUser from '$model/LoggedUser';
 	import type Projeto from '$model/Projeto';
 	import DuvidaRepository from '$repository/DuvidaRepository';
-	import { Plus } from 'lucide-svelte';
+	import { Pencil, Plus, Trash } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import { storeLogin } from '../../../../stores';
 	import FormAdicionarDuvida from '../components/FormAdicionarDuvida.svelte';
+	import ConfirmDialog from '$components/ConfirmDialog.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -24,6 +25,7 @@
 	});
 
 	let openStateAdicionar = $state(false);
+	let openStateApagar = $state(false);
 	let duvidaSelecionada: Duvida | null = $state(null);
 	let duvidas: Duvida[] | null = $state(null);
 
@@ -41,6 +43,10 @@
 				duvidaSelecionada = argumentos;
 				openStateAdicionar = !openStateAdicionar;
 				break;
+			case 'Apagar':
+				duvidaSelecionada = argumentos;
+				openStateApagar = !openStateApagar;
+				break;
 			default:
 				break;
 		}
@@ -50,8 +56,6 @@
 		if (!usuarioLogado) {
 			return;
 		}
-		console.log(texto);
-		
 		try {
 			if (id === 0) {
 				await DuvidaRepository.AdicionarDuvida(projeto.id, usuarioLogado.id, texto, visibilidade);
@@ -72,13 +76,36 @@
 		}
 		getDuvidas();
 	}
+
+	async function apagaDuvida() {
+		if (!duvidaSelecionada) return;
+		try {
+			const response = await DuvidaRepository.ApagarDuvida(duvidaSelecionada.id);
+
+			openStateApagar = false;
+			duvidaSelecionada = null;
+			toast.triggerSuccess('Duvida excluido com sucesso!');
+
+			await getDuvidas();
+		} catch (error) {
+			toast.triggerError('Ocorreu um erro ao tentar apagar duvida!');
+			console.log(error);
+		}
+	}
 </script>
 
 <FormAdicionarDuvida
 	AdicionarDuvida={adicionarDuvida}
-	openState={openStateAdicionar}
+	bind:openState={openStateAdicionar}
 	duvida={duvidaSelecionada}
 	{data}
+/>
+
+<ConfirmDialog
+	bind:openState={openStateApagar}
+	titulo="Tem certeza que deseja apagar essa dúvida"
+	texto="Dúvida: {duvidaSelecionada?.texto}"
+	funcao={apagaDuvida}
 />
 
 <div class="grid gap-4">
@@ -92,12 +119,26 @@
 	</button>
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if duvidas && duvidas.length > 0}
-			{#each duvidas as duvida, i}
-				<div class="grid">
-					<p class="font-semibold">{duvida.texto}</p>
-					<p class="text-sm text-gray-500">
-						Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
-					</p>
+			{#each duvidas as duvida}
+				<div class="flex">
+					<div class="grid">
+						<p class="font-semibold">{duvida.texto}</p>
+						<p class="text-sm text-gray-500">
+							Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
+						</p>
+					</div>
+					<div class="ml-auto flex gap-3">
+						<button
+							class="hover:text-primary-500 mb-auto ml-auto fill-current"
+							onclick={() => {
+								abrirModal('Adicionar', duvida);
+							}}><Pencil /></button
+						>
+						<button class="hover:text-error-500 mb-auto ml-auto fill-current"
+						onclick={() => {
+							abrirModal('Apagar', duvida)
+						}}><Trash /></button>
+					</div>
 				</div>
 			{/each}
 		{:else}

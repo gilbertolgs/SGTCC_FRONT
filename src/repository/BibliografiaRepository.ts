@@ -53,12 +53,20 @@ class BibliografiaRepository {
             acessadoEm: acessadoEm
         }
 
-        const response = await Api.post(`bibligrafia/atualizarBibliografia`, data)
+        const response = await Api.put(`bibligrafia/atualizarBibliografia`, data)
             .catch((error) => {
                 throw new Error(error);
             });
 
         return response;
+    }
+
+    async ApagarBibliografia(idBibliografia: number) {
+        const response = await Api.delete(`bibligrafia/${idBibliografia}/deletarBibliografia`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
     }
 }
 

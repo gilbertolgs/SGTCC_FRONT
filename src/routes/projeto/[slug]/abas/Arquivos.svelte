@@ -7,13 +7,14 @@
 	import type Projeto from '$model/Projeto';
 	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
 	import { FileUpload, type FileUploadApi } from '@skeletonlabs/skeleton-svelte';
-	import { FilePlus2 } from 'lucide-svelte';
+	import { FilePlus2, Pencil, Trash } from 'lucide-svelte';
 	import IconRemove from 'lucide-svelte/icons/circle-x';
 	import IconFile from 'lucide-svelte/icons/paperclip';
 	import { getContext, onMount } from 'svelte';
 	import { storeLogin } from '../../../../stores';
 	import BotoesArquivo from '../components/BotoesArquivo.svelte';
 	import TabelaArquivos from '../components/TabelaArquivos.svelte';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	const toast = new Toaster(getContext);
 
@@ -50,6 +51,10 @@
 
 	async function getArquivos() {
 		arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
+
+		arquivos.sort((b, a) => {
+			return new Date(a.criadoEm).getTime() - new Date(b.criadoEm).getTime() || a.id - b.id;
+		});
 	}
 
 	function selecionaLinha(arquivo: Arquivo) {
@@ -140,4 +145,27 @@
 
 <BotoesArquivo {linhaSelecionada} {selecionaLinha} {baixaArquivo} {abrirModal} />
 
-<TabelaArquivos {arquivos} {linhaSelecionada} {selecionaLinha} />
+<div class="grid gap-4">
+	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
+		{#if arquivos && arquivos.length > 0}
+			{#each arquivos as arquivo, i}
+				{#if i > 0}
+					<hr />
+				{/if}
+				<div class="grid">
+					<span class="text-primary-500">{arquivos.length - i}</span>
+					<span>
+						{arquivo.nomeOriginal}
+					</span>
+					<span>
+						{DataFormatHandler.FormatDate(arquivo.criadoEm)}
+					</span>
+				</div>
+			{/each}
+		{:else}
+			<span>Não há Arquivos por enquanto</span>
+		{/if}
+	</div>
+</div>
+
+<!-- <TabelaArquivos {arquivos} {linhaSelecionada} {selecionaLinha} /> -->

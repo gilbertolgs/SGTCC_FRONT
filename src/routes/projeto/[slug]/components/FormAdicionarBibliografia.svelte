@@ -39,7 +39,7 @@
 			$form.id = referencia.id;
 			$form.autores = referencia.autores.trim();
 			$form.referencia = referencia.referencia.trim();
-			$form.acessadoEm = referencia.acessadoEm.trim();
+			$form.acessadoEm = referencia.acessadoEm.substring(0, 10);
 
 			textoModal = 'Alterar';
 		} else {

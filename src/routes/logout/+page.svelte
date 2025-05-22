@@ -4,11 +4,12 @@
 	import { storeLogin } from '../../stores';
 
 	LoginHandler.Deslogar();
-	storeLogin.subscribe((value) => {
-		if (value == null) {
-			goto('/');
-		} else {
-			invalidateAll();
-		}
-	});
+	goto('/');
+	// storeLogin.subscribe((value) => {
+	// 	if (value == null) {
+	// 		goto('/');
+	// 	} else {
+	// 		invalidateAll();
+	// 	}
+	// });
 </script>

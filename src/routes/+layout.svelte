@@ -12,30 +12,27 @@
 
 	async function reautenticar() {
 		//WARN mudar isso
-		const userEmail = Cookie.getCookie("email");
-		
-		if (userEmail) {
-			storeLogin.subscribe(async (value) => {
-				if (!value) {
-					const user = await UsuarioRepository.PegarPorEmailLogin(userEmail);
-					if (user) {
-						storeLogin.update(value => user);
-					}
-				}
-			})
-		}
+		if (!$storeLogin == null) return;
+
+		const userEmail = Cookie.getCookie('email');
+		if (!userEmail) return;
+
+		const user = await UsuarioRepository.PegarPorEmailLogin(userEmail);
+		if (!user) return;
+
+		storeLogin.update((value) => user);
 	}
 	onMount(reautenticar);
 
 	onNavigate((navigation) => {
-		if (!document.startViewTransition) return
+		if (!document.startViewTransition) return;
 
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
-				resolve()
-				await navigation.complete
-			})
-		})
+				resolve();
+				await navigation.complete;
+			});
+		});
 	});
 </script>
 

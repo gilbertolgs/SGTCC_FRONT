@@ -183,7 +183,7 @@
 	<div class="grid mt-2 preset-tonal p-3">
 		<h3 class="h3">Pendentes</h3>
 		{#each participantesPendentes as participante}
-			<div class="flex gap-2 m-3 dark:bg-slate-900 bg-slate-400 p-2 rounded justify-between">
+			<div class="flex gap-2 m-3 preset-tonal p-2 rounded justify-between">
 				<span class="my-auto font-bold">{participante.nome}</span>
 				{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
 					<button

@@ -6,25 +6,20 @@ import { storeLogin } from "../stores";
 
 class LoginHandler {
     PegaLogin() {
-        let usuarioLogado: LoggedUser | null = $state(null);
         storeLogin.subscribe((value) => {
-            usuarioLogado = value;
+            return value;
         });
-        return usuarioLogado;
     }
 
     async FazerLogin(email: string, senha: string) {
         if (email == undefined) {
             throw new Error("E-mail inválido");
-            // Alert.display("E-mail inválido", "variant-filled-warning");
         } else if (senha == undefined) {
             throw new Error("Senha inválida");
-            // Alert.display("Senha inválida", "variant-filled-warning");
         }
 
         const login = await UsuarioRepository.Login(email, senha);
         if(login == null) {
-            console.log(login);
             throw new Error("Ocorreu um Erro ao tentar Realizar Login");
         }
 
@@ -40,8 +35,6 @@ class LoginHandler {
             user.imagem,
             login.token,
         );
-        console.log(saveCookieUser);
-        
 
         storeLogin.update(value => saveCookieUser);
         this.SalvarCookie(login, saveCookieUser);

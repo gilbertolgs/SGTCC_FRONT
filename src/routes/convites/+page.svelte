@@ -55,7 +55,7 @@
 	<div class="preset-tonal mx-auto mt-2 grid p-3 md:w-1/2">
 		<h3 class="h3">Convites Pendentes</h3>
 		{#each convites as convite}
-			<div class="m-3 flex justify-between gap-2 rounded bg-slate-400 p-2 dark:bg-slate-900">
+			<div class="preset-tonal m-3 flex justify-between gap-2 rounded p-2">
 				<span class="my-auto font-bold">{convite.nomeProjeto}</span>
 				<div class="flex gap-2">
 					{#if usuarioLogado}

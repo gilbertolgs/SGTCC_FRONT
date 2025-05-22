@@ -57,6 +57,14 @@ class DuvidaRepository {
 
         return response;
     }
+
+    async ApagarDuvida(idDuvida: number) {
+        const response = await Api.delete(`duvidas/${idDuvida}/deletarDuvida`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+    }
 }
 
 export default new DuvidaRepository();
