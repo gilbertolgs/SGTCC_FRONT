@@ -54,7 +54,7 @@
 		const atividades = await AtividadeRepository.PegarAtividadesPorProjeto(projeto.id);
 
 		const totalPoints = atividades.length;
-		let earnedPoints = atividades.reduce((sum: number, task: { estado: number; }) => {
+		let earnedPoints = atividades.reduce((sum: number, task: { estado: number }) => {
 			if (task.estado === 2) return sum + 2;
 			if (task.estado === 1) return sum + 1;
 			return sum;
@@ -65,7 +65,6 @@
 			return;
 		}
 		earnedPoints = earnedPoints / 2;
-		
 
 		progresso = Math.round((earnedPoints / totalPoints) * 100);
 	}
@@ -88,25 +87,25 @@
 	}
 </script>
 
-<div
-	class="card group m-2 mx-auto flex w-full flex-col justify-between border border-stone-800 shadow-2xl drop-shadow-2xl md:w-80"
+<a
+	class="card group group m-2 mx-auto flex w-full flex-col justify-between shadow-2xl md:w-80"
+	href={`/projeto/${projeto.id}`}
 >
-	<div>
-		<div class="overflow-hidden rounded-t-xl">
+	<div class="overflow-hidden">
+		<div class="rounded-t-xl px-3 pt-3">
 			<img
 				src={imagemProjeto}
 				alt="Imagem do Projeto"
 				style={`view-transition-name: item-image-${projeto.id};`}
-				class="w-full transition-all delay-100 duration-300 group-hover:scale-110 md:min-w-30"
+				class="w-full rounded-xl drop-shadow-2xl transition-all delay-100 duration-300 group-hover:scale-110 md:min-w-30"
 			/>
 		</div>
-		<hr class="text-stone-800" />
 
 		<div class="grid items-center justify-between overflow-hidden p-4">
 			<div>
-				<a href={`/projeto/${projeto.id}`} class="anchor font-bold">
+				<div class="anchor font-bold group-hover:underline text-xl">
 					{projeto.nome}
-				</a>
+				</div>
 				<div class="text-xs break-normal opacity-70">{projeto.descricao}</div>
 			</div>
 		</div>
@@ -124,4 +123,4 @@
 			{/each}
 		</div>
 	{/if}
-</div>
+</a>

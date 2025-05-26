@@ -7,8 +7,8 @@
 	import {
 		Album,
 		CalendarDays,
-		FolderOpen,
 		GraduationCap,
+		HandHelping,
 		Info,
 		ListTodo,
 		MessageCircleQuestion,
@@ -17,15 +17,18 @@
 		Users
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { pageName } from '../../../stores';
+	import Anotacoes from './abas/Anotacoes.svelte';
+	import Arquivos from './abas/Arquivos.svelte';
+	import Atividades from './abas/Atividades.svelte';
+	import Bibliografia from './abas/Bibliografia.svelte';
+	import Calendario from './abas/Calendario.svelte';
+	import Duvidas from './abas/Duvidas.svelte';
 	import Informacoes from './abas/Informacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
-	import Atividades from './abas/Atividades.svelte';
-	import Arquivos from './abas/Arquivos.svelte';
-	import { pageName } from '../../../stores';
-	import Calendario from './abas/Calendario.svelte';
-	import Anotacoes from './abas/Anotacoes.svelte';
-	import Bibliografia from './abas/Bibliografia.svelte';
-	import Duvidas from './abas/Duvidas.svelte';
+	import { EnumParecerProposta } from '$model/EnumParecerProposta';
+	import Proposta from './abas/Propostas.svelte';
+	import Propostas from './abas/Propostas.svelte';
 
 	let { data } = $props();
 
@@ -84,6 +87,7 @@
 
 	async function getProjeto() {
 		projeto = await ProjetoRepository.PegarPorId(idProjeto);
+		projeto.propostaAprovada = 2;
 
 		defineImagem(projeto);
 	}
@@ -96,83 +100,95 @@
 	<meta name="Exibindo informações de projeto" content="Exibindo projeto" />
 </svelte:head>
 
+{#snippet projetoBase()}
+	<Tabs.Control value="proposta">
+		<span class="flex items-center md:gap-2"
+			><HandHelping />
+			<span class="hidden md:block">Proposta</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="informacoes">
+		<span class="flex items-center md:gap-2"
+			><Info />
+			<span class="hidden md:block">Informações</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="participantes">
+		<span class="flex items-center md:gap-2"
+			><Users />
+			<span class="hidden md:block">Participantes</span>
+		</span>
+	</Tabs.Control>
+{/snippet}
+{#snippet projetoProposta()}
+	{@render projetoBase()}
+{/snippet}
+{#snippet projetoEmAndamento()}
+	{@render projetoBase()}
+	<Tabs.Control value="atividades">
+		<span class="flex items-center md:gap-2"
+			><ListTodo />
+			<span class="hidden md:block">Atividades</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="arquivos">
+		<span class="flex items-center md:gap-2"
+			><ScrollText />
+			<span class="hidden md:block">Documentação</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="anotacoes">
+		<span class="flex items-center md:gap-2"
+			><NotebookPen />
+			<span class="hidden md:block">Anotações</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="bibliografia">
+		<span class="flex items-center md:gap-2"
+			><Album />
+			<span class="hidden md:block">Bibliografia</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="duvidas">
+		<span class="flex items-center md:gap-2"
+			><MessageCircleQuestion />
+			<span class="hidden md:block">Dúvidas</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="orientacao">
+		<span class="flex items-center md:gap-2"
+			><GraduationCap />
+			<span class="hidden md:block">Orientação</span>
+		</span>
+	</Tabs.Control>
+	<Tabs.Control value="calendario">
+		<span class="flex items-center md:gap-2"
+			><CalendarDays />
+			<span class="hidden md:block">Calendário</span>
+		</span>
+	</Tabs.Control>
+{/snippet}
+
 {#if projeto}
 	<div class="items-center justify-items-center md:grid">
-		<!-- <div class="relative flex w-full justify-center">
-			style={`view-transition-name: item-image-${data.idProjeto};`}
-			<img
-				src={imagemProjeto}
-				alt="Imagem do Projeto"
-				class="rounded-xl inset-shadow-sm md:w-1/2"
-			/>
-			<div class="bg-primary-500/50 absolute bottom-0 left-0 m-2 rounded-xl px-4 py-2 md:left-1/4">
-				{projeto.nome}
-			</div>
-		</div> -->
 		<div class="w-full md:m-2 md:w-3/4">
 			<Tabs
-				listJustify="justify-between"
+				listJustify="justify-start"
 				value={abaAtual}
 				onValueChange={(e) => handleTabChange(e.value)}
 			>
 				{#snippet list()}
-					<Tabs.Control value="informacoes">
-						<span class="flex items-center md:gap-2"
-							><Info />
-							<span class="hidden md:block">Informações</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="participantes">
-						<span class="flex items-center md:gap-2"
-							><Users />
-							<span class="hidden md:block">Participantes</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="atividades">
-						<span class="flex items-center md:gap-2"
-							><ListTodo />
-							<span class="hidden md:block">Atividades</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="arquivos">
-						<span class="flex items-center md:gap-2"
-							><ScrollText />
-							<span class="hidden md:block">Documentação</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="anotacoes">
-						<span class="flex items-center md:gap-2"
-							><NotebookPen />
-							<span class="hidden md:block">Anotações</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="bibliografia">
-						<span class="flex items-center md:gap-2"
-							><Album />
-							<span class="hidden md:block">Bibliografia</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="duvidas">
-						<span class="flex items-center md:gap-2"
-							><MessageCircleQuestion />
-							<span class="hidden md:block">Dúvidas</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="orientacao">
-						<span class="flex items-center md:gap-2"
-							><GraduationCap />
-							<span class="hidden md:block">Orientação</span>
-						</span>
-					</Tabs.Control>
-					<Tabs.Control value="calendario">
-						<span class="flex items-center md:gap-2"
-							><CalendarDays />
-							<span class="hidden md:block">Calendário</span>
-						</span>
-					</Tabs.Control>
+					{#if projeto?.propostaAprovada == EnumParecerProposta.NaoAvaliado}
+						{@render projetoProposta()}
+					{:else}
+						{@render projetoEmAndamento()}
+					{/if}
 				{/snippet}
 				{#snippet content()}
 					{#if projeto}
+						<Tabs.Panel value="proposta"
+							><Propostas {projeto} {getProjeto} {data} /></Tabs.Panel
+						>
 						<Tabs.Panel value="informacoes"
 							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
 						>

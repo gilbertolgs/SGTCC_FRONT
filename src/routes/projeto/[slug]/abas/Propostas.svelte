@@ -5,7 +5,7 @@
 	import { EnumEstadoProjeto } from '$model/EnumEstadoProjeto';
 	import type Projeto from '$model/Projeto';
 	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
+	import { X as IconX, ImagePlus, Pencil, Plus } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
 	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
@@ -118,75 +118,68 @@
 	{data}
 />
 
-<div>
+<div class="grid">
+	<button
+		onclick={() => {
+			abrirModal('Adicionar');
+		}}
+		class="btn preset-filled-success-500 mt-auto md:ml-auto"
+	>
+		<Plus />Adicionar
+	</button>
 	<div class="grid md:flex md:justify-center">
-		<div class="preset-tonal flex w-full rounded-lg p-6 shadow-md">
-			<div>
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Nome:</span>
-					<p class="">{projeto.nome}</p>
-				</div>
-
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Descrição:</span>
-					<p class="">{projeto.descricao}</p>
-				</div>
-
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Justificativa:</span>
-					<p class="">{projeto.justificativa}</p>
-				</div>
-
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Data de Início:</span>
-					<p class="">{DataFormatHandler.FormatDate(projeto.dataInicio)}</p>
-				</div>
-
-				{#if projeto.tags && projeto.tags.length > 0}
-					<div class="mb-4">
-						<span class="text-surface-700-300 font-bold">Tags:</span>
-						<div class="flex flex-wrap gap-2">
-							{#each projeto.tags as tag}
-								<span class="chip preset-filled-primary-500 flex flex-wrap">{tag.nome}</span>
-							{/each}
-						</div>
-					</div>
-				{/if}
-
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Estado:</span>
-					<p class="">{projeto.ExibeStatus()}</p>
-				</div>
+		<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Nome:</span>
+				<p class="">{projeto.nome}</p>
 			</div>
-			{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
-				<div class="mb-auto ml-auto grid gap-2">
-					<button
-						onclick={() => {
-							abrirModal('Alterar');
-						}}
-						class="btn preset-outlined-primary-500"><Pencil /> Alterar Projeto</button
-					>
-					<button
-						onclick={() => {
-							abrirModal('Imagem');
-						}}
-						class="btn preset-outlined-primary-500"><ImagePlus /> Alterar Imagem</button
-					>
-					<!-- <button
-						onclick={() => {
-							abrirModal('Finalizar');
-						}}
-						class="btn preset-outlined-primary-500 mt-3"><Check /> Finalizar Projeto</button
-					> -->
-					<button
-						onclick={() => {
-							abrirModal('Cancelar');
-						}}
-						class="btn preset-outlined-error-500"><IconX /> Cancelar Projeto</button
-					>
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Descrição:</span>
+				<p class="">{projeto.descricao}</p>
+			</div>
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Justificativa:</span>
+				<p class="">{projeto.justificativa}</p>
+			</div>
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Data de Início:</span>
+				<p class="">{DataFormatHandler.FormatDate(projeto.dataInicio)}</p>
+			</div>
+
+			{#if projeto.tags && projeto.tags.length > 0}
+				<div class="mb-4">
+					<span class="text-surface-700-300 font-bold">Tags:</span>
+					<div class="flex flex-wrap gap-2">
+						{#each projeto.tags as tag}
+							<span class="chip preset-filled-primary-500 flex flex-wrap">{tag.nome}</span>
+						{/each}
+					</div>
 				</div>
 			{/if}
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Estado:</span>
+				<p class="">{projeto.ExibeStatus()}</p>
+			</div>
 		</div>
+		{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
+			<div class="m-2 grid h-1/2 gap-2">
+				<button
+					onclick={() => {
+						abrirModal('Alterar');
+					}}
+					class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button
+				>
+				<button
+					onclick={() => {
+						abrirModal('Imagem');
+					}}
+					class="btn preset-filled-primary-500"><ImagePlus /> Alterar Imagem</button
+				>
+			</div>
+		{/if}
 	</div>
-	<img class="m-2 mx-auto w-[90%] rounded md:w-1/2" src={projeto.ExibeImagem()} alt="" />
 </div>

@@ -1,10 +1,11 @@
 <script lang="ts">
 	import FormInputComponent from '$components/FormInputComponent.svelte';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	const LogoGoogle: string =
 		'https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw';
 
-	let { errors, form, constraints, message, enhance } = $props();
+	let { loginPromise, errors, form, constraints, message, enhance } = $props();
 </script>
 
 {#snippet imagem(imagem: string)}
@@ -16,7 +17,6 @@
 	use:enhance
 	class="card bg-surface-100-900 border-surface-200-800 mx-auto space-y-5 border p-5 shadow md:mt-5 md:w-1/2"
 >
-	<!-- {#if $message}<h3>{$message}</h3>{/if} -->
 	<fieldset class="space-y-2">
 		<h2 class="h2">Login</h2>
 	</fieldset>
@@ -39,7 +39,18 @@
 		/>
 	</fieldset>
 	<fieldset>
-		<button type="submit" class="btn preset-filled-primary-500 w-full">Login</button>
+		<button type="submit" class="btn preset-filled-primary-500 w-full">
+			{#await loginPromise}
+				<LoaderCircle class="animate-spin"/>
+				<span class="inline-flex items-center justify-center">
+					<span class="loader mr-2"></span> Entrando...
+				</span>
+			{:then}
+				Login
+			{:catch}
+				Login
+			{/await}
+		</button>
 		<a href="/resetarSenha/requisicao" class="anchor font-bold">Esqueceu a Senha?</a>
 	</fieldset>
 	<hr class="hr" />

@@ -67,6 +67,8 @@ class DuvidaRepository {
             });
 
     }
+
+    /* -------- Respostas -------- */
 }
 
 export default new DuvidaRepository();
