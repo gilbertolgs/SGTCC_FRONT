@@ -16,7 +16,7 @@
 	onFocusOutside={modalClose}
 	onInteractOutside={modalClose}
 	triggerBase="btn preset-filled-primary-500"
-	contentBase={classe ?? "border card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2"}
+	contentBase={classe ?? "card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2"}
 	backdropClasses="backdrop-blur-sm brightness-50"
 >
 	{#snippet content()}

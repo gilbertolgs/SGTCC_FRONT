@@ -41,6 +41,7 @@ class DuvidaRepository {
         idUsuario: number,
         texto: string,
         visibilidade: EnumVisibilidadeDuvida,
+        atendida: number,
     ) {
         const data = {
             id: id,
@@ -48,9 +49,10 @@ class DuvidaRepository {
             idUsuario: idUsuario,
             texto: texto,
             visibilidade: visibilidade,
+            atendida: atendida,
         }
 
-        const response = await Api.post(`duvidas/atualizarDuvida`, data)
+        const response = await Api.put(`duvidas/atualizarDuvida`, data)
             .catch((error) => {
                 throw new Error(error);
             });

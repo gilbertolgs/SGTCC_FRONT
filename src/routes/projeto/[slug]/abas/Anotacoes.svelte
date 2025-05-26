@@ -55,6 +55,9 @@
 					return { ...anotacao, nomeUsuario };
 				})
 			);
+			anotacoes.sort((a, b) => {
+				return new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime();
+			});
 		}
 	}
 

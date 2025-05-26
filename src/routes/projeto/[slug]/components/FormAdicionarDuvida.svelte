@@ -27,7 +27,7 @@
 		validators: zod(_addDuvidaSchema),
 		onUpdate({ form }) {
 			if (form.valid) {
-				AdicionarDuvida(form.data.id, form.data.texto, form.data.visibilidade);
+				AdicionarDuvida(form.data.id, form.data.texto, form.data.visibilidade, form.data.atendida);
 			}
 		}
 	});

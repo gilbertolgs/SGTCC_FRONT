@@ -41,6 +41,7 @@
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
 			case 'Apagar':
+				arquivoSelecionado = argumentos;
 				openStateApagar = !openStateApagar;
 				break;
 
@@ -62,6 +63,22 @@
 		arquivoSelecionado.id = arquivo.id;
 		arquivoSelecionado.nomeOriginal = arquivo.nomeOriginal;
 		console.log(linhaSelecionada);
+	}
+
+	async function apagaArquivoSelecionado() {
+		try {
+			const response = await ProjetoArquivoRepository.ApagarArquivo(arquivoSelecionado.idExterno);
+
+			arquivoSelecionado = new Arquivo(0, 0, '', '', '', '', '', 0);
+			openStateApagar = false;
+			toast.triggerSuccess('Arquivo excluido com sucesso!');
+
+			await getArquivos();
+		} catch (error) {
+			openStateApagar = false;
+			toast.triggerError('Ocorreu um erro ao tentar apagar arquivo!');
+			console.log(error);
+		}
 	}
 
 	async function apagaArquivo() {
@@ -124,9 +141,9 @@
 
 <ConfirmDialog
 	bind:openState={openStateApagar}
-	titulo="Tem certeza que deseja apagar esse arquivo"
-	texto="Arquivo: {arquivoSelecionado.nomeOriginal}"
-	funcao={apagaArquivo}
+	titulo="Tem certeza que deseja apagar essa versão da documentação"
+	texto="Documentação: {arquivoSelecionado.nomeOriginal}"
+	funcao={apagaArquivoSelecionado}
 />
 
 <FileUpload
@@ -155,11 +172,23 @@
 				<div class="grid">
 					<span class="text-primary-500">{arquivos.length - i}</span>
 					<span>
-						{arquivo.nomeOriginal}
+						<button
+							class="hover:text-primary-500 mb-auto ml-auto fill-current hover:underline"
+							onclick={() => {
+								arquivoSelecionado = arquivo;
+								baixaArquivo();
+							}}>{arquivo.nomeOriginal}</button
+						>
 					</span>
 					<span>
 						{DataFormatHandler.FormatDate(arquivo.criadoEm)}
 					</span>
+					<button
+						class="hover:text-error-500 mb-auto ml-auto fill-current"
+						onclick={() => {
+							abrirModal('Apagar', arquivo);
+						}}><Trash /></button
+					>
 				</div>
 			{/each}
 		{:else}

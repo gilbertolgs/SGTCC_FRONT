@@ -33,8 +33,6 @@
 				break;
 
 			case 'Publicar':
-				console.log(argumentos);
-				
 				if (argumentos == null) return;
 
 				projeto = argumentos;
@@ -46,7 +44,6 @@
 		}
 	}
 </script>
-
 <svelte:head>
 	<title>{pageName} - Projetos</title>
 	<meta name="Página de administrador exibindo projetos" content="Exibindo projetos" />

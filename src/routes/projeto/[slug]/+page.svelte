@@ -8,6 +8,7 @@
 		Album,
 		CalendarDays,
 		FolderOpen,
+		GraduationCap,
 		Info,
 		ListTodo,
 		MessageCircleQuestion,
@@ -155,6 +156,12 @@
 						<span class="flex items-center md:gap-2"
 							><MessageCircleQuestion />
 							<span class="hidden md:block">Dúvidas</span>
+						</span>
+					</Tabs.Control>
+					<Tabs.Control value="orientacao">
+						<span class="flex items-center md:gap-2"
+							><GraduationCap />
+							<span class="hidden md:block">Orientação</span>
 						</span>
 					</Tabs.Control>
 					<Tabs.Control value="calendario">

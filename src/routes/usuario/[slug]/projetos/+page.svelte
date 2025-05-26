@@ -12,6 +12,7 @@
 	import FormCadastroProjeto from './FormCadastroProjeto.svelte';
 
 	import Toaster from '$lib/ToastHandler';
+	import PropostaRepository from '$repository/PropostaRepository';
 	const toast = new Toaster(getContext);
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
@@ -39,8 +40,6 @@
 
 	async function getProjetos() {
 		projetos = await ProjetoRepository.PegarTodosNaoCanceladosPorIdUsuario(idUsuario);
-		console.log(projetos);
-		
 	}
 
 	function abrirModal() {
@@ -63,6 +62,18 @@
 					justificativa,
 					tags
 				);
+
+				console.log('a');
+				console.log(response);
+				
+				// const responseProposta = await PropostaRepository.CriarProposta(
+				// 	usuarioLogado.id,
+				// 	usuarioLogado.idCurso,
+				// 	nome,
+				// 	descricao,
+				// 	justificativa,
+				// 	tags
+				// );
 			}
 			openState = false;
 			toast.triggerSuccess('Projeto cadastrado com sucesso!');

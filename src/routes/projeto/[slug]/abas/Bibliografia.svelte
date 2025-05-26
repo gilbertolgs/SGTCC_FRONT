@@ -142,7 +142,7 @@
 		{#if referencias && referencias.length > 0}
 			{#each referencias as referencia, i}
 				<div class="grid">
-					{#if i >> 0}
+					{#if i > 0}
 						<hr class="my-3" />
 					{/if}
 					<span class="text-primary-500">

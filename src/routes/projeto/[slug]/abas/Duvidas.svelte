@@ -10,6 +10,7 @@
 	import { storeLogin } from '../../../../stores';
 	import FormAdicionarDuvida from '../components/FormAdicionarDuvida.svelte';
 	import ConfirmDialog from '$components/ConfirmDialog.svelte';
+	import DetalhesDuvida from '../components/DetalhesDuvida.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -25,6 +26,7 @@
 	});
 
 	let openStateAdicionar = $state(false);
+	let openStateDetalhes = $state(false);
 	let openStateApagar = $state(false);
 	let duvidaSelecionada: Duvida | null = $state(null);
 	let duvidas: Duvida[] | null = $state(null);
@@ -43,6 +45,10 @@
 				duvidaSelecionada = argumentos;
 				openStateAdicionar = !openStateAdicionar;
 				break;
+			case 'Detalhes':
+				duvidaSelecionada = argumentos;
+				openStateDetalhes = !openStateDetalhes;
+				break;
 			case 'Apagar':
 				duvidaSelecionada = argumentos;
 				openStateApagar = !openStateApagar;
@@ -52,7 +58,12 @@
 		}
 	}
 
-	async function adicionarDuvida(id: number, texto: string, visibilidade: EnumVisibilidadeDuvida) {
+	async function adicionarDuvida(
+		id: number,
+		texto: string,
+		visibilidade: EnumVisibilidadeDuvida,
+		atendida: number
+	) {
 		if (!usuarioLogado) {
 			return;
 		}
@@ -65,7 +76,8 @@
 					projeto.id,
 					usuarioLogado.id,
 					texto,
-					visibilidade
+					visibilidade,
+					atendida
 				);
 			}
 			openStateAdicionar = false;
@@ -101,6 +113,13 @@
 	{data}
 />
 
+<DetalhesDuvida
+	bind:openState={openStateDetalhes}
+	duvida={duvidaSelecionada}
+	{abrirModal}
+	{getDuvidas}
+/>
+
 <ConfirmDialog
 	bind:openState={openStateApagar}
 	titulo="Tem certeza que deseja apagar essa dúvida"
@@ -119,10 +138,20 @@
 	</button>
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if duvidas && duvidas.length > 0}
-			{#each duvidas as duvida}
+			{#each duvidas as duvida, i}
+				{#if i > 0}
+					<hr class="my-3" />
+				{/if}
 				<div class="flex">
 					<div class="grid">
-						<p class="font-semibold">{duvida.texto}</p>
+						<p class="font-semibold">
+							<button
+								class="hover:text-primary-500 mb-auto ml-auto fill-current hover:underline"
+								onclick={() => {
+									abrirModal('Detalhes', duvida);
+								}}>{duvida.texto}</button
+							>
+						</p>
 						<p class="text-sm text-gray-500">
 							Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
 						</p>
@@ -134,10 +163,12 @@
 								abrirModal('Adicionar', duvida);
 							}}><Pencil /></button
 						>
-						<button class="hover:text-error-500 mb-auto ml-auto fill-current"
-						onclick={() => {
-							abrirModal('Apagar', duvida)
-						}}><Trash /></button>
+						<button
+							class="hover:text-error-500 mb-auto ml-auto fill-current"
+							onclick={() => {
+								abrirModal('Apagar', duvida);
+							}}><Trash /></button
+						>
 					</div>
 				</div>
 			{/each}

@@ -5,12 +5,10 @@
 	import { EnumEstadoProjeto } from '$model/EnumEstadoProjeto';
 	import type Projeto from '$model/Projeto';
 	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { Check, X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
+	import { X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
 	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
-	import { storeLogin } from '../../../../stores';
-	import type LoggedUser from '$model/LoggedUser';
 
 	const toast = new Toaster(getContext);
 
@@ -120,70 +118,73 @@
 	{data}
 />
 
-<div class="grid md:justify-center md:flex">
-	<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
-		<div class="mb-4">
-			<span class="text-surface-700-300 font-bold">Nome:</span>
-			<p class="">{projeto.nome}</p>
-		</div>
-
-		<div class="mb-4">
-			<span class="text-surface-700-300 font-bold">Descrição:</span>
-			<p class="">{projeto.descricao}</p>
-		</div>
-
-		<div class="mb-4">
-			<span class="text-surface-700-300 font-bold">Justificativa:</span>
-			<p class="">{projeto.justificativa}</p>
-		</div>
-
-		<div class="mb-4">
-			<span class="text-surface-700-300 font-bold">Data de Início:</span>
-			<p class="">{DataFormatHandler.FormatDate(projeto.dataInicio)}</p>
-		</div>
-
-		{#if projeto.tags && projeto.tags.length > 0}
+<div>
+	<div class="grid md:flex md:justify-center">
+		<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
 			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Tags:</span>
-				<div class="flex flex-wrap gap-2">
-					{#each projeto.tags as tag}
-						<span class="chip preset-filled-primary-500 flex flex-wrap">{tag.nome}</span>
-					{/each}
-				</div>
+				<span class="text-surface-700-300 font-bold">Nome:</span>
+				<p class="">{projeto.nome}</p>
 			</div>
-		{/if}
 
-		<div class="mb-4">
-			<span class="text-surface-700-300 font-bold">Estado:</span>
-			<p class="">{projeto.ExibeStatus()}</p>
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Descrição:</span>
+				<p class="">{projeto.descricao}</p>
+			</div>
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Justificativa:</span>
+				<p class="">{projeto.justificativa}</p>
+			</div>
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Data de Início:</span>
+				<p class="">{DataFormatHandler.FormatDate(projeto.dataInicio)}</p>
+			</div>
+
+			{#if projeto.tags && projeto.tags.length > 0}
+				<div class="mb-4">
+					<span class="text-surface-700-300 font-bold">Tags:</span>
+					<div class="flex flex-wrap gap-2">
+						{#each projeto.tags as tag}
+							<span class="chip preset-filled-primary-500 flex flex-wrap">{tag.nome}</span>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			<div class="mb-4">
+				<span class="text-surface-700-300 font-bold">Estado:</span>
+				<p class="">{projeto.ExibeStatus()}</p>
+			</div>
 		</div>
-	</div>
-	<!-- {#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado} -->
-		<div class="m-2 grid h-1/2 gap-2">
-			<button
-				onclick={() => {
-					abrirModal('Alterar');
-				}}
-				class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button
-			>
-			<button
-				onclick={() => {
-					abrirModal('Imagem');
-				}}
-				class="btn preset-filled-warning-500"><ImagePlus /> Alterar Imagem</button
-			>
-			<button
+		{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
+			<div class="m-2 grid h-1/2 gap-2">
+				<button
+					onclick={() => {
+						abrirModal('Alterar');
+					}}
+					class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button
+				>
+				<button
+					onclick={() => {
+						abrirModal('Imagem');
+					}}
+					class="btn preset-filled-primary-500"><ImagePlus /> Alterar Imagem</button
+				>
+				<!-- <button
 				onclick={() => {
 					abrirModal('Finalizar');
 				}}
-				class="btn preset-filled-success-500 mt-3"><Check /> Finalizar Projeto</button
-			>
-			<button
-				onclick={() => {
-					abrirModal('Cancelar');
-				}}
-				class="btn preset-filled-error-500"><IconX /> Cancelar Projeto</button
-			>
-		</div>
-	<!-- {/if} -->
+				class="btn preset-filled-primary-500 mt-3"><Check /> Finalizar Projeto</button
+			> -->
+				<button
+					onclick={() => {
+						abrirModal('Cancelar');
+					}}
+					class="btn preset-filled-error-500 mt-3"><IconX /> Cancelar Projeto</button
+				>
+			</div>
+		{/if}
+	</div>
+	<img class="m-2 mx-auto rounded md:w-1/2" src={projeto.ExibeImagem()} alt="" />
 </div>
