@@ -1,8 +1,4 @@
-import FileHandler from "$lib/FileHandler";
-import { textoEnumEstadoProjeto, type EnumEstadoProjeto } from "./EnumEstadoProjeto";
-import type Imagem from "./Imagem";
-import Tag from "./Tag";
-import Usuario from "./Usuario";
+import type { EnumParecerProposta } from "./EnumParecerProposta";
 
 class Proposta {
   id: number;
@@ -13,7 +9,7 @@ class Proposta {
   atividadesPropostas: string;
   contribuicaoAgenda: string;
   sugestao: string;
-  parecer: number;
+  parecer: EnumParecerProposta;
   criadoEm: string;
 
   constructor(
@@ -25,7 +21,7 @@ class Proposta {
     atividadesPropostas: string,
     contribuicaoAgenda: string,
     sugestao: string,
-    parecer: number,
+    parecer: EnumParecerProposta,
     criadoEm: string
   ) {
     this.id = id;

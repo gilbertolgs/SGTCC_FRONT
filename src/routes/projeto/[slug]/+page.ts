@@ -23,6 +23,22 @@ export const _addActivitySchema = z.object({
     dataFim: z.string().nullish()
 });
 
+export const _addProposalSchema = z.object({
+    id: number(),
+    idProjeto: number(),
+    atividadesPropostas: z.string(),
+    contribuicaoAgenda: z.string(),
+    sugestao: z.string(),
+});
+
+export const _addRelatorioSchema = z.object({
+    id: z.number(),
+    titulo: z.string().min(1, 'Título é obrigatório'),
+    descricao: z.string().min(1, 'Descrição é obrigatória'),
+    duracaoEncontro: z.number().min(1, 'Duração deve ser maior que zero'),
+    dataRealizacao: z.string().min(1, 'Data de realização é obrigatória'), // Pode ser ajustado para z.date() se necessário
+});
+
 export const _addNoteSchema = z.object({
     id: number(),
     titulo: z.string(),
@@ -45,11 +61,13 @@ export const _addDuvidaSchema = z.object({
 export const load = async ({ params, fetch }) => {
     const alterProjectForm = await superValidate(zod(_alterProjectSchema));
     const activityForm = await superValidate(zod(_addActivitySchema));
+    const proposalForm = await superValidate(zod(_addProposalSchema));
     const noteForm = await superValidate(zod(_addNoteSchema));
     const bibliographyForm = await superValidate(zod(_addBibliographySchema));
     const duvidaForm = await superValidate(zod(_addDuvidaSchema));
+    const relatorioForm = await superValidate(zod(_addRelatorioSchema));
 
     const idProjeto = parseInt(params.slug);
 
-    return { alterProjectForm, activityForm, noteForm, bibliographyForm, duvidaForm, idProjeto };
+    return { alterProjectForm, activityForm, proposalForm, noteForm, bibliographyForm, duvidaForm, relatorioForm, idProjeto };
 };

@@ -80,6 +80,63 @@ class DuvidaRepository {
     }
 
     /* -------- Respostas -------- */
+
+    async RespostasPorDuvida(idDuvida: number) {
+        const response = await Api.get(`respostaDuvidas/respostaPorDuvida?idDuvida=${idDuvida}`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async ApagarResposta(idDuvida: number) {
+        const response = await Api.delete(`respostaDuvidas/deletarResposta?id=${idDuvida}`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+    }
+
+    async AdicionarResposta(
+        idDuvida: number,
+        idUsuario: number,
+        texto: string
+    ) {
+        const data = {
+            idDuvida: idDuvida,
+            idUsuario: idUsuario,
+            texto: texto
+        }
+
+        const response = await Api.post(`respostaDuvidas/responderDuvida`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
+
+    async AtualizarResposta(
+        id: number,
+        idDuvida: number,
+        idUsuario: number,
+        texto: string
+    ) {
+        const data = {
+            id: id,
+            idDuvida: idDuvida,
+            idUsuario: idUsuario,
+            texto: texto
+        }
+
+        const response = await Api.put(`respostaDuvidas/atualizarResposta`, data)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+    }
 }
 
 export default new DuvidaRepository();

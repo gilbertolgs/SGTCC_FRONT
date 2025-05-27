@@ -1,14 +1,14 @@
 <script lang="ts">
-	import ConfirmDialog from '$components/ConfirmDialog.svelte';
 	import DataFormatHandler from '$lib/DataFormatHandler';
 	import Toaster from '$lib/ToastHandler';
-	import { EnumEstadoProjeto } from '$model/EnumEstadoProjeto';
 	import type Projeto from '$model/Projeto';
-	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { X as IconX, ImagePlus, Pencil, Plus } from 'lucide-svelte';
+	import type Proposta from '$model/Proposta';
+	import PropostaRepository from '$repository/PropostaRepository';
+	import { Plus } from 'lucide-svelte';
 	import { getContext } from 'svelte';
-	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
-	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
+	import FormAdicionarProposta from '../components/FormAdicionarProposta.svelte';
+	import ConfirmDialog from '$components/ConfirmDialog.svelte';
+	import { textoEnumParecerProposta } from '$model/EnumParecerProposta';
 
 	const toast = new Toaster(getContext);
 
@@ -20,23 +20,22 @@
 	let { projeto, getProjeto, data }: Props = $props();
 
 	let openStateFinalizar = $state(false);
-	let openStateCancelar = $state(false);
-	let openStateImagem = $state(false);
-	let openStateAlterar = $state(false);
+	let openStateApagar = $state(false);
+	let openStateDetalhes = $state(false);
+	let openStateAdicionar = $state(false);
+
+	let propostas: Proposta[] | null = $state(null);
+	let propostaSelecionada: Proposta | null = $state(null);
 
 	function abrirModal(modal: string, argumentos: any = null) {
 		switch (modal) {
-			case 'Finalizar':
-				openStateFinalizar = !openStateFinalizar;
+			case 'Apagar':
+				propostaSelecionada = argumentos;
+				openStateApagar = !openStateApagar;
 				break;
-			case 'Cancelar':
-				openStateCancelar = !openStateCancelar;
-				break;
-			case 'Imagem':
-				openStateImagem = !openStateImagem;
-				break;
-			case 'Alterar':
-				openStateAlterar = !openStateAlterar;
+			case 'Adicionar':
+				propostaSelecionada = argumentos;
+				openStateAdicionar = !openStateAdicionar;
 				break;
 
 			default:
@@ -44,77 +43,78 @@
 		}
 	}
 
-	async function alterarProjeto(
-		idProjeto: number,
-		nome: string,
-		descricao: string,
-		justificativa: string,
-		tags: string[]
+	async function getPropostas() {
+		propostas = await PropostaRepository.PegarPorIdProjeto(projeto.id);
+	}
+
+	$effect(() => {
+		getPropostas();
+	});
+
+	async function adicionarProposta(
+		idProposta: number,
+		atividadesPropostas: string,
+		contribuicaoAgenda: string,
+		sugestao: string
 	) {
-		console.log('tags', tags);
-
 		try {
-			const response = await ProjetoRepository.AlterarProjeto(
-				idProjeto,
-				nome,
-				descricao,
-				justificativa,
-				tags
-			);
-			openStateAlterar = false;
-			toast.triggerSuccess('Projeto alterado com sucesso!');
-			await getProjeto();
+			if (idProposta === 0) {
+				PropostaRepository.CriarProposta(projeto.id, atividadesPropostas, contribuicaoAgenda, '');
+			} else {
+				PropostaRepository.AlterarProposta(
+					idProposta,
+					atividadesPropostas,
+					contribuicaoAgenda,
+					sugestao
+				);
+			}
+			toast.triggerSuccess('Sucesso adicionar Proposta');
 		} catch (error) {
-			openStateAlterar = false;
-			toast.triggerError('Ocorreu um erro ao tentar alterar projeto!');
-			console.log(error);
+			toast.triggerError('Erro ao tentar adicionar Proposta');
 		}
+		openStateAdicionar = false;
+		propostaSelecionada = null;
+		getPropostas();
 	}
 
-	async function finalizarProjeto() {
-		try {
-			const response = await ProjetoRepository.FinalizarProjeto(projeto.id);
-			openStateFinalizar = false;
-			toast.triggerSuccess('Projeto Finalizado com sucesso!');
-			await getProjeto();
-		} catch (error) {
-			toast.triggerError('Ocorreu um erro ao tentar finalizar projeto!');
-			console.log(error);
+	async function apagarProposta(idProposta: number | undefined) {
+		if (!idProposta) {
+			return;
 		}
-	}
 
-	async function cancelarProjeto() {
 		try {
-			const response = await ProjetoRepository.CancelarProjeto(projeto.id);
-			openStateCancelar = false;
-			toast.triggerSuccess('Projeto Cancelado com sucesso!');
-			await getProjeto();
+			const response = await PropostaRepository.Deletar(idProposta);
+			openStateApagar = false;
+			openStateDetalhes = false;
+			openStateAdicionar = false;
+			toast.triggerSuccess('Proposta excluída com sucesso!');
+			getPropostas();
 		} catch (error) {
-			toast.triggerError('Ocorreu um erro ao tentar cancelar projeto!');
-			console.log(error);
+			openStateApagar = false;
+			toast.triggerError('Ocorreu um erro ao tentar apagar proposta!');
 		}
 	}
 </script>
 
-<ConfirmDialog
+<!-- <ConfirmDialog
 	bind:openState={openStateFinalizar}
 	titulo="Tem certeza que deseja finalizar esse projeto?"
 	texto="Projeto: {projeto.nome}"
 	funcao={finalizarProjeto}
 />
+ -->
 
 <ConfirmDialog
-	bind:openState={openStateCancelar}
-	titulo="Tem certeza que deseja cancelar esse projeto?"
-	texto="Projeto: {projeto.nome}"
-	funcao={cancelarProjeto}
+	bind:openState={openStateApagar}
+	titulo="Tem certeza que deseja apagar essa proposta?"
+	texto="Proposta de Projeto: {projeto.nome}"
+	funcao={apagarProposta}
 />
 
-<AlterarImagemProjeto bind:openState={openStateImagem} {projeto} {getProjeto} />
-<FormAlterarProjeto
-	AlterarCadastro={alterarProjeto}
-	bind:openState={openStateAlterar}
-	{projeto}
+<FormAdicionarProposta
+	AdicionarProposta={adicionarProposta}
+	bind:openState={openStateAdicionar}
+	proposta={propostaSelecionada}
 	{data}
 />
 
@@ -127,59 +127,38 @@
 	>
 		<Plus />Adicionar
 	</button>
-	<div class="grid md:flex md:justify-center">
-		<div class="preset-tonal w-full rounded-lg p-6 shadow-md">
-			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Nome:</span>
-				<p class="">{projeto.nome}</p>
-			</div>
-
-			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Descrição:</span>
-				<p class="">{projeto.descricao}</p>
-			</div>
-
-			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Justificativa:</span>
-				<p class="">{projeto.justificativa}</p>
-			</div>
-
-			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Data de Início:</span>
-				<p class="">{DataFormatHandler.FormatDate(projeto.dataInicio)}</p>
-			</div>
-
-			{#if projeto.tags && projeto.tags.length > 0}
-				<div class="mb-4">
-					<span class="text-surface-700-300 font-bold">Tags:</span>
-					<div class="flex flex-wrap gap-2">
-						{#each projeto.tags as tag}
-							<span class="chip preset-filled-primary-500 flex flex-wrap">{tag.nome}</span>
-						{/each}
+	<div class="mt-2 grid gap-6 md:flex md:flex-col md:items-center">
+		{#if propostas}
+			{#each propostas as proposta}
+				<div class="preset-tonal w-full rounded-lg p-6 shadow-md md:w-3/4">
+					<div class="mb-4">
+						<span class="text-surface-700-300 font-bold">Atividades Propostas:</span>
+						<p>{proposta.atividadesPropostas}</p>
 					</div>
-				</div>
-			{/if}
 
-			<div class="mb-4">
-				<span class="text-surface-700-300 font-bold">Estado:</span>
-				<p class="">{projeto.ExibeStatus()}</p>
-			</div>
-		</div>
-		{#if projeto.estado == EnumEstadoProjeto.EmProgresso || projeto.estado == EnumEstadoProjeto.Criado}
-			<div class="m-2 grid h-1/2 gap-2">
-				<button
-					onclick={() => {
-						abrirModal('Alterar');
-					}}
-					class="btn preset-filled-primary-500"><Pencil /> Alterar Projeto</button
-				>
-				<button
-					onclick={() => {
-						abrirModal('Imagem');
-					}}
-					class="btn preset-filled-primary-500"><ImagePlus /> Alterar Imagem</button
-				>
-			</div>
+					<div class="mb-4">
+						<span class="text-surface-700-300 font-bold">Contribuição para a Agenda:</span>
+						<p>{proposta.contribuicaoAgenda}</p>
+					</div>
+
+					<div class="mb-4">
+						<span class="text-surface-700-300 font-bold">Parecer:</span>
+						<p>{textoEnumParecerProposta[proposta.parecer]}</p>
+					</div>
+
+					<div class="mb-4">
+						<span class="text-surface-700-300 font-bold">Criado em:</span>
+						<p>{DataFormatHandler.FormatDate(proposta.criadoEm)}</p>
+					</div>
+
+					{#if proposta.sugestao.trim().length > 0}
+						<div class="mb-4">
+							<span class="text-surface-700-300 font-bold">Sugestão de Coordenador</span>
+							<p>{proposta.sugestao}</p>
+						</div>
+					{/if}
+				</div>
+			{/each}
 		{/if}
 	</div>
 </div>

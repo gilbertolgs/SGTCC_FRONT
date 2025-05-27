@@ -20,13 +20,7 @@
 	import { fade } from 'svelte/transition';
 	const toast = new Toaster(getContext);
 
-	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
-
-	storeLogin.subscribe((value) => {
-		console.log(value);
-
-		usuarioLogado = value;
-	});
+	let usuarioLogado = $derived($storeLogin);
 
 	let { openState = $bindable(), idAtividade, abrirModal, getAtividades } = $props();
 	let atividade: Atividade | null = $derived(null);

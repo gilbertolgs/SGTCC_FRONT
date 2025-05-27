@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { generateRandomCanvas } from '$lib/canvasUtils.js';
+	import { EnumParecerProposta } from '$model/EnumParecerProposta';
 	import type Projeto from '$model/Projeto.js';
 	import CursoRepository from '$repository/CursoRepository.js';
 	import ProjetoRepository from '$repository/ProjetoRepository.js';
@@ -26,9 +27,8 @@
 	import Duvidas from './abas/Duvidas.svelte';
 	import Informacoes from './abas/Informacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
-	import { EnumParecerProposta } from '$model/EnumParecerProposta';
-	import Proposta from './abas/Propostas.svelte';
 	import Propostas from './abas/Propostas.svelte';
+	import Orientacoes from './abas/Orientacoes.svelte';
 
 	let { data } = $props();
 
@@ -87,7 +87,6 @@
 
 	async function getProjeto() {
 		projeto = await ProjetoRepository.PegarPorId(idProjeto);
-		projeto.propostaAprovada = 2;
 
 		defineImagem(projeto);
 	}
@@ -155,7 +154,7 @@
 			<span class="hidden md:block">Dúvidas</span>
 		</span>
 	</Tabs.Control>
-	<Tabs.Control value="orientacao">
+	<Tabs.Control value="orientacoes">
 		<span class="flex items-center md:gap-2"
 			><GraduationCap />
 			<span class="hidden md:block">Orientação</span>
@@ -176,6 +175,8 @@
 				listJustify="justify-start"
 				value={abaAtual}
 				onValueChange={(e) => handleTabChange(e.value)}
+				listClasses="md:w-3/4 w-full overflow-x-auto"
+				contentClasses="md:w-3/4 w-full"
 			>
 				{#snippet list()}
 					{#if projeto?.propostaAprovada == EnumParecerProposta.NaoAvaliado}
@@ -186,9 +187,7 @@
 				{/snippet}
 				{#snippet content()}
 					{#if projeto}
-						<Tabs.Panel value="proposta"
-							><Propostas {projeto} {getProjeto} {data} /></Tabs.Panel
-						>
+						<Tabs.Panel value="proposta"><Propostas {projeto} {getProjeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="informacoes"
 							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
 						>
@@ -198,6 +197,7 @@
 						<Tabs.Panel value="anotacoes"><Anotacoes {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="bibliografia"><Bibliografia {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="duvidas"><Duvidas {projeto} {data} /></Tabs.Panel>
+						<Tabs.Panel value="orientacoes"><Orientacoes {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="calendario"><Calendario {projeto} /></Tabs.Panel>
 					{/if}
 				{/snippet}

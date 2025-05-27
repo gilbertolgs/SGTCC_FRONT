@@ -36,6 +36,7 @@
 		ProjetoRepository.PegarTodosPorFiltro(tipoFiltro, filtro, tipoOrdenacao, ano).then(
 			(resposta) => {
 				projetos = resposta;
+				console.log(projetos);
 			}
 		);
 	}

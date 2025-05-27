@@ -1,17 +1,11 @@
 <script lang="ts">
-	import { Check, XIcon } from 'lucide-svelte/icons';
-	import { getContext, onMount } from 'svelte';
-
+	import CardDuvida from '$components/CardDuvida.svelte';
 	import Toaster from '$lib/ToastHandler';
-	import type Convite from '$model/Convite';
-	import { EnumConvite } from '$model/EnumConvite';
-	import type LoggedUser from '$model/LoggedUser';
-	import UsuarioRepository from '$repository/UsuarioRepository';
+	import type Duvida from '$model/Duvida';
+	import DuvidaRepository from '$repository/DuvidaRepository';
+	import { getContext, onMount } from 'svelte';
 	import { pageName, storeLogin } from '../../stores';
 	import DetalhesDuvida from '../projeto/[slug]/components/DetalhesDuvida.svelte';
-	import DuvidaRepository from '$repository/DuvidaRepository';
-	import type Duvida from '$model/Duvida';
-	import CardDuvida from '$components/CardDuvida.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -56,7 +50,7 @@
 	{getDuvidas}
 />
 
-{#if duvidas}
+<div class="md:m-5">
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if duvidas && duvidas.length > 0}
 			{#each duvidas as duvida, i}
@@ -69,4 +63,4 @@
 			<span>Não há dúvidas no momento!</span>
 		{/if}
 	</div>
-{/if}
+</div>

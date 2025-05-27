@@ -6,6 +6,7 @@
 	import AtividadeRepository from '$repository/AtividadeRepository';
 	import { MoveLeft, MoveRight } from 'lucide-svelte';
 	import DetalhesDia from '../components/DetalhesDia.svelte';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	interface Props {
 		projeto: Projeto;
@@ -27,7 +28,7 @@
 	let openStateAno = $state(false);
 	let openStateDetalhes = $state(false);
 
-	const hoje = new Date().getDate();
+	const hoje = DataFormatHandler.FormatDate(new Date().toString());
 
 	$effect(() => {
 		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
@@ -183,7 +184,7 @@
 			<button
 				class={`hover:bg-tertiary-500 grid cursor-pointer rounded p-2 transition-all md:min-h-[4rem]
                 ${isCurrentMonth ? '' : 'opacity-40'} 
-				${(date.getDate() == hoje) ? 'bg-primary-500' : ''}
+				${DataFormatHandler.FormatDate(new Date(date).toString()) == hoje ? 'bg-primary-500' : ''}
                 `}
 				onclick={() => selectDate(date)}
 			>

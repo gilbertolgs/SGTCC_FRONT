@@ -1,13 +1,10 @@
-import Atividade from "$model/Atividade";
 import { EnumFuncaoUsuario } from "$model/EnumFuncaoUsuario";
 import { EnumPapel } from "$model/EnumPapel";
 import type { EnumTipoFiltro } from "$model/EnumTipoFiltro";
 import type { EnumTipoOrdenacao } from "$model/EnumTipoOrdenacao";
 import Projeto from "$model/Projeto";
 import type Usuario from "$model/Usuario";
-import { number } from "zod";
 import Api from "./axiosInstance";
-import type { EnumAtividade } from "$model/EnumAtividade";
 
 class ProjetoRepository {
     async PegarPorId(id: number): Promise<Projeto> {
@@ -138,8 +135,15 @@ class ProjetoRepository {
             });
 
         let funcaoUsuario = EnumFuncaoUsuario.Membro;
-        if (usuario.papel === EnumPapel.Professor) {
-            funcaoUsuario = EnumFuncaoUsuario.Orientador;
+        switch (usuario.papel) {
+            case EnumPapel.Professor:
+            case EnumPapel.ProfessorResponsavel:
+            case EnumPapel.Coordenador:
+                funcaoUsuario = EnumFuncaoUsuario.Orientador;
+                break;
+
+            default:
+                break;
         }
         const data = {
             idUsuario: usuario.id,

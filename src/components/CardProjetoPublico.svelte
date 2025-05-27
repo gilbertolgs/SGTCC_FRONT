@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { generateRandomCanvas } from '$lib/canvasUtils';
 	import DataFormatHandler from '$lib/DataFormatHandler';
+	import FileHandler from '$lib/FileHandler';
 	import type LoggedUser from '$model/LoggedUser';
 	import Projeto from '$model/Projeto';
 	import CursoRepository from '$repository/CursoRepository';
+	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Download, Star } from 'lucide-svelte';
+	import { Download, Heart, Star } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	interface Props {
@@ -87,14 +89,35 @@
 			pegaEstrelas();
 		}
 	}
+
+	async function baixarDocumento(
+		event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+	) {
+		try {
+			const arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
+			//TODO Alterar isso
+			const arquivo = arquivos[0];
+
+			const idArquivo = arquivo.id;
+			const response = await ProjetoArquivoRepository.BaixarArquivo(idArquivo);
+			const blob = FileHandler.FormataArquivoBaixado(response);
+
+			const link = document.createElement('a');
+			const url = window.URL.createObjectURL(blob);
+			link.href = url;
+			link.download = arquivo.nomeOriginal;
+			link.click();
+
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 </script>
 
 <div
-	class="card group m-2 mx-auto grid w-full grid-cols-4 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
+	class="card group m-2 mx-auto grid w-full grid-cols-3 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
 >
-	<div class="m-2 overflow-hidden">
-		<img src={imagem} alt="Imagem do Projeto" class="w-full rounded-xl" />
-	</div>
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">
 			{projeto.nome}
@@ -133,23 +156,23 @@
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">
 		<div class="m-2 grid grid-flow-col items-center gap-2">
-			<span>{estrelas} Estrelas </span>
+			<span>{estrelas} Favoritos </span>
 			{#if usuarioLogado}
-				<label class="relative cursor-pointer brightness-125 hover:text-[#e3d664]">
+				<label class="relative cursor-pointer brightness-125 hover:text-[#7e6eff]">
 					<input
 						bind:checked={avaliarChecado}
 						onclick={avaliar}
 						type="checkbox"
 						class="peer hidden"
 					/>
-					<Star class="hidden peer-checked:block" fill="#e3d664" />
-					<Star class="block peer-checked:hidden" />
+					<Heart class="hidden peer-checked:block" fill="#7e6eff" />
+					<Heart class="block peer-checked:hidden" />
 				</label>
 			{/if}
 		</div>
 
 		<div class="m-2">
-			<button class="btn preset-filled-secondary-500">
+			<button class="btn preset-filled-secondary-500" onclick={baixarDocumento}>
 				<Download />
 				Baixar PDF</button
 			>

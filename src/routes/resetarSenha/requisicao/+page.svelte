@@ -4,6 +4,7 @@
 	import Toaster from '$lib/ToastHandler';
 	import type Usuario from '$model/Usuario';
 	import AuthRepository from '$repository/AuthRepository';
+	import { LoaderCircle } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
 
 	const toast = new Toaster(getContext);
@@ -27,19 +28,29 @@
 	onMount(async () => {});
 
 	async function EnviarEmail() {
-		try {
-			if (form.email.trim() == '') {
-				throw new Error('Email não encontrado');
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				if (form.email.trim() == '') {
+					throw new Error('Email não encontrado');
+				}
+				const response = await AuthRepository.PedirRedefinicaoDeSenha(form.email);
+				if (!response) {
+					toast.triggerError('Email não encontrado');
+				}
+				console.log(response);
+				toast.triggerSuccess('Email Enviado!');
+				resolve();
+			} catch (error) {
+				toast.triggerWarn('preencha todos os campos!');
+				validaCampos();
+				reject();
 			}
-			const response = await AuthRepository.PedirRedefinicaoDeSenha(form.email);
-			if (!response) {
-				toast.triggerError('Email não encontrado');
-			}
-			console.log(response);
-		} catch (error) {
-			toast.triggerWarn('preencha todos os campos!');
-			validaCampos();
-		}
+		});
+	}
+
+	let envioPromise: Promise<void> | null = $state(null);
+	function envia(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) {
+		envioPromise = EnviarEmail();
 	}
 </script>
 
@@ -61,8 +72,17 @@
 		/>
 	</fieldset>
 	<fieldset>
-		<button onclick={EnviarEmail} type="button" class="btn preset-filled-primary-500 w-full"
-			>Enviar</button
-		>
+		<button onclick={envia} type="button" class="btn preset-filled-primary-500 w-full">
+			{#await envioPromise}
+				<LoaderCircle class="animate-spin" />
+				<span class="inline-flex items-center justify-center">
+					<span class="loader mr-2"></span> Enviando...
+				</span>
+			{:then}
+				Enviar
+			{:catch}
+				Enviar
+			{/await}
+		</button>
 	</fieldset>
 </form>

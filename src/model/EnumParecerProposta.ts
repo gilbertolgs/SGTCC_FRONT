@@ -5,8 +5,8 @@ export enum EnumParecerProposta {
 }
 
 export const textoEnumParecerProposta: Record<EnumParecerProposta, string> = {
-    [EnumParecerProposta.Favoravel]: "Favoravel",
-    [EnumParecerProposta.Desfavoravel]: "Desfavoravel",
+    [EnumParecerProposta.Favoravel]: "Favorável",
+    [EnumParecerProposta.Desfavoravel]: "Desfavorável",
     [EnumParecerProposta.NaoAvaliado]: "Não Avaliado",
 };
 

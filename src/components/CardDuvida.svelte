@@ -2,6 +2,9 @@
 	import type Duvida from '$model/Duvida';
 	import { EnumVisibilidadeDuvida } from '$model/EnumVisibilidadeDuvida';
 	import { Pencil, Trash } from 'lucide-svelte';
+	import { storeLogin } from '../stores';
+
+	let usuarioLogado = $derived($storeLogin);
 
 	interface Props {
 		abrirModal: Function;
@@ -24,18 +27,20 @@
 			Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
 		</p>
 	</div>
-	<div class="ml-auto flex gap-3">
-		<button
-			class="hover:text-primary-500 mb-auto ml-auto fill-current"
-			onclick={() => {
-				abrirModal('Adicionar', duvida);
-			}}><Pencil /></button
-		>
-		<button
-			class="hover:text-error-500 mb-auto ml-auto fill-current"
-			onclick={() => {
-				abrirModal('Apagar', duvida);
-			}}><Trash /></button
-		>
-	</div>
+	{#if usuarioLogado && usuarioLogado.id == duvida.idUsuario}
+		<div class="ml-auto flex gap-3">
+			<button
+				class="hover:text-primary-500 mb-auto ml-auto fill-current"
+				onclick={() => {
+					abrirModal('Adicionar', duvida);
+				}}><Pencil /></button
+			>
+			<button
+				class="hover:text-error-500 mb-auto ml-auto fill-current"
+				onclick={() => {
+					abrirModal('Apagar', duvida);
+				}}><Trash /></button
+			>
+		</div>
+	{/if}
 </div>

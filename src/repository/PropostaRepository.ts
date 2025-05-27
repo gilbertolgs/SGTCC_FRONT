@@ -14,17 +14,17 @@ class PropostaRepository {
     async PegarPorIdCurso(idCurso: number): Promise<Proposta[]> {
         const response = await Api.get(`propostas/porCurso/${idCurso}`);
 
-        const proposta = response.map(Proposta.CriaDeDados);
+        const propostas = response.map(Proposta.CriaDeDados);
 
-        return proposta;
+        return propostas;
     }
 
-    async PegarPorIdProjeto(idProjeto: number): Promise<Proposta> {
+    async PegarPorIdProjeto(idProjeto: number): Promise<Proposta[]> {
         const response = await Api.get(`propostas/buscarPropostaPorProjeto?idProjeto=${idProjeto}`);
 
-        const proposta = Proposta.CriaDeDados(response);
+        const propostas = response.map(Proposta.CriaDeDados);
 
-        return proposta;
+        return propostas;
     }
 
     async CriarProposta(
@@ -48,16 +48,20 @@ class PropostaRepository {
         return response;
     }
 
-    async AlterarProposta(idProposta: number, nome: string, descricao: string, justificativa: string, tags: string[]) {
+    async AlterarProposta(
+        idProposta: number,
+        atividadesPropostas: string,
+        contribuicaoAgenda: string,
+        sugestao: string,
+    ) {
         const data = {
             id: idProposta,
-            nome: nome,
-            descricao: descricao,
-            justificativa: justificativa,
-            tags: tags.map(tag => ({ nome: tag }))
+            atividadesPropostas: atividadesPropostas,
+            contribuicaoAgenda: contribuicaoAgenda,
+            sugestao: sugestao,
         };
 
-        const response = await Api.put(`propostas/${idProposta}/atualizarProposta`, data)
+        const response = await Api.put(`propostas/atualizarProposta`, data)
             .catch((error) => {
                 throw new Error(error);
             });
@@ -67,6 +71,16 @@ class PropostaRepository {
 
     async Parecer(idProposta: number, parecer: EnumParecerProposta) {
         const response = await Api.put(`propostas/parecer?id=${idProposta}&parecer=${parecer}`, null)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+
+    }
+
+    async Deletar(idProposta: number) {
+        const response = await Api.delete(`propostas/deletarProposta?id=${idProposta}`)
             .catch((error) => {
                 throw new Error(error);
             });

@@ -110,7 +110,10 @@
 			constraints={$constraints.confirmarSenha}
 		/>
 	</fieldset>
-	termos e condicoes
+	<label class="flex items-center space-x-2">
+		<input class="checkbox" type="checkbox" />
+		<span class="my-auto">Aceito os <button class="anchor">Termos e Condições</button></span>
+	</label>
 	<fieldset>
 		<button type="submit" class="btn preset-filled-primary-500 w-full">Cadastrar</button>
 	</fieldset>
