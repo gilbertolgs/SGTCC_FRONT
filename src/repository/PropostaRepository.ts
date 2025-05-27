@@ -1,3 +1,4 @@
+import type { EnumParecerProposta } from "$model/EnumParecerProposta";
 import Proposta from "$model/Proposta";
 import Api from "./axiosInstance";
 
@@ -6,6 +7,14 @@ class PropostaRepository {
         const response = await Api.get(`propostas/${id}`);
 
         const proposta = Proposta.CriaDeDados(response);
+
+        return proposta;
+    }
+
+    async PegarPorIdCurso(idCurso: number): Promise<Proposta[]> {
+        const response = await Api.get(`propostas/porCurso/${idCurso}`);
+
+        const proposta = response.map(Proposta.CriaDeDados);
 
         return proposta;
     }
@@ -54,6 +63,16 @@ class PropostaRepository {
             });
 
         return response;
+    }
+
+    async Parecer(idProposta: number, parecer: EnumParecerProposta) {
+        const response = await Api.put(`propostas/parecer?id=${idProposta}&parecer=${parecer}`, null)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        return response;
+
     }
 }
 

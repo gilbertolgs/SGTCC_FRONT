@@ -12,7 +12,10 @@
 	const toast = new Toaster(getContext);
 
 	let { data } = $props();
-	let usuarioLogado = $derived($storeLogin);
+	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
+	storeLogin.subscribe((value) => {
+		usuarioLogado = value;
+	});
 
 	let convites: Convite[] | null = $state(null);
 

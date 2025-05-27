@@ -15,11 +15,7 @@
 	import PropostaRepository from '$repository/PropostaRepository';
 	const toast = new Toaster(getContext);
 
-	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
-
-	storeLogin.subscribe((value) => {
-		usuarioLogado = value;
-	});
+	let usuarioLogado = $derived($storeLogin);
 
 	let { data } = $props();
 

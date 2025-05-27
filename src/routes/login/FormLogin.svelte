@@ -2,8 +2,8 @@
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import { LoaderCircle } from 'lucide-svelte';
 
-	const LogoGoogle: string =
-		'https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw';
+	// const LogoGoogle: string =
+	// 	'https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw';
 
 	let { loginPromise, errors, form, constraints, message, enhance } = $props();
 </script>
@@ -41,7 +41,7 @@
 	<fieldset>
 		<button type="submit" class="btn preset-filled-primary-500 w-full">
 			{#await loginPromise}
-				<LoaderCircle class="animate-spin"/>
+				<LoaderCircle class="animate-spin" />
 				<span class="inline-flex items-center justify-center">
 					<span class="loader mr-2"></span> Entrando...
 				</span>
@@ -55,12 +55,12 @@
 	</fieldset>
 	<hr class="hr" />
 	<fieldset class="space-y-5">
-		<button
+		<!-- <button
 			type="button"
 			class="btn preset-outlined-primary-500 hover:preset-filled-primary-500 w-full"
 		>
 			{@render imagem(LogoGoogle)} Entrar com Google
-		</button>
+		</button> -->
 		<p class="text-center text-sm">
 			Não possui cadastro? <a href="/cadastrar" class="anchor font-bold">Criar conta</a>
 		</p>

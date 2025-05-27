@@ -12,6 +12,7 @@ export class NavigationLinks {
             return this.LinksPadrao();
         }
         switch (this.usuario.papel) {
+
             case EnumPapel.Admin:
                 return this.LinksAdmin();
 
@@ -20,6 +21,10 @@ export class NavigationLinks {
 
             case EnumPapel.Professor:
                 return this.LinksProfessor(this.usuario.id);
+
+            case EnumPapel.ProfessorResponsavel:
+            case EnumPapel.Coordenador:
+                return this.LinksCoordenador(this.usuario.id);
 
             default:
                 return this.LinksPadrao();
@@ -46,7 +51,7 @@ export class NavigationLinks {
             { label: 'Biblioteca', href: '/biblioteca' },
             { label: 'Cursos', href: '/cursos' },
             { label: 'Usuários', href: '/usuarios' },
-            { label: 'Projetos', href: '/projetos' },
+            // { label: 'Projetos', href: '/projetos' },
             { label: 'Documento', href: '/documento' },
         ];
     }
@@ -55,8 +60,22 @@ export class NavigationLinks {
         return [
             { label: 'Biblioteca', href: '/biblioteca' },
             { label: 'Seus Projetos', href: `/usuario/${idUsuario}/projetos` },
+            { label: 'Convites', href: `/convites` },
             { label: 'Atividades', href: '/atividades' },
-            { label: 'Banca', href: '/banca' }
+            { label: 'Bancas', href: '/bancas' },
+            { label: 'Dúvidas', href: '/duvidas' }
+        ];
+    }
+
+    private LinksCoordenador(idUsuario: number) {
+        return [
+            { label: 'Biblioteca', href: '/biblioteca' },
+            { label: 'Seus Projetos', href: `/usuario/${idUsuario}/projetos` },
+            { label: 'Convites', href: `/convites` },
+            { label: 'Atividades', href: '/atividades' },
+            { label: 'Bancas', href: '/bancas' },
+            { label: 'Dúvidas', href: '/duvidas' },
+            { label: 'Propostas', href: '/propostas' }
         ];
     }
 }

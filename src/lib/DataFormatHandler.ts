@@ -1,5 +1,7 @@
 class DataFormatHandler {
-    FormatDate(dateString: string) {
+    FormatDate(dateString: string | null) {
+        if (dateString === null) return '';
+
         const newDate = new Date(dateString);
 
         const formatted = newDate.toLocaleDateString();

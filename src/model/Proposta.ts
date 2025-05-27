@@ -16,7 +16,6 @@ class Proposta {
   parecer: number;
   criadoEm: string;
 
-
   constructor(
     id: number,
     idProjeto: number,

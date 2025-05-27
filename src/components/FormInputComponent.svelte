@@ -16,7 +16,7 @@
 	<span class="label-text">{label}</span>
 	<input
 		bind:value={valor}
-		class="input light:bg-surface-50 {erros ? 'preset-input-error' : ''}"
+		class="input light:bg-surface-50 {erros ? 'bg-error-300' : ''}"
 		type={tipo}
 		{placeholder}
 		autocomplete="off"

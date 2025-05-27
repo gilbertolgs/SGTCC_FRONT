@@ -14,6 +14,17 @@ class DuvidaRepository {
         return duvidas;
     }
 
+    async PegarDuvidasPorCurso(idCurso: number) {
+        const response = await Api.get(`duvidas/porCurso/${idCurso}`)
+            .catch((error) => {
+                throw new Error(error);
+            });
+
+        const duvidas = response.map(Duvida.CriaDeDados);
+
+        return duvidas;
+    }
+
     async AdicionarDuvida(
         idProjeto: number,
         idUsuario: number,

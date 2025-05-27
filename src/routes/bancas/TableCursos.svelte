@@ -62,7 +62,7 @@
 				<tr class="even:preset-tonal">
 					<td>
 						<span class="inline-flex w-min items-center gap-1 whitespace-nowrap">
-							<!-- <ImageComponent objeto={cursoAtual} /> -->
+							<ImageComponent objeto={cursoAtual} />
 							<span>
 								{cursoAtual.nome}
 							</span>
@@ -79,14 +79,14 @@
 							>
 								<Pencil /> Alterar
 							</button>
-							<!-- <button
+							<button
 								class="btn preset-filled-primary-500"
 								onclick={() => {
 									abrirModal('Imagem', cursoAtual);
 								}}
 							>
 								<ImagePlus /> Alterar Imagem
-							</button> -->
+							</button>
 							<button
 								class="btn preset-filled-error-500"
 								onclick={() => {
@@ -109,7 +109,7 @@
 		{#snippet corpo()}
 			<tr class="">
 				<td class="flex items-center gap-2">
-					<!-- <div class="placeholder h-15 min-w-26 animate-pulse"></div> -->
+					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
 					<div class="placeholder h-2 w-full animate-pulse"></div>
 				</td>
 				<td class="">

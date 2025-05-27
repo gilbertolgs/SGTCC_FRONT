@@ -110,6 +110,7 @@
 			constraints={$constraints.confirmarSenha}
 		/>
 	</fieldset>
+	termos e condicoes
 	<fieldset>
 		<button type="submit" class="btn preset-filled-primary-500 w-full">Cadastrar</button>
 	</fieldset>

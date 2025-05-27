@@ -11,6 +11,7 @@
 	import FormAdicionarDuvida from '../components/FormAdicionarDuvida.svelte';
 	import ConfirmDialog from '$components/ConfirmDialog.svelte';
 	import DetalhesDuvida from '../components/DetalhesDuvida.svelte';
+	import CardDuvida from '$components/CardDuvida.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -20,10 +21,7 @@
 	}
 	let { projeto, data }: Props = $props();
 
-	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
-	storeLogin.subscribe((value) => {
-		usuarioLogado = value;
-	});
+	let usuarioLogado = $derived($storeLogin);
 
 	let openStateAdicionar = $state(false);
 	let openStateDetalhes = $state(false);
@@ -142,35 +140,7 @@
 				{#if i > 0}
 					<hr class="my-3" />
 				{/if}
-				<div class="flex">
-					<div class="grid">
-						<p class="font-semibold">
-							<button
-								class="hover:text-primary-500 mb-auto ml-auto fill-current hover:underline"
-								onclick={() => {
-									abrirModal('Detalhes', duvida);
-								}}>{duvida.texto}</button
-							>
-						</p>
-						<p class="text-sm text-gray-500">
-							Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
-						</p>
-					</div>
-					<div class="ml-auto flex gap-3">
-						<button
-							class="hover:text-primary-500 mb-auto ml-auto fill-current"
-							onclick={() => {
-								abrirModal('Adicionar', duvida);
-							}}><Pencil /></button
-						>
-						<button
-							class="hover:text-error-500 mb-auto ml-auto fill-current"
-							onclick={() => {
-								abrirModal('Apagar', duvida);
-							}}><Trash /></button
-						>
-					</div>
-				</div>
+				<CardDuvida {abrirModal} {duvida} />
 			{/each}
 		{:else}
 			<span>Não há dúvidas no momento!</span>
