@@ -29,7 +29,7 @@
 {#snippet rota(label: string, href: string)}
 	<a
 		{href}
-		class="btn font-semibold {page.url.pathname === href ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
+		class="btn font-semibold text-sm {page.url.pathname === href ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
 	>
 		{label}
 	</a>
@@ -39,10 +39,10 @@
 		href="/"
 		class="hover:text-primary-500 flex fill-current font-sans text-5xl font-extrabold transition-all select-none gap-3"
 	>
-		<span class="w-12">
+		<span class="w-10">
 			<LogoMono />
 		</span>
-		<span class="my-auto text-4xl antialiased"> SGTCC </span>
+		<span class="my-auto text-3xl antialiased"> SGTCC </span>
 	</a>
 {/snippet}
 

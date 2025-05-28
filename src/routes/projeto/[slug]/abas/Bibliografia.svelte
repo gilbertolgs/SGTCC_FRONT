@@ -111,7 +111,7 @@
 		const text = referencia.autores.trim() + '\n' + referencia.referencia.trim();
 		await navigator.clipboard.writeText(text);
 
-		toast.triggerSuccess('Referência copiada!')
+		toast.triggerSuccess('Referência copiada!');
 	}
 </script>
 
@@ -129,6 +129,45 @@
 	funcao={apagaReferencia}
 />
 
+{#snippet cardReferencia(referencia: Bibliografia, i: number)}
+	<div class="preset-tonal mb-4 rounded p-3 shadow-md transition-all hover:shadow-lg">
+		<div class="mb-2 flex items-center justify-between">
+			<h3 class="text-lg font-semibold">Referência {i + 1}</h3>
+			<button class="btn preset-outlined-primary-500" onclick={() => copiaReferencia(referencia)}>
+				<Copy class="mr-1 h-4 w-4" />
+				Copiar
+			</button>
+		</div>
+
+		<div class="text-muted-foreground space-y-1 text-sm">
+			<p>{referencia.autores}</p>
+			<p>
+				<span class="font-semibold">{referencia.referencia}</span>
+			</p>
+			<p class="mt-2 opacity-70">
+				Acessado em: {DataFormatHandler.FormatDate(referencia.acessadoEm)}
+			</p>
+		</div>
+
+		<div class="mt-3 flex gap-3">
+			<button
+				class="btn preset-outlined-primary-500"
+				onclick={() => abrirModal('Adicionar', referencia)}
+			>
+				<Pencil class="mr-1 h-4 w-4" />
+				Editar
+			</button>
+			<button
+				class="btn preset-outlined-error-500"
+				onclick={() => abrirModal('Apagar', referencia)}
+			>
+				<Trash class="mr-1 h-4 w-4" />
+				Excluir
+			</button>
+		</div>
+	</div>
+{/snippet}
+
 <div class="grid gap-4">
 	<button
 		onclick={() => {
@@ -141,40 +180,7 @@
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if referencias && referencias.length > 0}
 			{#each referencias as referencia, i}
-				<div class="grid">
-					{#if i > 0}
-						<hr class="my-3" />
-					{/if}
-					<span class="text-primary-500">
-						{i + 1}
-					</span>
-					<span>
-						{referencia.autores}
-					</span>
-					<span class="font-bold">
-						{referencia.referencia}
-					</span>
-					<p class="mt-2 opacity-70">
-						Acessado em: {DataFormatHandler.FormatDate(referencia.acessadoEm)}
-					</p>
-				</div>
-				<div class="grid grid-flow-col justify-between gap-5">
-					<div class="flex gap-5">
-						<button
-							class="hover:text-primary-500 mb-auto ml-auto fill-current"
-							onclick={() => {
-								abrirModal('Adicionar', referencia);
-							}}><Pencil /></button
-						>
-						<button
-							class="hover:text-error-500 mb-auto ml-auto fill-current"
-							onclick={() => {
-								abrirModal('Apagar', referencia);
-							}}><Trash /></button
-						>
-					</div>
-					<button class="hover:text-primary-500 mb-auto ml-auto fill-current" onclick={() => {copiaReferencia(referencia)}}><Copy /></button>
-				</div>
+				{@render cardReferencia(referencia, i)}
 			{/each}
 		{:else}
 			<span>Não há referências no momento!</span>

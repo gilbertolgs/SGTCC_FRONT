@@ -57,40 +57,45 @@
 	<meta name="Página de Atividades pessoais" content="Exibindo atividades" />
 </svelte:head>
 
-{#if projetoAtividades}
-	<div class="preset-tonal mx-auto mt-2 grid p-3 md:w-1/2">
-		<h3 class="h3">Projetos</h3>
-		{#each projetoAtividades as projetoAtividade}
-			<div class="preset-tonal m-3 rounded p-2">
-				<div class="flex justify-between gap-2">
-					<a
-						href="projeto/{projetoAtividade.projeto.id}"
-						class="anchor font-bold group-hover:underline"
-					>
-						{projetoAtividade.projeto.nome}
-					</a>
-				</div>
-				{#if projetoAtividade.atividades.length > 0}
-					<ul class="mt-2 text-sm">
+{#if projetoAtividades?.length}
+	<div class="mx-auto mt-6 space-y-6 md:w-1/2">
+		<h3 class="text-lg font-semibold">Projetos</h3>
+
+		{#each projetoAtividades as projetoAtividade (projetoAtividade.projeto.id)}
+			<div class="preset-tonal rounded p-4 shadow-sm transition-all hover:shadow-md">
+				<a
+					href={`projeto/${projetoAtividade.projeto.id}`}
+					class="anchor text-base font-bold hover:underline"
+				>
+					{projetoAtividade.projeto.nome}
+				</a>
+
+				{#if projetoAtividade.atividades?.length > 0}
+					<ul class="mt-3 space-y-3 text-sm">
 						{#each projetoAtividade.atividades as atividade}
-							<li class="my-1">
+							<li>
 								<div class="font-semibold">{atividade.nome}</div>
-								<div class="text-xs">
+								<div class="text-muted-foreground text-xs">
 									Início: {DataFormatHandler.FormatDate(atividade.dataInicio)} | Entrega: {DataFormatHandler.FormatDate(
 										atividade.dataEntrega
-									)}
-									<br />
-									Prioridade: {textoEnumPrioridadeAtividade[atividade.prioridade]} | Estado: {textoEnumPrioridadeAtividade[
-										atividade.prioridade
+									)}<br />
+									Prioridade: {textoEnumPrioridadeAtividade[atividade.prioridade]} | Estado: {textoEnumAtividade[
+										atividade.estado
 									]}
 								</div>
 							</li>
 						{/each}
 					</ul>
 				{:else}
-					<p class="mt-2 text-sm">Sem atividades.</p>
+					<p class="text-muted-foreground mt-3 text-sm">Sem atividades.</p>
 				{/if}
 			</div>
 		{/each}
+	</div>
+{:else}
+	<div
+		class="preset-tonal text-muted-foreground mx-auto mt-6 rounded p-6 text-center shadow-sm md:w-1/2"
+	>
+		<p>Não há projetos para exibir no momento.</p>
 	</div>
 {/if}

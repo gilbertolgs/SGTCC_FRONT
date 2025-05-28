@@ -48,29 +48,44 @@
 	<meta name="Página de Convites" content="Exibindo convites" />
 </svelte:head>
 
-{#if convites}
-	<div class="preset-tonal mx-auto mt-2 grid p-3 md:w-1/2">
-		<h3 class="h3">Convites Pendentes</h3>
-		{#each convites as convite}
-			<div class="preset-tonal m-3 flex justify-between gap-2 rounded p-2">
-				<span class="my-auto font-bold">{convite.nomeProjeto}</span>
-				<div class="flex gap-2">
+{#if convites?.length}
+	<div class="mx-auto mt-6 space-y-4 md:w-1/2">
+		<h3 class="text-lg font-semibold">Convites Pendentes</h3>
+
+		{#each convites as convite (convite.id)}
+			<div class="preset-tonal rounded p-4 shadow-sm transition-all hover:shadow-md">
+				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<div>
+						<p class="text-base font-medium">{convite.nomeProjeto}</p>
+						<p class="text-muted-foreground text-sm">
+							Você foi convidado para participar deste projeto.
+						</p>
+					</div>
+
 					{#if usuarioLogado}
-						<button
-							onclick={() => {
-								responderConvite(convite.id, EnumConvite.Aceito);
-							}}
-							class="btn preset-filled-success-500 flex"><Check />Aceitar</button
-						>
-						<button
-							onclick={() => {
-								responderConvite(convite.id, EnumConvite.Rejeitado);
-							}}
-							class="btn preset-filled-error-500 flex"><XIcon />Cancelar</button
-						>
+						<div class="flex gap-2">
+							<button
+								class="btn preset-filled-success-500 flex items-center gap-1"
+								onclick={() => responderConvite(convite.id, EnumConvite.Aceito)}
+							>
+								<Check class="h-4 w-4" /> Aceitar
+							</button>
+							<button
+								class="btn preset-filled-error-500 flex items-center gap-1"
+								onclick={() => responderConvite(convite.id, EnumConvite.Rejeitado)}
+							>
+								<XIcon class="h-4 w-4" /> Cancelar
+							</button>
+						</div>
 					{/if}
 				</div>
 			</div>
 		{/each}
+	</div>
+{:else}
+	<div
+		class="preset-tonal text-muted-foreground mx-auto mt-6 rounded p-6 text-center shadow-sm md:w-1/2"
+	>
+		<p>Você não tem convites pendentes no momento.</p>
 	</div>
 {/if}

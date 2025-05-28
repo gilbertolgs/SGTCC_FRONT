@@ -162,34 +162,41 @@
 
 <BotoesArquivo {linhaSelecionada} {selecionaLinha} {baixaArquivo} {abrirModal} />
 
+{#snippet cardDocumento(arquivo: Arquivo, i: number)}
+	<div class="preset-tonal mb-4 rounded p-3 shadow-md transition-all hover:shadow-lg">
+		<div class="flex items-center justify-between">
+			{#if arquivos}
+				<h3 class="text-lg font-semibold">
+					Versão {arquivos.length - i}
+				</h3>
+			{/if}
+			<button class="btn preset-outlined-error-500" onclick={() => abrirModal('Apagar', arquivo)}>
+				<Trash class="mr-1 h-4 w-4" />
+				Excluir
+			</button>
+		</div>
+
+		<div class="text-muted-foreground mt-2 text-sm">
+			<button
+				class="hover:text-primary-500 underline"
+				onclick={() => {
+					arquivoSelecionado = arquivo;
+					baixaArquivo();
+				}}
+			>
+				{arquivo.nomeOriginal}
+			</button>
+			<p class="mt-1 opacity-70">
+				Criado em: {DataFormatHandler.FormatDate(arquivo.criadoEm)}
+			</p>
+		</div>
+	</div>
+{/snippet}
 <div class="grid gap-4">
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if arquivos && arquivos.length > 0}
 			{#each arquivos as arquivo, i}
-				{#if i > 0}
-					<hr />
-				{/if}
-				<div class="grid">
-					<span class="text-primary-500">{arquivos.length - i}</span>
-					<span>
-						<button
-							class="hover:text-primary-500 mb-auto ml-auto fill-current hover:underline"
-							onclick={() => {
-								arquivoSelecionado = arquivo;
-								baixaArquivo();
-							}}>{arquivo.nomeOriginal}</button
-						>
-					</span>
-					<span>
-						{DataFormatHandler.FormatDate(arquivo.criadoEm)}
-					</span>
-					<button
-						class="hover:text-error-500 mb-auto ml-auto fill-current"
-						onclick={() => {
-							abrirModal('Apagar', arquivo);
-						}}><Trash /></button
-					>
-				</div>
+				{@render cardDocumento(arquivo, i)}
 			{/each}
 		{:else}
 			<span>Não há Arquivos por enquanto</span>

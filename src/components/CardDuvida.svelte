@@ -13,34 +13,37 @@
 	let { abrirModal, duvida }: Props = $props();
 </script>
 
-<div class="flex">
-	<div class="grid">
-		<p class="font-semibold">
-			<button
-				class="hover:text-primary-500 mb-auto ml-auto fill-current hover:underline"
-				onclick={() => {
-					abrirModal('Detalhes', duvida);
-				}}>{duvida.texto}</button
-			>
-		</p>
-		<p class="text-sm text-gray-500">
-			Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}
-		</p>
+<div class="preset-tonal rounded p-3 shadow-md transition-all hover:shadow-lg">
+	<div class="flex items-center justify-between">
+		<h3 class="truncate text-lg font-semibold">{duvida.texto}</h3>
+		<button
+			class="btn preset-outlined-primary-500"
+			onclick={() => abrirModal('Detalhes', duvida)}
+		>
+			Ver detalhes
+		</button>
 	</div>
+
+	<div class="text-muted-foreground mt-2 text-sm">
+		<p>Visibilidade: {EnumVisibilidadeDuvida[duvida.visibilidade]}</p>
+	</div>
+
 	{#if usuarioLogado && usuarioLogado.id == duvida.idUsuario}
-		<div class="ml-auto flex gap-3">
+		<div class="mt-3 flex gap-3">
 			<button
-				class="hover:text-primary-500 mb-auto ml-auto fill-current"
-				onclick={() => {
-					abrirModal('Adicionar', duvida);
-				}}><Pencil /></button
+				class="btn preset-outlined-primary-500"
+				onclick={() => abrirModal('Adicionar', duvida)}
 			>
+				<Pencil class="h-4 w-4 mr-1" />
+				Editar
+			</button>
 			<button
-				class="hover:text-error-500 mb-auto ml-auto fill-current"
-				onclick={() => {
-					abrirModal('Apagar', duvida);
-				}}><Trash /></button
+				class="btn preset-outlined-error-500"
+				onclick={() => abrirModal('Apagar', duvida)}
 			>
+				<Trash class="h-4 w-4 mr-1" />
+				Excluir
+			</button>
 		</div>
 	{/if}
 </div>

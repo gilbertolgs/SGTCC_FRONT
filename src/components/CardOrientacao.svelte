@@ -12,28 +12,40 @@
 </script>
 
 <div class="preset-tonal rounded p-3 shadow-md transition-all hover:shadow-lg">
-	<div class="flex items-center justify-between">
-		<h3 class="truncate text-lg font-semibold">{relatorio.titulo || 'Sem título'}</h3>
-		<button
-			class="btn preset-outlined-primary-500"
-			onclick={() => abrirModal('Detalhes', relatorio)}
-		>
-			Ver detalhes
-		</button>
-	</div>
-
-	<div class="text-muted-foreground mt-2 text-sm">
-		<p class="line-clamp-2">{relatorio.descricao || 'Sem descrição.'}</p>
-	</div>
-
-	<div class="text-muted-foreground mt-3 flex items-center gap-4 text-sm">
-		<div class="flex items-center gap-1">
-			<CalendarDays class="h-4 w-4" />
-			<span>{DataFormatHandler.FormatDate(relatorio.dataRealizacao)}</span>
+	<div class="flex items-start justify-between">
+		<!-- Question Text + Metadata -->
+		<div class="flex flex-col gap-1 max-w-xl">
+			<h3 class="text-lg font-semibold truncate">
+				<button
+					class="hover:underline text-left"
+					on:click={() => abrirModal('Detalhes', duvida)}
+				>
+					{duvida.texto}
+				</button>
+			</h3>
+			<p class="text-sm text-muted-foreground">
+				Visibilidade: <span class="font-medium">{EnumVisibilidadeDuvida[duvida.visibilidade]}</span>
+			</p>
 		</div>
-		<div class="flex items-center gap-1">
-			<Clock class="h-4 w-4" />
-			<span>{relatorio.duracaoEncontro} Horas</span>
-		</div>
+
+		<!-- Action Buttons (Edit/Delete) -->
+		{#if usuarioLogado && usuarioLogado.id === duvida.idUsuario}
+			<div class="ml-4 flex gap-2">
+				<button
+					class="btn-icon hover:opacity-80 transition"
+					on:click={() => abrirModal('Adicionar', duvida)}
+					title="Editar dúvida"
+				>
+					<Pencil class="w-5 h-5" />
+				</button>
+				<button
+					class="btn-icon hover:opacity-80 transition"
+					on:click={() => abrirModal('Apagar', duvida)}
+					title="Apagar dúvida"
+				>
+					<Trash class="w-5 h-5" />
+				</button>
+			</div>
+		{/if}
 	</div>
 </div>

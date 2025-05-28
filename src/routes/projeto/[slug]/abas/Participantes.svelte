@@ -93,106 +93,82 @@
 		><Plus />Adicionar</button
 	>
 </div>
-{#snippet cabecalhoCursos()}
-	<thead>
-		<tr>
-			{#each camposCabecalho as campo}
-				<td>{campo}</td>
-			{/each}
-		</tr>
-	</thead>
-{/snippet}
-{#if participantes}
-	<TableBaseComponent
-		{camposCabecalho}
-		arrObjetosTamanho={participantes.length}
-		labelObjeto="Participantes"
-	>
-		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
-		{/snippet}
-		{#snippet corpo()}
-			{#if participantes}
-				{#each participantes as participante}
-					<tr out:fade={{ duration: 400 }} in:fade={{ duration: 400 }}>
-						<td>
-							<a
-								href={`/usuario/${participante.id}`}
-								class="inline-flex w-min items-center gap-1 whitespace-nowrap"
+{#if participantes?.length}
+	<div class="space-y-4">
+		{#each participantes as participante (participante.id)}
+			<div class="preset-tonal rounded p-4 shadow-md transition-all hover:shadow-lg">
+				<div class="flex items-center justify-between">
+					<a href={`/usuario/${participante.id}`} class="flex items-center gap-3 truncate anchor">
+						<Avatar
+							classes="select-none group-hover:brightness-50 no-underline text-white"
+							size="size-10"
+							src={participante.ExibeImagem()}
+							name={participante.nome}
+						/>
+						<span class="text-lg font-semibold">{participante.nome}</span>
+					</a>
+
+					{#if usuarioLogado}
+						{#if usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
+							<button
+								class="btn preset-filled-error-500 flex gap-1"
+								onclick={() => removerParticipante(participante.id)}
 							>
-								<Avatar
-									classes="select-none group-hover:brightness-50"
-									size="size-10"
-									src={participante.ExibeImagem()}
-									name={participante.nome}
-								/>
-								<span class="anchor">
-									{participante.nome}
-								</span>
-							</a>
-						</td>
-						<td>{participante.ExibeFuncao()}</td>
-						<td>
-							{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
-								<button
-									onclick={() => {
-										removerParticipante(participante.id);
-									}}
-									class="btn preset-filled-error-500 flex"><Ban />Remover</button
-								>
-							{:else if usuarioLogado && usuarioLogado.id === participante.id && usuarioLogado.funcao !== EnumFuncaoUsuario.LiderProjeto}
-								<button
-									onclick={() => {
-										removerParticipante(participante.id);
-									}}
-									class="btn preset-filled-error-500 flex"><Ban />Sair</button
-								>
-							{/if}
-						</td>
-					</tr>
-				{/each}
-			{/if}
-		{/snippet}
-	</TableBaseComponent>
+								<Ban class="h-4 w-4" /> Remover
+							</button>
+						{:else if usuarioLogado.id === participante.id && usuarioLogado.funcao !== EnumFuncaoUsuario.LiderProjeto}
+							<button
+								class="btn preset-filled-error-500 flex gap-1"
+								onclick={() => removerParticipante(participante.id)}
+							>
+								<Ban class="h-4 w-4" /> Sair
+							</button>
+						{/if}
+					{/if}
+				</div>
+
+				<p class="text-muted-foreground mt-2 text-sm">{participante.ExibeFuncao()}</p>
+			</div>
+		{/each}
+	</div>
 {:else}
-	<TableBaseComponent {camposCabecalho} arrObjetosTamanho={1} labelObjeto="Participantes">
-		{#snippet cabecalho()}
-			{@render cabecalhoCursos()}
-		{/snippet}
-		{#snippet corpo()}
-			<tr class="">
-				<td class="flex items-center gap-2">
-					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
-					<div class="placeholder h-2 w-full animate-pulse"></div>
-				</td>
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
-				<td class="">
-					<div class="placeholder animate-pulse"></div>
-				</td>
-			</tr>
-		{/snippet}
-	</TableBaseComponent>
+	<!-- Skeleton loading state -->
+	<div class="space-y-4">
+		{#each Array(3) as _, i}
+			<div class="preset-tonal animate-pulse rounded p-4 shadow-md">
+				<div class="flex items-center gap-4">
+					<div class="placeholder h-10 w-10 rounded-full bg-gray-300"></div>
+					<div class="flex-1 space-y-2">
+						<div class="h-4 w-1/2 rounded bg-gray-300"></div>
+						<div class="h-3 w-1/3 rounded bg-gray-300"></div>
+					</div>
+				</div>
+			</div>
+		{/each}
+	</div>
 {/if}
 
-{#if participantesPendentes}
-	<div class="grid mt-2 preset-tonal p-3">
-		<h3 class="h3">Pendentes</h3>
-		{#each participantesPendentes as participante}
-			<div class="flex gap-2 m-3 preset-tonal p-2 rounded justify-between">
-				<span class="my-auto font-bold">{participante.nome}</span>
-				{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
-					<button
-						onclick={() => {
-							removerParticipante(participante.id);
-						}}
-						class="btn preset-filled-error-500 flex"><Ban />Cancelar</button
-					>
-				{/if}
+{#if participantesPendentes?.length}
+	<div class="mt-6 space-y-4">
+		<h3 class="text-lg font-semibold">Pendentes</h3>
+
+		{#each participantesPendentes as participante (participante.id)}
+			<div class="preset-tonal rounded p-3 shadow-sm">
+				<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+					<div>
+						<p class="font-medium">{participante.nome}</p>
+						<p class="text-muted-foreground text-sm">{participante.email}</p>
+					</div>
+
+					{#if usuarioLogado?.funcao === EnumFuncaoUsuario.LiderProjeto && usuarioLogado.id !== participante.id}
+						<button
+							class="btn preset-filled-error-500 flex gap-1 self-start sm:self-auto"
+							onclick={() => removerParticipante(participante.id)}
+						>
+							<Ban class="h-4 w-4" /> Cancelar
+						</button>
+					{/if}
+				</div>
 			</div>
 		{/each}
 	</div>

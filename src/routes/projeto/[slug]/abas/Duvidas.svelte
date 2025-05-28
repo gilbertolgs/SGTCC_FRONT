@@ -137,9 +137,6 @@
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if duvidas && duvidas.length > 0}
 			{#each duvidas as duvida, i}
-				{#if i > 0}
-					<hr class="my-3" />
-				{/if}
 				<CardDuvida {abrirModal} {duvida} />
 			{/each}
 		{:else}

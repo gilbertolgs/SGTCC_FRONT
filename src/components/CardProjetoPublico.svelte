@@ -116,7 +116,7 @@
 </script>
 
 <div
-	class="card group m-2 mx-auto grid w-full grid-cols-3 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4"
+	class="card group m-2 mx-auto grid w-full grid-cols-1 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4 md:grid-cols-3"
 >
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">
@@ -140,6 +140,8 @@
 					</a>
 				{/each}
 			</div>
+		{:else}
+			<span class="text-sm text-gray-400">Sem usuários</span>
 		{/if}
 		{#if projeto.tags.length > 0}
 			<div class="flex flex-wrap gap-2">
