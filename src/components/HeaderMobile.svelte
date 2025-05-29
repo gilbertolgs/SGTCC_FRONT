@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
-	import { Menu, X as IconX } from 'lucide-svelte';
+	import { X as IconX, Menu } from 'lucide-svelte';
 	import LightSwitch from './LightSwitch.svelte';
 	import PerfilHeader from './PerfilHeader.svelte';
 
@@ -47,7 +47,7 @@
 			<div class="my-3 grid gap-2">
 				<hr />
 				{#each links as { label, href }}
-					{@render rota(label, href)}
+					{@render rota(label, href, drawerClose)}
 				{/each}
 			</div>
 

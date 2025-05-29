@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, XIcon } from 'lucide-svelte/icons';
+	import { Check, LoaderCircle, XIcon } from 'lucide-svelte/icons';
 	import { getContext, onMount } from 'svelte';
 
 	import Toaster from '$lib/ToastHandler';
@@ -25,19 +25,29 @@
 		await getConvites();
 	});
 
+	let promiseRejeitaConvite: Promise<void> | null = $state(null);
+	let promiseAceitaConvite: Promise<void> | null = $state(null);
 	async function responderConvite(id: number, resposta: EnumConvite) {
 		if (!usuarioLogado) {
 			return;
 		}
 		try {
-			await UsuarioRepository.ResponderConvite(id, resposta);
+			const response = UsuarioRepository.ResponderConvite(id, resposta);
+			promiseAceitaConvite = response;
+			promiseRejeitaConvite = response;
 			if (resposta === EnumConvite.Aceito) {
+				promiseRejeitaConvite = null;
+				await promiseAceitaConvite;
 				toast.triggerSuccess('Convite aceito com sucesso!');
 			} else {
+				promiseAceitaConvite = null;
+				await promiseRejeitaConvite;
 				toast.triggerSuccess('Convite rejeitado com sucesso!');
 			}
 		} catch (error) {
 			toast.triggerError('Erro ao responder convite');
+			promiseRejeitaConvite = null;
+			promiseAceitaConvite = null;
 		}
 		getConvites();
 	}
@@ -64,18 +74,32 @@
 
 					{#if usuarioLogado}
 						<div class="flex gap-2">
-							<button
-								class="btn preset-filled-success-500 flex items-center gap-1"
-								onclick={() => responderConvite(convite.id, EnumConvite.Aceito)}
-							>
-								<Check class="h-4 w-4" /> Aceitar
-							</button>
-							<button
-								class="btn preset-filled-error-500 flex items-center gap-1"
-								onclick={() => responderConvite(convite.id, EnumConvite.Rejeitado)}
-							>
-								<XIcon class="h-4 w-4" /> Cancelar
-							</button>
+							{#await promiseAceitaConvite}
+								<button class="btn preset-filled-success-500 flex items-center gap-1" disabled>
+									<LoaderCircle class="animate-spin" />
+									Aceitando...
+								</button>
+							{:then}
+								<button
+									class="btn preset-filled-success-500 flex items-center gap-1"
+									onclick={() => responderConvite(convite.id, EnumConvite.Aceito)}
+								>
+									<Check class="h-4 w-4" /> Aceitar
+								</button>
+							{/await}
+							{#await promiseRejeitaConvite}
+								<button class="btn preset-filled-error-500 flex items-center gap-1" disabled>
+									<LoaderCircle class="animate-spin" />
+									Rejeitando...
+								</button>
+							{:then}
+								<button
+									class="btn preset-filled-error-500 flex items-center gap-1"
+									onclick={() => responderConvite(convite.id, EnumConvite.Rejeitado)}
+								>
+									<XIcon class="h-4 w-4" /> Rejeitar
+								</button>
+							{/await}
 						</div>
 					{/if}
 				</div>

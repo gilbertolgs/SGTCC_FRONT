@@ -47,7 +47,6 @@ class Atividade {
         return 'error'
       default:
         return 'success'
-        break;
     }
   }
 

@@ -18,7 +18,7 @@
 		Users
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { pageName } from '../../../stores';
+	import { pageName, storeLogin } from '../../../stores';
 	import Anotacoes from './abas/Anotacoes.svelte';
 	import Arquivos from './abas/Arquivos.svelte';
 	import Atividades from './abas/Atividades.svelte';
@@ -26,9 +26,11 @@
 	import Calendario from './abas/Calendario.svelte';
 	import Duvidas from './abas/Duvidas.svelte';
 	import Informacoes from './abas/Informacoes.svelte';
+	import Orientacoes from './abas/Orientacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
 	import Propostas from './abas/Propostas.svelte';
-	import Orientacoes from './abas/Orientacoes.svelte';
+	import UsuarioRepository from '$repository/UsuarioRepository';
+	import { EnumConvite } from '$model/EnumConvite';
 
 	let { data } = $props();
 
@@ -82,7 +84,6 @@
 
 	onMount(async () => {
 		await getProjeto();
-		console.log(projeto);
 	});
 
 	async function getProjeto() {
@@ -170,13 +171,13 @@
 
 {#if projeto}
 	<div class="items-center justify-items-center md:grid">
-		<div class="w-full md:m-2 md:w-3/4">
+		<div class="w-screen">
 			<Tabs
 				listJustify="justify-start"
 				value={abaAtual}
 				onValueChange={(e) => handleTabChange(e.value)}
-				listClasses="md:w-3/4 w-full overflow-x-auto"
-				contentClasses="md:w-3/4 w-full"
+				listClasses="w-full overflow-x-auto overflow-y-hidden"
+				contentClasses="md:w-[90%] mx-auto"
 			>
 				{#snippet list()}
 					{#if projeto?.propostaAprovada == EnumParecerProposta.NaoAvaliado}

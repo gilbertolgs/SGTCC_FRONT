@@ -9,11 +9,12 @@
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import UsuarioRepository from '$repository/UsuarioRepository';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Ban, Plus } from 'lucide-svelte';
+	import { Ban, LoaderCircle, Plus } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { storeLogin } from '../../../../stores';
 	import { EnumConvite } from '$model/EnumConvite';
+	import { goto } from '$app/navigation';
 
 	const toast = new Toaster(getContext);
 
@@ -50,21 +51,26 @@
 
 	let txtNovoParticipanteEmail = $state('');
 
+	let promiseEnvioConvite: Promise<void> | null = $state(null);
+
 	async function adicionarParticipante() {
 		if (txtNovoParticipanteEmail.length < 1) {
 			return;
 		}
 		try {
-			const response = await ProjetoRepository.AdicionarUsuarioAoProjeto(
+			const response = ProjetoRepository.AdicionarUsuarioAoProjeto(
 				projeto.id,
 				txtNovoParticipanteEmail
 			);
+			promiseEnvioConvite = response;
+
+			await response;
 			toast.triggerSuccess('Usuário adicionado com sucesso!');
-			await getParticipantes();
 			txtNovoParticipanteEmail = '';
+			await getParticipantes();
 		} catch (error) {
 			toast.triggerError('Ocorreu um erro ao tentar adicionar usuário ao projeto!');
-			console.log(error);
+			promiseEnvioConvite = null;
 		}
 	}
 
@@ -72,6 +78,10 @@
 		try {
 			const response = await ProjetoRepository.RemoverUsuarioDoProjeto(projeto.id, idUsuario);
 			toast.triggerSuccess('Usuário removido com sucesso!');
+			if (usuarioLogado && usuarioLogado.id === idUsuario) {
+				goto('/');
+				return;
+			}
 			await getParticipantes();
 		} catch (error) {
 			toast.triggerError('Ocorreu um erro ao tentar remover usuário ao projeto!');
@@ -89,16 +99,22 @@
 		erros={null}
 		constraints={null}
 	/>
-	<button onclick={adicionarParticipante} class="btn preset-filled-success-500 mt-auto"
-		><Plus />Adicionar</button
-	>
+	{#await promiseEnvioConvite}
+		<button disabled class="btn preset-filled-success-500 mt-auto"
+			><LoaderCircle class="animate-spin" />Convidando...</button
+		>
+	{:then}
+		<button onclick={adicionarParticipante} class="btn preset-filled-success-500 mt-auto"
+			><Plus />Adicionar</button
+		>
+	{/await}
 </div>
 {#if participantes?.length}
 	<div class="space-y-4">
 		{#each participantes as participante (participante.id)}
 			<div class="preset-tonal rounded p-4 shadow-md transition-all hover:shadow-lg">
 				<div class="flex items-center justify-between">
-					<a href={`/usuario/${participante.id}`} class="flex items-center gap-3 truncate anchor">
+					<a href={`/usuario/${participante.id}`} class="anchor flex items-center gap-3 truncate">
 						<Avatar
 							classes="select-none group-hover:brightness-50 no-underline text-white"
 							size="size-10"

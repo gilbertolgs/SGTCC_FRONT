@@ -24,12 +24,23 @@
 	// });
 
 	let links = $derived(new NavigationLinks(usuarioLogado).PegarLinks());
+
+	function nomeRotaEIgualPaginaAtual(nome: string, pagina: string) {
+		if (nome.includes('projeto') && pagina.includes('projeto')) return true;
+
+		return nome === pagina;
+	}
 </script>
 
-{#snippet rota(label: string, href: string)}
+{#snippet rota(label: string, href: string, fechaCabecalho: Function | null = null)}
 	<a
 		{href}
-		class="btn font-semibold text-sm {page.url.pathname === href ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
+		class="btn text-sm font-semibold {nomeRotaEIgualPaginaAtual(page.url.pathname, href)
+			? 'preset-filled-primary-500'
+			: 'hover:preset-tonal'}"
+		onclick={() => {
+			if (fechaCabecalho) fechaCabecalho();
+		}}
 	>
 		{label}
 	</a>
@@ -37,7 +48,7 @@
 {#snippet logo()}
 	<a
 		href="/"
-		class="hover:text-primary-500 flex fill-current font-sans text-5xl font-extrabold transition-all select-none gap-3"
+		class="hover:text-primary-500 flex gap-3 fill-current font-sans text-5xl font-extrabold transition-all select-none"
 	>
 		<span class="w-10">
 			<LogoMono />
