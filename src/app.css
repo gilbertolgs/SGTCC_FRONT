@@ -45,14 +45,14 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+    background-color: #00000000;
 }
 
 /* For Firefox */
 * {
     scrollbar-width: thin;
     /* "auto" or "thin" */
-    scrollbar-color: var(--color-primary-500) #aaa;
+    scrollbar-color: var(--color-primary-500) #00000000;
     /* thumb and track */
 }
 

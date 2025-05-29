@@ -9,6 +9,7 @@
 	import { getContext } from 'svelte';
 	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
 	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
+	import SeminarioApiRepository from '$repository/openapi/SeminarioApiRepository';
 
 	const toast = new Toaster(getContext);
 
@@ -94,6 +95,11 @@
 			console.log(error);
 		}
 	}
+
+	SeminarioApiRepository.PegarPorId(1).then((data)=> {
+		console.log('data');
+		console.log(data);
+	});
 </script>
 
 <ConfirmDialog
