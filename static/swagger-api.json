@@ -1125,6 +1125,29 @@
         }
       }
     },
+    "/api/campoDocumentoAvaliacao/porCategoria/{idCategoria}": {
+      "get": {
+        "tags": [
+          "CampoDocumento"
+        ],
+        "parameters": [
+          {
+            "name": "idCategoria",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/campoDocumentoAvaliacao/{id}/buscarPorId": {
       "get": {
         "tags": [
@@ -2570,6 +2593,29 @@
         }
       }
     },
+    "/api/projetos/projetosPorCurso/{idCurso}": {
+      "get": {
+        "tags": [
+          "Projeto"
+        ],
+        "parameters": [
+          {
+            "name": "idCurso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/projetos/{id}": {
       "get": {
         "tags": [
@@ -3639,6 +3685,29 @@
       "get": {
         "tags": [
           "Seminario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/seminario/todosPorIdProjeto/{idProjeto}": {
+      "get": {
+        "tags": [
+          "Seminario"
+        ],
+        "parameters": [
+          {
+            "name": "idProjeto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {

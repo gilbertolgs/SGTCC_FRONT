@@ -47,11 +47,11 @@
 					<h3 class="h3">{relatorio.titulo ?? 'Sem título'}</h3>
 				</div>
 				<hr class="mx-5 my-2 opacity-30" />
-				{#if usuarioLogado && usuarioLogado.id == relatorio.idProfessor}
-					<div class="mt-4 flex gap-2">
-						<button class="btn preset-outlined-primary-500" onclick={baixarPdf}>
-							<Download /> Baixar
-						</button>
+				<div class="mt-4 flex gap-2">
+					<button class="btn preset-outlined-primary-500" onclick={baixarPdf}>
+						<Download /> Baixar
+					</button>
+					{#if usuarioLogado && usuarioLogado.id == relatorio.idProfessor}
 						<button
 							class="btn preset-outlined-primary-500"
 							onclick={() => abrirModal('Adicionar', relatorio)}
@@ -64,8 +64,8 @@
 						>
 							<Trash /> Excluir
 						</button>
-					</div>
-				{/if}
+					{/if}
+				</div>
 
 				<p class="text-base opacity-80">Descrição: {relatorio.descricao ?? 'Sem descrição'}</p>
 				<p class="text-base opacity-80">Duração: {relatorio.duracaoEncontro}h</p>

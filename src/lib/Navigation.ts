@@ -51,7 +51,7 @@ export class NavigationLinks {
             { label: 'Biblioteca', href: '/biblioteca' },
             { label: 'Cursos', href: '/cursos' },
             { label: 'Usuários', href: '/usuarios' },
-            // { label: 'Projetos', href: '/projetos' },
+            { label: 'Projetos', href: '/projetos' },
             { label: 'Documento', href: '/documento' },
         ];
     }

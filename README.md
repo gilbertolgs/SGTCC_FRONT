@@ -29,3 +29,9 @@ npm install
 ```
 npm run dev
 ```
+
+## Gerar Paths por OpenApi
+Rode esse comando para gerar os paths da Api utilizando [OpenApi](https://openapi-ts.dev/openapi-fetch/)
+```
+npx openapi-typescript ./static/swagger-api.json -o ./src/lib/api/v1.d.ts
+```

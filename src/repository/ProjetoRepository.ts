@@ -31,6 +31,14 @@ class ProjetoRepository {
         return projeto;
     }
 
+    async PegarPorCurso(idCurso: number) {
+        const response = await Api.get(`projetos/projetosPorCurso/${idCurso}`);
+
+        const projeto = response.map(Projeto.CriaDeDados);
+
+        return projeto;
+    }
+
     async PegarTodosPorFiltro(tipoFiltro: EnumTipoFiltro, filtro: string, tipoOrdenacao: EnumTipoOrdenacao, ano: number): Promise<Projeto[]> {
         const params = {
             tipoFiltro: tipoFiltro,

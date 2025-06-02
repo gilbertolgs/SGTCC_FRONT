@@ -4,12 +4,12 @@
 	import Toaster from '$lib/ToastHandler';
 	import { EnumEstadoProjeto } from '$model/EnumEstadoProjeto';
 	import type Projeto from '$model/Projeto';
+	import SeminarioApiRepository from '$repository/openapi/SeminarioApiRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
-	import { X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
+	import { Check, X as IconX, ImagePlus, Pencil } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import AlterarImagemProjeto from '../components/AlterarImagemProjeto.svelte';
 	import FormAlterarProjeto from '../components/FormAlterarProjeto.svelte';
-	import SeminarioApiRepository from '$repository/openapi/SeminarioApiRepository';
 
 	const toast = new Toaster(getContext);
 
@@ -178,12 +178,12 @@
 						}}
 						class="btn preset-outlined-primary-500"><ImagePlus /> Alterar Imagem</button
 					>
-					<!-- <button
+					<button
 						onclick={() => {
 							abrirModal('Finalizar');
 						}}
 						class="btn preset-outlined-primary-500 mt-3"><Check /> Finalizar Projeto</button
-					> -->
+					>
 					<button
 						onclick={() => {
 							abrirModal('Cancelar');
