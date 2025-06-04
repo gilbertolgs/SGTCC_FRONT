@@ -1,5 +1,5 @@
 <script lang="ts">
-    let {label, placeholder, valor = $bindable(), erros, constraints, tipo} = $props();
+    let {label, placeholder, valor = $bindable(), erros, constraints } = $props();
 </script>
 
 <label class="label">

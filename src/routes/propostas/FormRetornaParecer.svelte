@@ -54,7 +54,6 @@
 					<FormTextAreaComponent
 						label="Sugestão"
 						placeholder="Sugestão"
-						tipo="text"
 						bind:valor={$form.sugestao}
 						erros={$errors.sugestao}
 						constraints={$constraints.sugestao}

@@ -17,9 +17,10 @@
 
 	interface Props {
 		projeto: Projeto;
+		getAtividadesGlobal: Function;
 		data: any;
 	}
-	let { projeto, data }: Props = $props();
+	let { projeto, getAtividadesGlobal, data }: Props = $props();
 	let atividades: Atividade[] | null = $state(null);
 	let idAtividadeAberta: number = $state(0);
 	let atividadeASerAlterada: Atividade | null = $state(null);
@@ -74,6 +75,8 @@
 		todos = todos.sort((a, b) => {
 			return b.prioridade - a.prioridade;
 		})
+
+		getAtividadesGlobal(atividades);
 	}
 
 	async function adicionarAtividade(

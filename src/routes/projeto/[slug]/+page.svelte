@@ -18,7 +18,7 @@
 		Users
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { pageName, storeLogin } from '../../../stores';
+	import { pageName } from '../../../stores';
 	import Anotacoes from './abas/Anotacoes.svelte';
 	import Arquivos from './abas/Arquivos.svelte';
 	import Atividades from './abas/Atividades.svelte';
@@ -29,13 +29,24 @@
 	import Orientacoes from './abas/Orientacoes.svelte';
 	import Participantes from './abas/Participantes.svelte';
 	import Propostas from './abas/Propostas.svelte';
-	import UsuarioRepository from '$repository/UsuarioRepository';
-	import { EnumConvite } from '$model/EnumConvite';
+	import type Atividade from '$model/Atividade';
+	import AtividadeRepository from '$repository/AtividadeRepository';
 
 	let { data } = $props();
 
 	let idProjeto = data.idProjeto;
 	let projeto: Projeto | null = $state(null);
+	let atividades: Atividade[] | null = $state(null);
+
+	async function getAtividades(atividadesPassadas: Atividade[] | null = null) {
+		if (atividadesPassadas) {
+			atividades = atividadesPassadas;
+			return;
+		}
+		if (!projeto) return;
+
+		atividades = await AtividadeRepository.PegarAtividadesPorProjeto(projeto.id);
+	}
 
 	//Gambiarra pro Typescript não reclamar
 	let imagemProjeto: string | null = $derived((projeto as Projeto | null)?.ExibeImagem?.() ?? null);
@@ -158,7 +169,7 @@
 	<Tabs.Control value="orientacoes">
 		<span class="flex items-center md:gap-2"
 			><GraduationCap />
-			<span class="hidden md:block">Orientação</span>
+			<span class="hidden md:block">Relatório</span>
 		</span>
 	</Tabs.Control>
 	<Tabs.Control value="calendario">
@@ -193,13 +204,13 @@
 							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
 						>
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
-						<Tabs.Panel value="atividades"><Atividades {projeto} {data} /></Tabs.Panel>
+						<Tabs.Panel value="atividades"><Atividades {projeto} getAtividadesGlobal={getAtividades} {data} /></Tabs.Panel>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="anotacoes"><Anotacoes {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="bibliografia"><Bibliografia {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="duvidas"><Duvidas {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="orientacoes"><Orientacoes {projeto} {data} /></Tabs.Panel>
-						<Tabs.Panel value="calendario"><Calendario {projeto} /></Tabs.Panel>
+						<Tabs.Panel value="calendario"><Calendario {projeto} {atividades} /></Tabs.Panel>
 					{/if}
 				{/snippet}
 			</Tabs>

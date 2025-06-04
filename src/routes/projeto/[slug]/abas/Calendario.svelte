@@ -10,10 +10,11 @@
 
 	interface Props {
 		projeto: Projeto;
+		atividades: Atividade[] | null;
 	}
-	let { projeto }: Props = $props();
 
-	let atividades: Atividade[] | null = $state(null);
+	let { projeto, atividades }: Props = $props();
+
 	let atividadesPorDia = $derived(
 		(atividades as Atividade[] | null)?.reduce((mapa, atividade) => {
 			return mapeiaAtividades(atividade, mapa);
@@ -31,16 +32,24 @@
 	const hoje = DataFormatHandler.FormatDate(new Date().toString());
 
 	$effect(() => {
-		AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
-			if (atividades && atividades.length > 0) {
-				atividadesPorDia = atividades.reduce(
-					(mapa: Map<number, Atividade[]>, atividade: Atividade) => {
-						return mapeiaAtividades(atividade, mapa);
-					},
-					new Map<number, Atividade[]>()
-				);
-			}
-		});
+		// AtividadeRepository.PegarAtividadesPorProjeto(projeto.id).then((atividades) => {
+		// 	if (atividades && atividades.length > 0) {
+		// 		atividadesPorDia = atividades.reduce(
+		// 			(mapa: Map<number, Atividade[]>, atividade: Atividade) => {
+		// 				return mapeiaAtividades(atividade, mapa);
+		// 			},
+		// 			new Map<number, Atividade[]>()
+		// 		);
+		// 	}
+		// });
+		if (atividades && atividades.length > 0) {
+			atividadesPorDia = atividades.reduce(
+				(mapa: Map<number, Atividade[]>, atividade: Atividade) => {
+					return mapeiaAtividades(atividade, mapa);
+				},
+				new Map<number, Atividade[]>()
+			);
+		}
 	});
 
 	let calendarDays: { date: Date; isCurrentMonth: boolean }[] = $derived(
@@ -194,7 +203,7 @@
 				{#if atividadesPorDia}
 					{#each atividadesPorDia.get(date.getTime()) ?? [] as atividade}
 						<div class="flex gap-1 overflow-hidden">
-							<span class="preset-filled-{atividade.CorPrioridade()}-500 rounded p-1">
+							<span class="bg-{atividade.CorPrioridade()}-500 rounded p-1">
 								{atividade.nome}
 							</span>
 						</div>

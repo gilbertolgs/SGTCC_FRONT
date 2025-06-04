@@ -52,7 +52,6 @@
 				<FormTextAreaComponent
 					label="Descrição"
 					placeholder="descrição"
-					tipo="text"
 					bind:valor={$form.descricao}
 					erros={$errors.descricao}
 					constraints={$constraints.descricao}
@@ -60,7 +59,6 @@
 				<FormTextAreaComponent
 					label="Justificativa"
 					placeholder="justificativa"
-					tipo="text"
 					bind:valor={$form.justificativa}
 					erros={$errors.justificativa}
 					constraints={$constraints.justificativa}

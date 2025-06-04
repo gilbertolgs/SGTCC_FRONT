@@ -97,7 +97,6 @@
 			<FormTextAreaComponent
 				label="Descrição"
 				placeholder="Descreva o que foi discutido"
-				tipo="text"
 				bind:valor={$form.descricao}
 				erros={$errors.descricao}
 				constraints={$constraints.descricao}

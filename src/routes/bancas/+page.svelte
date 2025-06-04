@@ -10,6 +10,7 @@
 	import type Projeto from '$model/Projeto';
 	import { storeLogin } from '../../stores';
 	import ProjetoRepository from '$repository/ProjetoRepository';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	type Banca = {
 		id: number;
@@ -117,11 +118,16 @@
 			<div class="preset-tonal w-full rounded-lg p-6 shadow-md md:w-3/4">
 				<div class="mb-2 flex items-center justify-between">
 					<div>
-						<p><strong>ID Projeto:</strong> {banca.idProjeto}</p>
-						<p><strong>Data:</strong> {banca.dataSeminario}</p>
+						<p>
+							<strong>Projeto:</strong>
+							{projetos?.filter((p) => p.id == banca.idProjeto)[0].nome}
+						</p>
+						<p><strong>Data:</strong> {DataFormatHandler.FormatDate(banca.dataSeminario)}</p>
 					</div>
+
 					<div class="flex gap-2">
-						<button onclick={() => abrirModal(banca)} class="btn preset-outlined-primary-500">
+						<a class="btn preset-outlined-primary-500" href="/bancas/{banca.id}"> Ver detalhes </a>
+						<!-- <button onclick={() => abrirModal(banca)} class="btn preset-outlined-primary-500">
 							<Pencil class="h-4 w-4" />
 						</button>
 						<button
@@ -129,7 +135,7 @@
 							class="btn preset-outlined-error-500"
 						>
 							<Trash class="h-4 w-4" />
-						</button>
+						</button> -->
 					</div>
 				</div>
 				{#if banca.observacaoNotaProjeto}
@@ -188,7 +194,7 @@
 						erros={null}
 						constraints={null}
 					/>
-
+				</div>
 			</fieldset>
 
 			<fieldset>

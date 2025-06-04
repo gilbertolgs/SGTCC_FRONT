@@ -6,8 +6,8 @@ export enum EnumTipoOrdenacao {
 }
 
 export const textoEnumTipoOrdenacao: Record<EnumTipoOrdenacao, string> = {
-    [EnumTipoOrdenacao.MaisAvaliados]: "Mais Avaliados",
-    [EnumTipoOrdenacao.MenosAvaliados]: "Menos Avaliados",
+    [EnumTipoOrdenacao.MaisAvaliados]: "Mais Favoritados",
+    [EnumTipoOrdenacao.MenosAvaliados]: "Menos Favoritados",
     [EnumTipoOrdenacao.Recentes]: "Recentes",
     [EnumTipoOrdenacao.Antigos]: "Antigos",
 };

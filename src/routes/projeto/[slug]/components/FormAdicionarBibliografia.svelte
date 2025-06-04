@@ -72,7 +72,6 @@
 					<FormTextAreaComponent
 						label="Referência"
 						placeholder="referencia"
-						tipo="text"
 						bind:valor={$form.referencia}
 						erros={$errors.referencia}
 						constraints={$constraints.referencia}

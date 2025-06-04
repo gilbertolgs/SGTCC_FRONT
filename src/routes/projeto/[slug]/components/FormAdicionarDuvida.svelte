@@ -61,7 +61,6 @@
 					<FormTextAreaComponent
 						label="Texto"
 						placeholder="Digite sua dúvida"
-						tipo="text"
 						bind:valor={$form.texto}
 						erros={$errors.texto}
 						constraints={$constraints.texto}

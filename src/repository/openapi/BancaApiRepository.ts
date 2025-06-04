@@ -102,6 +102,15 @@ class BancaApiRepository {
     return data;
   }
 
+  async BuscarTodosAvaliadoresPorBanca(idBanca: number) {
+    const { data, error } = await openApiClient.GET("/api/avaliadorBanca/BuscarTodosPorBanca/{idBanca}",
+      { params: { path: { idBanca } } }
+    );
+
+    if (error || !data) throw new Error("Erro ao buscar avaliadores.");
+    return data;
+  }
+
   async BuscarAvaliadorPorId(id: number) {
     const { data, error } = await openApiClient.GET("/api/avaliadorBanca/{id}/buscarPorId", {
       params: { path: { id } }
@@ -111,13 +120,17 @@ class BancaApiRepository {
     return data;
   }
 
-  async DeletarAvaliador(id: string, body: any) {
+  async DeletarAvaliador(id: number) {
+    const idPath = id.toString();
+    const body = {
+      id: id
+    }
     const { data, error } = await openApiClient.DELETE("/api/avaliadorBanca/{id}/deletarBanca", {
-      params: { path: { id } },
+      params: { path: { id: idPath } },
       body: body
     });
 
-    if (error) throw new Error(`Erro ao deletar avaliador da banca com ID ${id}.`);
+    if (error) throw new Error(`Erro ao deletar avaliador da banca com ID ${idPath}.`);
     return data;
   }
 }

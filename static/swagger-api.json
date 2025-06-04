@@ -682,6 +682,29 @@
         }
       }
     },
+    "/api/avaliadorBanca/BuscarTodosPorBanca/{idBanca}": {
+      "get": {
+        "tags": [
+          "AvaliadoresBanca"
+        ],
+        "parameters": [
+          {
+            "name": "idBanca",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/avaliadorBanca/{id}/buscarPorId": {
       "get": {
         "tags": [

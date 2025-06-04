@@ -8,6 +8,7 @@
 	import FormInputComponent from '$components/FormInputComponent.svelte';
 	import DuvidaRepository from '$repository/DuvidaRepository';
 	import { fade } from 'svelte/transition';
+	import FormTextAreaComponent from '$components/FormTextAreaComponent.svelte';
 
 	const toast = new Toaster(getContext);
 
@@ -83,17 +84,17 @@
 
 <ModalBase
 	bind:openState
-	classe="card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2 h-full"
+	classe="card flex flex-col bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2 h-full"
 >
 	{#snippet conteudo()}
 		{#if duvida}
-			<div class="flex h-full flex-col gap-3">
+			<div class="flex flex-col gap-3">
 				<div class="grid grid-flow-col">
 					<h3 class="h3">{duvida.texto}</h3>
 				</div>
 				<hr class="mx-5 my-2 opacity-30" />
 				{#if usuarioLogado && usuarioLogado.id == duvida.idUsuario}
-					<div class="flex gap-2">
+					<div class="flex gap-2 h-full">
 						<button
 							class="btn preset-filled-primary-500"
 							onclick={() => {
@@ -118,12 +119,13 @@
 					>Ainda não há respostas</span
 				>
 			{:else}
-				<ul
-					class="mb-3 grid gap-2 overflow-auto"
-					in:fade={{ duration: 200 }}
-				>
+				<ul class="mb-3 grid gap-2 overflow-auto" in:fade={{ duration: 200 }}>
 					{#each respostas as resposta}
-						<li class="rounded preset-tonal shadow-xl p-2" in:fade={{ duration: 400 }} out:fade={{ duration: 100 }}>
+						<li
+							class="preset-tonal rounded p-2 shadow-xl"
+							in:fade={{ duration: 400 }}
+							out:fade={{ duration: 100 }}
+						>
 							<div class="flex w-full gap-1">
 								<a href="/usuario/{resposta.idUsuario}" class="anchor mr-auto"
 									>{resposta.nomeUsuario}</a
@@ -148,12 +150,10 @@
 					{/each}
 				</ul>
 			{/if}
-			<div class="my-10 flex gap-2">
-				<FormInputComponent
-					classe="col-span-3"
+			<div class="my-10 mt-auto flex gap-2">
+				<FormTextAreaComponent
 					label="Resposta"
 					placeholder="resposta"
-					tipo="text"
 					bind:valor={txtResposta}
 					erros={null}
 					constraints={null}

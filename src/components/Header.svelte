@@ -27,6 +27,7 @@
 
 	function nomeRotaEIgualPaginaAtual(nome: string, pagina: string) {
 		if (nome.includes('projeto') && pagina.includes('projeto')) return true;
+		if (nome.includes('banca') && pagina.includes('banca')) return true;
 
 		return nome === pagina;
 	}

@@ -64,7 +64,6 @@
 					<FormTextAreaComponent
 						label="Atividades Propostas"
 						placeholder="Atividades Propostas"
-						tipo="text"
 						bind:valor={$form.atividadesPropostas}
 						erros={$errors.atividadesPropostas}
 						constraints={$constraints.atividadesPropostas}
@@ -72,7 +71,6 @@
 					<FormTextAreaComponent
 						label="Contribuição Agenda"
 						placeholder="Contribuição Agenda"
-						tipo="text"
 						bind:valor={$form.contribuicaoAgenda}
 						erros={$errors.contribuicaoAgenda}
 						constraints={$constraints.contribuicaoAgenda}
