@@ -31,11 +31,13 @@
 	import Propostas from './abas/Propostas.svelte';
 	import type Atividade from '$model/Atividade';
 	import AtividadeRepository from '$repository/AtividadeRepository';
+	import PropostaRepository from '$repository/PropostaRepository';
 
 	let { data } = $props();
 
 	let idProjeto = data.idProjeto;
 	let projeto: Projeto | null = $state(null);
+	let projetoTemPropostaAprovada: boolean = $state(false);
 	let atividades: Atividade[] | null = $state(null);
 
 	async function getAtividades(atividadesPassadas: Atividade[] | null = null) {
@@ -101,6 +103,11 @@
 		projeto = await ProjetoRepository.PegarPorId(idProjeto);
 
 		defineImagem(projeto);
+		const propostas = await PropostaRepository.PegarPorIdProjeto(projeto.id);
+
+		projetoTemPropostaAprovada = propostas.some(
+			(proposta) => proposta.parecer === EnumParecerProposta.Favoravel
+		);
 	}
 
 	let abaAtual = $state('informacoes');
@@ -191,10 +198,10 @@
 				contentClasses="md:w-[90%] mx-auto"
 			>
 				{#snippet list()}
-					{#if projeto?.propostaAprovada == EnumParecerProposta.NaoAvaliado}
-						{@render projetoProposta()}
-					{:else}
+					{#if projetoTemPropostaAprovada}
 						{@render projetoEmAndamento()}
+					{:else}
+						{@render projetoProposta()}
 					{/if}
 				{/snippet}
 				{#snippet content()}
@@ -204,7 +211,9 @@
 							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
 						>
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
-						<Tabs.Panel value="atividades"><Atividades {projeto} getAtividadesGlobal={getAtividades} {data} /></Tabs.Panel>
+						<Tabs.Panel value="atividades"
+							><Atividades {projeto} getAtividadesGlobal={getAtividades} {data} /></Tabs.Panel
+						>
 						<Tabs.Panel value="arquivos"><Arquivos {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="anotacoes"><Anotacoes {projeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="bibliografia"><Bibliografia {projeto} {data} /></Tabs.Panel>

@@ -95,11 +95,6 @@
 			console.log(error);
 		}
 	}
-
-	SeminarioApiRepository.PegarPorId(1).then((data)=> {
-		console.log('data');
-		console.log(data);
-	});
 </script>
 
 <ConfirmDialog

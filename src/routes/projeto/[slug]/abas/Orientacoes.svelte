@@ -9,7 +9,7 @@
 	import RelatorioRepository from '$repository/RelatorioRepository';
 	import UsuarioRepository from '$repository/UsuarioRepository';
 	import { Plus } from 'lucide-svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { storeLogin } from '../../../../stores';
 	import DetalhesRelatorio from '../components/DetalhesOrientacao.svelte';
 	import FormAdicionarRelatorio from '../components/FormAdicionarOrientacao.svelte';
@@ -30,6 +30,10 @@
 	let relatorioSelecionado: Relatorio | null = $state(null);
 	let relatorios: Relatorio[] | null = $state(null);
 
+	let usuarioEOrientador: boolean = $derived(
+		(usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.Orientador) || false
+	);
+
 	async function pegaFuncaoUsuario() {
 		let participantes = await UsuarioRepository.PegarTodosPorProjeto(projeto.id);
 		participantes = participantes.filter((p) => p.estado == EnumConvite.Aceito);
@@ -38,13 +42,15 @@
 			const usuarioLogadoDados = participantes.filter((p) => p.id === usuarioLogado?.id)[0];
 
 			usuarioLogado.funcao = usuarioLogadoDados.funcao;
-			console.log(usuarioLogado);
 		}
 	}
 
 	$effect(() => {
 		getRelatorios();
-		pegaFuncaoUsuario();
+		pegaFuncaoUsuario().then(() => {
+			usuarioEOrientador =
+				(usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.Orientador) || false;
+		});
 	});
 
 	async function getRelatorios() {
@@ -150,7 +156,7 @@
 />
 
 <div class="grid gap-4">
-	{#if usuarioLogado && usuarioLogado.funcao === EnumFuncaoUsuario.Orientador}
+	{#if usuarioEOrientador}
 		<button
 			onclick={() => abrirModal('Adicionar')}
 			class="btn preset-filled-success-500 mt-auto md:ml-auto"

@@ -59,9 +59,9 @@
 	) {
 		try {
 			if (idProposta === 0) {
-				PropostaRepository.CriarProposta(projeto.id, atividadesPropostas, contribuicaoAgenda, '');
+				await PropostaRepository.CriarProposta(projeto.id, atividadesPropostas, contribuicaoAgenda, '');
 			} else {
-				PropostaRepository.AlterarProposta(
+				await PropostaRepository.AlterarProposta(
 					idProposta,
 					atividadesPropostas,
 					contribuicaoAgenda,
