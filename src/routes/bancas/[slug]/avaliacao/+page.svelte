@@ -3,20 +3,24 @@
 	import DocumentoApiRepository from '$repository/openapi/DocumentoApiRepository';
 	import NotaApiRepository from '$repository/openapi/NotaApiRepository';
 	import { EnumTipoNota } from '$model/EnumTipoNota';
+	import FormInputComponent from '$components/FormInputComponent.svelte';
 
-	let { data } = $props();
-	const idBanca = data.idBanca;
+	interface Props {
+		data: any;
+	}
+	let { data }: Props = $props();
+	const idBanca = $derived(data.idBanca);
 
-	let idProjeto: number;
-	let idAluno: number;
-	let idAvaliadorBanca: number;
+	let idProjeto: number = $state(0);
+	let idAluno: number = $state(0);
+	let idAvaliadorBanca: number = $state(0);
 
 	// Fetched Data
-	let categorias: any[] = [];
-	let camposPorCategoria: Record<string, any[]> = {};
-	let notas: Record<number, number> = {};
+	let categorias: any[] = $state([]);
+	let camposPorCategoria: Record<string, any[]> = $state({});
+	let notas: Record<number, number> = $state({});
 
-	let carregando = true;
+	let carregando = $state(true);
 
 	onMount(async () => {
 		try {
@@ -62,24 +66,21 @@
 				<h2 class="mb-4 text-xl font-semibold">{categoria.valor}</h2>
 				<div class="space-y-4">
 					{#each camposPorCategoria[categoria.valor] as campo}
-						<div class="flex items-center justify-between">
-							<label class="font-medium">{campo.campo}</label>
-							<input
-								type="number"
-								min="0"
-								max="10"
-								step="0.1"
-								class="input w-24"
-								bind:value={notas[campo.id]}
-							/>
-						</div>
+						<FormInputComponent
+							label={campo.campo}
+							placeholder={campo.campo}
+							tipo="text"
+							bind:valor={notas[campo.id]}
+							erros={null}
+							constraints={null}
+						/>
 					{/each}
 				</div>
 			</div>
 		{/each}
 
 		<div class="text-center">
-			<button class="btn preset-filled-success-500 mt-4 w-full md:w-1/2" on:click={salvarNotas}>
+			<button class="btn preset-filled-success-500 mt-4 w-full md:w-1/2" onclick={salvarNotas}>
 				Salvar Avaliação
 			</button>
 		</div>
