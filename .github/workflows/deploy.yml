@@ -45,7 +45,7 @@ jobs:
 
     - name: Copy compressed file to server
       run: |
-        scp project.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DESTINATION_PATH }}
+        scp project.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/${{ secrets.DESTINATION_PATH }}/
 
     - name: Decompress files and run Docker Compose on server
       run: |
