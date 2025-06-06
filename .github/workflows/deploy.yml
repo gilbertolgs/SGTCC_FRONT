@@ -28,9 +28,6 @@ jobs:
     - name: Build SvelteKit project
       run: npm run build
 
-    - name: Clean node_modules
-      run: rm -rf node_modules  # Delete node_modules before compressing
-
     - name: Compress project excluding node_modules
       run: |
         touch project.tar.gz && tar --exclude=node_modules --exclude=.git --exclude=.github --exclude=./project.tar.gz -czf project.tar.gz .  # Create compressed archive
@@ -47,12 +44,18 @@ jobs:
       run: |
         scp project.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/${{ secrets.DESTINATION_PATH }}/
 
-    - name: Decompress files and run Docker Compose on server
+
+    - name: Deploy on server
       run: |
         ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd ${{ secrets.DESTINATION_PATH }} || exit 1
-          tar -xzf project.tar.gz  # Decompress project
-          rm project.tar.gz  # Clean up compressed file
-          docker compose down  # Stop any running containers
-          docker compose up -d  # Restart containers in detached mode
+          set -e
+          DEST_DIR="${{ secrets.DESTINATION_PATH }}/app"
+          rm -rf "$DEST_DIR"
+          mkdir -p "$DEST_DIR"
+          cd "$DEST_DIR"
+          mv ../project.tar.gz .
+          tar -xzf project.tar.gz
+          rm project.tar.gz
+          docker compose down || true
+          docker compose up -d
         EOF
