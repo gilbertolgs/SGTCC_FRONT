@@ -1,0 +1,58 @@
+name: Build, Compress and Deploy SvelteKit
+
+on:
+  push:
+    branches:
+      - prod  # Or your deployment branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'  # Or your project's version
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup environment variables
+      run: |
+        echo "PUBLIC_API_ROUTE=${{ secrets.PUBLIC_API_ROUTE }}" >> .env
+
+    - name: Build SvelteKit project
+      run: npm run build
+
+    - name: Clean node_modules
+      run: rm -rf node_modules  # Delete node_modules before compressing
+
+    - name: Compress project excluding node_modules
+      run: |
+        tar --exclude=node_modules --exclude=.git --exclude=.github -czf project.tar.gz .  # Create compressed archive
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+
+    - name: Copy compressed file to server
+      run: |
+        scp project.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DESTINATION_PATH }}
+
+    - name: Decompress files and run Docker Compose on server
+      run: |
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd ${{ secrets.DESTINATION_PATH }} || exit 1
+          tar -xzf project.tar.gz  # Decompress project
+          rm project.tar.gz  # Clean up compressed file
+          docker-compose down  # Stop any running containers
+          docker-compose up -d  # Restart containers in detached mode
+        EOF
