@@ -8,8 +8,9 @@
 	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Download, Heart, Star } from 'lucide-svelte';
+	import { Download, Heart, Star, UsersIcon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import PopoverBase from './PopoverBase.svelte';
 
 	interface Props {
 		projeto: Projeto;
@@ -124,21 +125,32 @@
 		</span>
 		{#if projeto.usuarios.length > 0}
 			<div class="grid max-h-20 gap-2 overflow-y-auto">
-				{#each projeto.usuarios as usuario}
-					<a href={`/usuario/${usuario.id}`} class="w-fit">
-						<div class="flex items-center gap-2">
-							<Avatar
-								classes="select-none"
-								size="size-6"
-								src={usuario.ExibeImagem()}
-								name={usuario.nome}
-							/>
-							<span class="anchor">
-								{usuario.nome}
-							</span>
+				<PopoverBase>
+					{#snippet botao()}
+						<div class="preset-outlined-primary-500 m-2 flex gap-1 rounded p-1">
+							<UsersIcon />Autores
 						</div>
-					</a>
-				{/each}
+					{/snippet}
+					{#snippet conteudo()}
+						<div class="grid gap-3">
+							{#each projeto.usuarios as usuario}
+								<a href={`/usuario/${usuario.id}`} class="w-fit">
+									<div class="flex items-center gap-2">
+										<Avatar
+											classes="select-none"
+											size="size-6"
+											src={usuario.ExibeImagem()}
+											name={usuario.nome}
+										/>
+										<span class="anchor">
+											{usuario.nome}
+										</span>
+									</div>
+								</a>
+							{/each}
+						</div>
+					{/snippet}
+				</PopoverBase>
 			</div>
 		{:else}
 			<span class="text-sm text-gray-400">Sem usuários</span>
@@ -154,7 +166,7 @@
 		{/if}
 	</div>
 	<div class="m-2 hidden flex-col md:flex">
-		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
+		<span class="text-xl opacity-70">{projeto.descricao}</span>
 	</div>
 	<div class="ml-auto flex flex-col items-end justify-between">
 		<div class="m-2 grid grid-flow-col items-center gap-2">
@@ -173,13 +185,13 @@
 			{/if}
 		</div>
 
-		<div class="m-2">
+		<div class="m-2 flex gap-5">
 			<button class="btn preset-filled-secondary-500" onclick={baixarDocumento}>
 				<Download />
 				Baixar PDF</button
 			>
 			{#if projeto.dataFim}
-				<span class="font-sans font-extralight"
+				<span class="font-sans font-extralight mt-auto"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span
 				>
 			{/if}

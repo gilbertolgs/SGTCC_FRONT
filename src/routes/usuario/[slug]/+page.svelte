@@ -9,6 +9,7 @@
 	import { getContext, onMount } from 'svelte';
 	import { pageName, storeLogin } from '../../../stores';
 	import PerfilCard from './PerfilCard.svelte';
+	import CardProjetoPublico from '$components/CardProjetoPublico.svelte';
 	const toast = new Toaster(getContext);
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
@@ -27,14 +28,14 @@
 		usuario = await UsuarioRepository.PegarPorId(idUsuario);
 
 		if (usuarioLogado && usuario.id === usuarioLogado.id) {
-			projetos = await ProjetoRepository.PegarTodosNaoCanceladosPorIdUsuario(idUsuario);
+			projetos = await ProjetoRepository.PegarPorFavoritosDeUsuario(idUsuario);
 		}
 	});
 </script>
 
 <svelte:head>
-	<title>{pageName} - Login</title>
-	<meta name="Realizar Login" content="Pagina para realização de login" />
+	<title>{pageName} - Perfil</title>
+	<meta name="Perfil de Usuario" content="Pagina de perfil" />
 </svelte:head>
 
 <div class="grid justify-items-center gap-2">
@@ -42,9 +43,9 @@
 </div>
 
 {#if usuario && projetos && projetos.length > 0}
-	<div class="preset-tonal grid gap-2 rounded p-3 md:m-5 md:grid-cols-3">
+	<div class="preset-tonal grid gap-2 p-5">
 		{#each projetos as projeto}
-			<CardProjetoUsuario {projeto} {usuario} />
+			<CardProjetoPublico {projeto} usuarioLogado={usuarioLogado} />
 		{/each}
 	</div>
 {/if}
