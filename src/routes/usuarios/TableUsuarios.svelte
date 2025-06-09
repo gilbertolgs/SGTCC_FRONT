@@ -6,6 +6,7 @@
 	import type Usuario from '$model/Usuario';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { Pencil, Trash } from 'lucide-svelte';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	let {
 		getUsuarios,
@@ -98,7 +99,7 @@
 								classes="select-none group-hover:brightness-50"
 								size="size-10"
 								src={usuarioAtual.ExibeImagem()}
-								name={usuarioAtual.nome}
+								name={DataFormatHandler.FormatName(usuarioAtual.nome)}
 							/>
 							<span class="anchor">
 								{usuarioAtual.nome}

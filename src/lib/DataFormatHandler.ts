@@ -1,4 +1,13 @@
 class DataFormatHandler {
+    FormatName(name: string) {
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 0) return '';
+
+        const firstName = parts[0];
+        const lastName = parts.length > 1 ? parts[parts.length - 1] : '';
+
+        return lastName ? `${firstName} ${lastName}` : firstName;
+    }
     FormatDate(dateString: string | null) {
         if (dateString === null) return '';
 

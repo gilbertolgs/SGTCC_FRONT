@@ -11,7 +11,7 @@
 	import IconRemove from 'lucide-svelte/icons/circle-x';
 	import IconFile from 'lucide-svelte/icons/paperclip';
 	import { getContext, onMount } from 'svelte';
-	import { storeLogin } from '../../../../stores';
+	import { apiRoute, storeLogin } from '../../../../stores';
 	import BotoesArquivo from '../components/BotoesArquivo.svelte';
 	import TabelaArquivos from '../components/TabelaArquivos.svelte';
 	import DataFormatHandler from '$lib/DataFormatHandler';
@@ -99,6 +99,8 @@
 	async function baixaArquivo() {
 		try {
 			const idArquivo = arquivoSelecionado.id;
+			window.open(apiRoute + 'arquivos/download/' + idArquivo);
+			return;
 			const response = await ProjetoArquivoRepository.BaixarArquivo(idArquivo);
 			const blob = FileHandler.FormataArquivoBaixado(response);
 

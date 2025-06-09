@@ -9,6 +9,7 @@
 	import { storeLogin } from '../../../stores';
 	import AlterarImagemUsuario from './AlterarImagemUsuario.svelte';
 	import AlterarUsuario from './ModalAlterarUsuario.svelte';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	let usuarioLogado: LoggedUser | null = $state<LoggedUser | null>(null);
 	let openStateImagem = $state(false);
@@ -64,7 +65,7 @@
 	<Avatar
 		classes="select-none group-hover:brightness-50"
 		src={usuario.ExibeImagem()}
-		name={usuario.nome}
+		name={DataFormatHandler.FormatName(usuario.nome)}
 	/>
 {/snippet}
 

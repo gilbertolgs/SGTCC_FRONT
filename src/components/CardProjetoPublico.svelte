@@ -11,6 +11,7 @@
 	import { Download, Heart, Star, UsersIcon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import PopoverBase from './PopoverBase.svelte';
+	import { apiRoute } from '../stores';
 
 	interface Props {
 		projeto: Projeto;
@@ -97,9 +98,12 @@
 		try {
 			const arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
 			//TODO Alterar isso
-			const arquivo = arquivos[0];
+			const arquivo = arquivos[arquivos.length - 1];
 
 			const idArquivo = arquivo.id;
+			window.open(apiRoute + "arquivos/download/" + idArquivo);
+			return
+
 			const response = await ProjetoArquivoRepository.BaixarArquivo(idArquivo);
 			const blob = FileHandler.FormataArquivoBaixado(response);
 
@@ -140,7 +144,7 @@
 											classes="select-none"
 											size="size-6"
 											src={usuario.ExibeImagem()}
-											name={usuario.nome}
+											name={DataFormatHandler.FormatName(usuario.nome)}
 										/>
 										<span class="anchor">
 											{usuario.nome}
@@ -191,7 +195,7 @@
 				Baixar PDF</button
 			>
 			{#if projeto.dataFim}
-				<span class="font-sans font-extralight mt-auto"
+				<span class="mt-auto font-sans font-extralight"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span
 				>
 			{/if}
