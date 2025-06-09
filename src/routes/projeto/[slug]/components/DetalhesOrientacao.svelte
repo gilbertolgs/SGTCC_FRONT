@@ -38,7 +38,7 @@
 
 <ModalBase
 	bind:openState
-	classe="card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2 h-full"
+	classe="card flex flex-col bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2 h-full"
 >
 	{#snippet conteudo()}
 		{#if relatorio}

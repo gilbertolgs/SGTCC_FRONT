@@ -36,7 +36,7 @@
 {#snippet rota(label: string, href: string, fechaCabecalho: Function | null = null)}
 	<a
 		{href}
-		class="btn text-sm font-semibold {nomeRotaEIgualPaginaAtual(page.url.pathname, href)
+		class="btn text-xs font-semibold {nomeRotaEIgualPaginaAtual(page.url.pathname, href)
 			? 'preset-filled-primary-500'
 			: 'hover:preset-tonal'}"
 		onclick={() => {

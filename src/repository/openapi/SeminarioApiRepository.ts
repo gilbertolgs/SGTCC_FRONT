@@ -2,18 +2,29 @@ import openApiClient from "./openApiInstance";
 
 class SeminarioApiRepository {
     /* ------------ Seminario ------------ */
-    async CriarSeminario(payload: any) {
+    async CriarSeminario(idUsuario: number, requisitos: string, dataRealizacao: string) {
+        const body = {
+            idUsuario: idUsuario,
+            requisitos: requisitos,
+            data: dataRealizacao,
+        }
         const { data, error } = await openApiClient.POST("/api/seminario/criarSeminario", {
-            body: payload,
+            body: body,
         });
 
         if (error || !data) throw new Error("Erro ao criar seminário.");
         return data;
     }
 
-    async AtualizarSeminario(payload: any) {
+    async AtualizarSeminario(id: number, idUsuario: number, requisitos: string, dataRealizacao: string) {
+        const body = {
+            id: id,
+            idUsuario: idUsuario,
+            requisitos: requisitos,
+            data: dataRealizacao,
+        }
         const { data, error } = await openApiClient.PUT("/api/seminario/atualizarSeminario", {
-            body: payload,
+            body: body,
         });
 
         if (error || !data) throw new Error("Erro ao atualizar seminário.");
@@ -55,18 +66,27 @@ class SeminarioApiRepository {
     }
 
     /* ------------ SeminarioProjeto ------------ */
-    async CriarSeminarioProjeto(payload: any) {
+    async CriarSeminarioProjeto(idSeminario: number, idProjeto: number) {
+        const body = {
+            idSeminario: idSeminario,
+            idProjeto: idProjeto
+        }
         const { data, error } = await openApiClient.POST("/api/seminarioProjeto/criarSeminarioProjeto", {
-            body: payload,
+            body: body,
         });
 
         if (error || !data) throw new Error("Erro ao criar seminário-projeto.");
         return data;
     }
 
-    async AtualizarSeminarioProjeto(payload: any) {
+    async AtualizarSeminarioProjeto(id: number, idSeminario: number, idProjeto: number) {
+        const body = {
+            id: id,
+            idSeminario: idSeminario,
+            idProjeto: idProjeto
+        }
         const { data, error } = await openApiClient.PUT("/api/seminarioProjeto/atualizarSeminarioProjeto", {
-            body: payload,
+            body: body,
         });
 
         if (error || !data) throw new Error("Erro ao atualizar seminário-projeto.");

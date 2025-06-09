@@ -26,7 +26,7 @@ class DocumentoApiRepository {
             body: body
         });
 
-        if (error || !data) throw new Error("Erro ao criar campo de documento.");
+        if (error) throw new Error("Erro ao criar campo de documento.");
 
         return data;
     }
@@ -93,7 +93,7 @@ class DocumentoApiRepository {
             body: body
         });
 
-        if (error || !data) throw new Error("Erro ao criar categoria de documento.");
+        if (error) throw new Error("Erro ao atualizar categoria de documento.");
 
         return data;
     }
