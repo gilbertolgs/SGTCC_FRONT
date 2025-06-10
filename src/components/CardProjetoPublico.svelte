@@ -12,6 +12,8 @@
 	import { onMount } from 'svelte';
 	import PopoverBase from './PopoverBase.svelte';
 	import { apiRoute } from '../stores';
+	import { EnumFuncaoUsuario } from '$model/EnumFuncaoUsuario';
+	import { EnumPapel } from '$model/EnumPapel';
 
 	interface Props {
 		projeto: Projeto;
@@ -101,8 +103,8 @@
 			const arquivo = arquivos[arquivos.length - 1];
 
 			const idArquivo = arquivo.id;
-			window.open(apiRoute + "arquivos/download/" + idArquivo);
-			return
+			window.open(apiRoute + 'arquivos/download/' + idArquivo);
+			return;
 
 			const response = await ProjetoArquivoRepository.BaixarArquivo(idArquivo);
 			const blob = FileHandler.FormataArquivoBaixado(response);
@@ -149,6 +151,9 @@
 										<span class="anchor">
 											{usuario.nome}
 										</span>
+										{#if usuario.funcao == EnumFuncaoUsuario.Orientador}
+											<span class="chip preset-outlined-primary-500">Orientador</span>
+										{/if}
 									</div>
 								</a>
 							{/each}

@@ -5,12 +5,12 @@
 	import type Projeto from '$model/Projeto.js';
 	import type Usuario from '$model/Usuario';
 	import BancaApiRepository from '$repository/openapi/BancaApiRepository';
+	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository.js';
+	import ProjetoRepository from '$repository/ProjetoRepository.js';
 	import UsuarioRepository from '$repository/UsuarioRepository.js';
 	import { Download, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { apiRoute } from '../../../stores.js';
-	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository.js';
-	import ProjetoRepository from '$repository/ProjetoRepository.js';
+	import { apiRoute, storeLogin } from '../../../stores.js';
 
 	type Banca = {
 		idProjeto: number;
@@ -28,6 +28,9 @@
 
 	let { data } = $props();
 	const idBanca = data.idBanca;
+
+	let usuarioLogado = $derived($storeLogin);
+	let idAvaliadorBanca: number = $state(0);
 
 	let banca: Banca | null = $state(null);
 	let projeto: Projeto | null = $state(null);
@@ -47,6 +50,8 @@
 		await getProfessores();
 		await getAvaliadores();
 		await getProjeto();
+
+		await comparaUsuarioLogadoAvaliadores();
 	}
 
 	async function getProjeto() {
@@ -108,6 +113,20 @@
 		} catch (error) {
 			console.log(error);
 		}
+	}
+
+	async function comparaUsuarioLogadoAvaliadores() {
+		const avaliadores: any = await BancaApiRepository.BuscarTodosAvaliadoresPorBanca(idBanca);
+
+		if (!avaliadores || !usuarioLogado) return;
+
+		const avaliadoresFiltrados = avaliadores.filter(
+			(a: { idUsuario: number }) => a.idUsuario === usuarioLogado.id
+		);
+
+		if (avaliadoresFiltrados.length < 1) return;
+
+		idAvaliadorBanca = avaliadoresFiltrados[0].id;
 	}
 </script>
 
@@ -180,15 +199,15 @@
 		</ul>
 	</div>
 
-	<!-- Start Evaluation Button -->
-	<div class="pt-4 text-center">
-		<a class="btn preset-filled-success-500 w-full md:w-1/2" href="/bancas/{idBanca}/avaliacao">
-			Iniciar Avaliação
-		</a>
-	</div>
+	{#if idAvaliadorBanca !== 0}
+		<div class="pt-4 text-center">
+			<a class="btn preset-filled-success-500 w-full md:w-1/2" href="/bancas/{idBanca}/avaliacao">
+				Iniciar Avaliação
+			</a>
+		</div>
+	{/if}
 </div>
 
-<!-- Modal: Editar Data -->
 <ModalBase bind:openState={openModalEditar}>
 	{#snippet conteudo()}
 		<form onsubmit={salvarData} class="space-y-4 p-4">

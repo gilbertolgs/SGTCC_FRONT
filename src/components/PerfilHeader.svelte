@@ -26,8 +26,13 @@
 </script>
 
 {#snippet nomeUsuario(usuario: LoggedUser | Usuario)}
-	<Avatar size="size-8" classes="text-xs select-none" src={imagemDoUsuario} name={DataFormatHandler.FormatName(usuario.nome)} />
-	<span class="text-xl font-normal">{usuario.nome}</span>
+	<Avatar
+		size="size-8"
+		classes="text-xs select-none"
+		src={imagemDoUsuario}
+		name={DataFormatHandler.FormatName(usuario.nome)}
+	/>
+	<span class="text-xl font-normal">{DataFormatHandler.FormatName(usuario.nome)}</span>
 {/snippet}
 
 {#if usuarioLogado == null}

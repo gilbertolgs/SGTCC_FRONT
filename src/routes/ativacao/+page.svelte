@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import type Usuario from '$model/Usuario';
 	import AuthRepository from '$repository/AuthRepository';
@@ -10,6 +11,7 @@
 	onMount(async () => {
 		if (tokenAtivacao) {
 			usuario = await AuthRepository.AtivarConta(tokenAtivacao);
+			goto('/login');
 			console.log(usuario);
 		}
 	});
