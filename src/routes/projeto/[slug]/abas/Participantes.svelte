@@ -15,6 +15,7 @@
 	import { storeLogin } from '../../../../stores';
 	import { EnumConvite } from '$model/EnumConvite';
 	import { goto } from '$app/navigation';
+	import DataFormatHandler from '$lib/DataFormatHandler';
 
 	const toast = new Toaster(getContext);
 
@@ -90,6 +91,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Participantes</h3>
+
 <div class="m-2 mt-10 flex gap-3">
 	<FormInputComponent
 		label="Email"
@@ -109,7 +112,7 @@
 		>
 	{/await}
 </div>
-{#if participantes?.length}
+{#if participantes}
 	<div class="space-y-4">
 		{#each participantes as participante (participante.id)}
 			<div class="preset-tonal rounded p-4 shadow-md transition-all hover:shadow-lg">
@@ -119,7 +122,7 @@
 							classes="select-none group-hover:brightness-50 no-underline text-white"
 							size="size-10"
 							src={participante.ExibeImagem()}
-							name={participante.nome}
+							name={DataFormatHandler.FormatName(participante.nome)}
 						/>
 						<span class="text-lg font-semibold">{participante.nome}</span>
 					</a>

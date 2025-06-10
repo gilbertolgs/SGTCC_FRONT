@@ -8,8 +8,12 @@
 	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import { Download, Heart, Star } from 'lucide-svelte';
+	import { Download, Heart, Star, UsersIcon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import PopoverBase from './PopoverBase.svelte';
+	import { apiRoute } from '../stores';
+	import { EnumFuncaoUsuario } from '$model/EnumFuncaoUsuario';
+	import { EnumPapel } from '$model/EnumPapel';
 
 	interface Props {
 		projeto: Projeto;
@@ -96,9 +100,12 @@
 		try {
 			const arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
 			//TODO Alterar isso
-			const arquivo = arquivos[0];
+			const arquivo = arquivos[arquivos.length - 1];
 
 			const idArquivo = arquivo.id;
+			window.open(apiRoute + 'arquivos/download/' + idArquivo);
+			return;
+
 			const response = await ProjetoArquivoRepository.BaixarArquivo(idArquivo);
 			const blob = FileHandler.FormataArquivoBaixado(response);
 
@@ -116,7 +123,7 @@
 </script>
 
 <div
-	class="card group m-2 mx-auto grid w-full grid-cols-1 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4 md:grid-cols-3"
+	class="card group m-2 mx-auto grid w-full grid-cols-1 border border-stone-800 drop-shadow-2xl md:w-3/4 md:grid-cols-4"
 >
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">
@@ -124,21 +131,35 @@
 		</span>
 		{#if projeto.usuarios.length > 0}
 			<div class="grid max-h-20 gap-2 overflow-y-auto">
-				{#each projeto.usuarios as usuario}
-					<a href={`/usuario/${usuario.id}`} class="w-fit">
-						<div class="flex items-center gap-2">
-							<Avatar
-								classes="select-none"
-								size="size-6"
-								src={usuario.ExibeImagem()}
-								name={usuario.nome}
-							/>
-							<span class="anchor">
-								{usuario.nome}
-							</span>
+				<PopoverBase>
+					{#snippet botao()}
+						<div class="preset-outlined-primary-500 m-2 flex gap-1 rounded p-1">
+							<UsersIcon />Autores
 						</div>
-					</a>
-				{/each}
+					{/snippet}
+					{#snippet conteudo()}
+						<div class="grid gap-3">
+							{#each projeto.usuarios as usuario}
+								<a href={`/usuario/${usuario.id}`} class="w-fit">
+									<div class="flex items-center gap-2">
+										<Avatar
+											classes="select-none"
+											size="size-6"
+											src={usuario.ExibeImagem()}
+											name={DataFormatHandler.FormatName(usuario.nome)}
+										/>
+										<span class="anchor">
+											{usuario.nome}
+										</span>
+										{#if usuario.funcao == EnumFuncaoUsuario.Orientador}
+											<span class="chip preset-outlined-primary-500">Orientador</span>
+										{/if}
+									</div>
+								</a>
+							{/each}
+						</div>
+					{/snippet}
+				</PopoverBase>
 			</div>
 		{:else}
 			<span class="text-sm text-gray-400">Sem usuários</span>
@@ -153,11 +174,11 @@
 			</div>
 		{/if}
 	</div>
-	<div class="m-2 hidden flex-col md:flex">
-		<span class="text-xl break-all opacity-70">{projeto.descricao}</span>
+	<div class="col-span-2 hidden flex-col md:flex">
+		<span class="text-xl opacity-70">{projeto.descricao}</span>
 	</div>
-	<div class="ml-auto flex flex-col items-end justify-between">
-		<div class="m-2 grid grid-flow-col items-center gap-2">
+	<div class="flex flex-col">
+		<div class="m-2 ml-auto grid grid-flow-col items-center gap-2">
 			<span>{estrelas} Favoritos </span>
 			{#if usuarioLogado}
 				<label class="relative cursor-pointer brightness-125 hover:text-[#7e6eff]">
@@ -173,13 +194,13 @@
 			{/if}
 		</div>
 
-		<div class="m-2">
+		<div class="m-2 mt-auto flex gap-2 ml-auto">
 			<button class="btn preset-filled-secondary-500" onclick={baixarDocumento}>
 				<Download />
-				Baixar PDF</button
-			>
+				<span>Baixar PDF</span>
+			</button>
 			{#if projeto.dataFim}
-				<span class="font-sans font-extralight"
+				<span class="mt-auto font-sans font-extralight"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span
 				>
 			{/if}

@@ -81,7 +81,7 @@
 						</td>
 						<td>{DataFormatHandler.FormatDate(proposta.criadoEm)}</td>
 						<td>
-							<div class="grid grid-flow-col gap-2">
+							<div class="grid grid-flow-col gap-2 w-min ml-auto">
 								<button
 									class="btn preset-filled-primary-500"
 									onclick={() => abrirModal('Detalhes', proposta)}

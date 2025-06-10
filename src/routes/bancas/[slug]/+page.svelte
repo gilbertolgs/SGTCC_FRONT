@@ -5,11 +5,15 @@
 	import type Projeto from '$model/Projeto.js';
 	import type Usuario from '$model/Usuario';
 	import BancaApiRepository from '$repository/openapi/BancaApiRepository';
+	import ProjetoArquivoRepository from '$repository/ProjetoArquivoRepository.js';
+	import ProjetoRepository from '$repository/ProjetoRepository.js';
 	import UsuarioRepository from '$repository/UsuarioRepository.js';
-	import { Plus, Trash } from 'lucide-svelte';
+	import { Download, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { apiRoute, storeLogin } from '../../../stores.js';
 
 	type Banca = {
+		idProjeto: number;
 		nomeProjeto: string;
 		descricao: string;
 	};
@@ -24,6 +28,9 @@
 
 	let { data } = $props();
 	const idBanca = data.idBanca;
+
+	let usuarioLogado = $derived($storeLogin);
+	let idAvaliadorBanca: number = $state(0);
 
 	let banca: Banca | null = $state(null);
 	let projeto: Projeto | null = $state(null);
@@ -42,6 +49,14 @@
 		await getBanca();
 		await getProfessores();
 		await getAvaliadores();
+		await getProjeto();
+
+		await comparaUsuarioLogadoAvaliadores();
+	}
+
+	async function getProjeto() {
+		const dados: any = await BancaApiRepository.PegarBancaPorId(idBanca);
+		projeto = await ProjetoRepository.PegarPorId(dados.idProjeto);
 	}
 
 	async function getBanca() {
@@ -74,11 +89,6 @@
 		e.preventDefault();
 		await BancaApiRepository.AtualizarBanca({ id: idBanca, dataSeminario });
 		openModalEditar = false;
-		alert('Data atualizada.');
-	}
-
-	function iniciarAvaliacao() {
-		alert('Avaliação iniciada! (implemente a lógica)');
 	}
 
 	let professoresFiltrados = $derived(
@@ -88,17 +98,54 @@
 				p.nome.toLowerCase().includes(filtroNome.toLowerCase())
 		)
 	);
+
+	async function baixarDocumento(
+		event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+	) {
+		try {
+			if (!projeto) return;
+			const arquivos = await ProjetoArquivoRepository.PegarTodosPorProjeto(projeto.id);
+			//TODO Alterar isso
+			const arquivo = arquivos[arquivos.length - 1];
+
+			const idArquivo = arquivo.id;
+			window.open(apiRoute + 'arquivos/download/' + idArquivo);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async function comparaUsuarioLogadoAvaliadores() {
+		const avaliadores: any = await BancaApiRepository.BuscarTodosAvaliadoresPorBanca(idBanca);
+
+		if (!avaliadores || !usuarioLogado) return;
+
+		const avaliadoresFiltrados = avaliadores.filter(
+			(a: { idUsuario: number }) => a.idUsuario === usuarioLogado.id
+		);
+
+		if (avaliadoresFiltrados.length < 1) return;
+
+		idAvaliadorBanca = avaliadoresFiltrados[0].id;
+	}
 </script>
 
 <div class="mx-auto max-w-4xl space-y-8 p-6">
 	<!-- Info Header -->
 	<div class="space-y-1">
 		<h1 class="text-2xl font-bold">Banca</h1>
-		<p><strong>Projeto:</strong> {banca?.nomeProjeto}</p>
-		<p><strong>Descrição:</strong> {banca?.descricao}</p>
-		<button class="btn preset-outlined-primary-500 mt-2" onclick={() => (openModalEditar = true)}>
+		<p><strong>Projeto:</strong> {projeto?.nome}</p>
+		<p><strong>Descrição:</strong> {projeto?.descricao}</p>
+		<p>
+			<strong>Documentação:</strong>
+			<button class="btn preset-filled-secondary-500" onclick={baixarDocumento}>
+				<Download />
+				Baixar Documentação</button
+			>
+		</p>
+		<!-- <button class="btn preset-outlined-primary-500 mt-2" onclick={() => (openModalEditar = true)}>
 			Editar Data
-		</button>
+		</button> -->
 	</div>
 
 	<!-- Avaliadores Atuais -->
@@ -152,16 +199,15 @@
 		</ul>
 	</div>
 
-	<!-- Start Evaluation Button -->
-	<div class="pt-4 text-center">
-		<a class="btn preset-filled-success-500 w-full md:w-1/2"
-		href="/bancas/{idBanca}/avaliacao">
-			Iniciar Avaliação
-		</a>
-	</div>
+	{#if idAvaliadorBanca !== 0}
+		<div class="pt-4 text-center">
+			<a class="btn preset-filled-success-500 w-full md:w-1/2" href="/bancas/{idBanca}/avaliacao">
+				Iniciar Avaliação
+			</a>
+		</div>
+	{/if}
 </div>
 
-<!-- Modal: Editar Data -->
 <ModalBase bind:openState={openModalEditar}>
 	{#snippet conteudo()}
 		<form onsubmit={salvarData} class="space-y-4 p-4">

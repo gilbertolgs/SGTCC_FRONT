@@ -74,6 +74,7 @@ export class NavigationLinks {
             { label: 'Convites', href: `/convites` },
             { label: 'Atividades', href: '/atividades' },
             { label: 'Bancas', href: '/bancas' },
+            // { label: 'Seminários', href: '/seminarios' },
             { label: 'Dúvidas', href: '/duvidas' },
             { label: 'Propostas', href: '/propostas' }
         ];

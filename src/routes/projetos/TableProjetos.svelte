@@ -68,7 +68,7 @@
 					<tr class="even:preset-tonal">
 						<td>
 							<span class="inline-flex w-min items-center gap-1 whitespace-nowrap">
-								<ImageComponent objeto={projetoAtual} />
+								<!-- <ImageComponent objeto={projetoAtual} /> -->
 								<span>
 									{projetoAtual.nome}
 								</span>
@@ -100,7 +100,7 @@
 		{#snippet corpo()}
 			<tr class="">
 				<td class="flex items-center gap-2">
-					<div class="placeholder h-15 min-w-26 animate-pulse"></div>
+					<!-- <div class="placeholder h-15 min-w-26 animate-pulse"></div> -->
 					<div class="placeholder h-2 w-full animate-pulse"></div>
 				</td>
 				<td class="">

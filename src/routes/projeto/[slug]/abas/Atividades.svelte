@@ -135,6 +135,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Atividades</h3>
+
 <FormAdicionarAtividade
 	AdicionarAtividade={adicionarAtividade}
 	bind:openState={openStateAdicionar}

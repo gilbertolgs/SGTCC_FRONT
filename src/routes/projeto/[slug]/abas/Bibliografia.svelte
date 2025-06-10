@@ -115,6 +115,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Bibliografia</h3>
+
 <FormAdicionarBibliografia
 	AdicionarAnotacao={adicionarBibliografia}
 	bind:openState={openStateAdicionar}

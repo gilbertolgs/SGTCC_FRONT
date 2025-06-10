@@ -12,11 +12,15 @@
 	import UsuarioRepository from '$repository/UsuarioRepository';
 	import Toaster from '$lib/ToastHandler';
 	import { goto } from '$app/navigation';
+	import ModalBase from '$components/ModalBase.svelte';
+	import TermosECondicoes from './TermosECondicoes.svelte';
 
 	const toast = new Toaster(getContext);
 
 	let { data } = $props();
 	let cursos: Curso[] | null = $state(null);
+
+	let openStateTermos = $state(false);
 
 	onMount(async () => {
 		cursos = await CursoRepository.PegarTodos();
@@ -112,7 +116,15 @@
 	</fieldset>
 	<label class="flex items-center space-x-2">
 		<input class="checkbox" type="checkbox" />
-		<span class="my-auto">Aceito os <button class="anchor">Termos e Condições</button></span>
+		<span class="my-auto"
+			>Aceito os <button
+				class="anchor"
+				type="button"
+				onclick={() => {
+				openStateTermos = true;
+				}}>Termos e Condições</button
+			></span
+		>
 	</label>
 	<fieldset>
 		<button type="submit" class="btn preset-filled-primary-500 w-full">Cadastrar</button>
@@ -122,3 +134,13 @@
 		Já tem uma conta? <a href="/login" class="anchor font-bold">Login</a>
 	</p>
 </form>
+
+<ModalBase
+	bind:openState={openStateTermos} classe="max-h-[90%] overflow-auto card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2"
+>
+	{#snippet conteudo()}
+		<div class="">
+			<TermosECondicoes />
+		</div>
+	{/snippet}
+</ModalBase>

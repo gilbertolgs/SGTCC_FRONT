@@ -26,8 +26,8 @@
 
 	function pesquisaProjeto() {
 		if (estaVazio(txtFiltro) && estaVazio(txtAno)) {
-			toast.triggerWarn("FILTRO ou ANO devem estar preenchidos!");
-			return
+			toast.triggerWarn('FILTRO ou ANO devem estar preenchidos!');
+			return;
 		}
 		getProjetos(cmbTipoFiltro, txtFiltro, cmbTipoOrdenacao, txtAno);
 	}

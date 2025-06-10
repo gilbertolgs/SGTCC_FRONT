@@ -9,7 +9,7 @@ export enum EnumPapel {
 export const textoEnumPapel: Record<EnumPapel, string> = {
     [EnumPapel.Aluno]: "Aluno",
     [EnumPapel.Professor]: "Professor",
-    [EnumPapel.Admin]: "Secretária",
+    [EnumPapel.Admin]: "Secretaria",
     [EnumPapel.Coordenador]: "Coordenador",
     [EnumPapel.ProfessorResponsavel]: "Professor Responsável",
 };

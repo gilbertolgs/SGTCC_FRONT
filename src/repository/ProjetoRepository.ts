@@ -39,6 +39,14 @@ class ProjetoRepository {
         return projeto;
     }
 
+    async PegarPorFavoritosDeUsuario(idUsuario: number) {
+        const response = await Api.get(`projetos/porFavoritosDeUsuario/${idUsuario}`);
+
+        const projeto = response.map(Projeto.CriaDeDados);
+
+        return projeto;
+    }
+
     async PegarTodosPorFiltro(tipoFiltro: EnumTipoFiltro, filtro: string, tipoOrdenacao: EnumTipoOrdenacao, ano: number): Promise<Projeto[]> {
         const params = {
             tipoFiltro: tipoFiltro,

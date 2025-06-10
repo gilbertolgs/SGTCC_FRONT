@@ -108,6 +108,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Calendário</h3>
+
 <DetalhesDia
 	bind:openState={openStateDetalhes}
 	atividades={atividadesDiaSelecionado}

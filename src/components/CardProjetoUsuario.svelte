@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { goto, preloadCode, preloadData } from '$app/navigation';
 	import { generateRandomCanvas } from '$lib/canvasUtils';
+	import { EnumParecerProposta } from '$model/EnumParecerProposta';
 	import type Projeto from '$model/Projeto';
 	import type Usuario from '$model/Usuario';
 	import AtividadeRepository from '$repository/AtividadeRepository';
 	import CursoRepository from '$repository/CursoRepository';
 	import ProjetoRepository from '$repository/ProjetoRepository';
+	import PropostaRepository from '$repository/PropostaRepository';
 	import { Progress } from '@skeletonlabs/skeleton-svelte';
 	import { onMount } from 'svelte';
 
@@ -45,10 +47,20 @@
 		});
 	}
 
+	let projetoTemPropostaAprovada: boolean = $state(false);
 	$effect(() => {
 		defineImagem();
 		calculaProgresso();
+		pegaProposta();
 	});
+
+	async function pegaProposta() {
+		const propostas = await PropostaRepository.PegarPorIdProjeto(projeto.id);
+
+		projetoTemPropostaAprovada = propostas.some(
+			(proposta) => proposta.parecer === EnumParecerProposta.Favoravel
+		);
+	}
 
 	async function calculaProgresso() {
 		const atividades = await AtividadeRepository.PegarAtividadesPorProjeto(projeto.id);
@@ -103,10 +115,14 @@
 
 		<div class="grid items-center justify-between overflow-hidden p-4">
 			<div>
-				<div class="anchor font-bold group-hover:underline text-xl">
+				<div class="anchor text-xl font-bold group-hover:underline">
 					{projeto.nome}
 				</div>
 				<div class="text-xs break-normal opacity-70">{projeto.descricao}</div>
+				{#if !projetoTemPropostaAprovada}
+					<span class="chip preset-filled-warning-500 text-base font-normal">Proposta Pendente</span
+					>
+				{/if}
 			</div>
 		</div>
 	</div>

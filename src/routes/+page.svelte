@@ -117,7 +117,7 @@
 				)}
 					<div class="h-full">
 						<div
-							class="bg-primary-100 text-primary-500 flex items-center justify-start gap-2 rounded-full"
+							class="text-primary-500 flex items-center justify-start gap-2 rounded-full"
 						>
 							<funcionalidade.icone />
 							<h2 class="title-font text-tertiary-500 text-2xl font-medium">
@@ -188,10 +188,10 @@
 		{/each}
 	</Marquee>
 	<div
-		class="dark:from-background pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white"
+		class="dark:from-background pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-surface-500"
 	></div>
 	<div
-		class="dark:from-background pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white"
+		class="dark:from-background pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-surface-500"
 	></div>
 </section>
 <!-- <section class="body-font text-gray-700">

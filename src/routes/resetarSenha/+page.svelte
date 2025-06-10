@@ -38,10 +38,10 @@
 	}
 
 	onMount(async () => {
-		if (tokenAtivacao) {
-			usuario = await AuthRepository.AtivarConta(tokenAtivacao);
-			console.log(usuario);
-		}
+		// if (tokenAtivacao) {
+		// 	usuario = await AuthRepository.AtivarConta(tokenAtivacao);
+		// 	console.log(usuario);
+		// }
 	});
 
 	async function RedefinirSenha() {
@@ -52,7 +52,9 @@
 			const response = await AuthRepository.RedefinirSenha(tokenAtivacao, form.senha);
 			if (!response) {
 				toast.triggerError('ocorreu um erro ao tentar alterar a senha, tente novamente mais tarde');
+				return;
 			}
+			toast.triggerSuccess('senha alterada com sucesso!');
 			console.log(response);
 		} catch (error) {
 			toast.triggerWarn('preencha todos os campos!');

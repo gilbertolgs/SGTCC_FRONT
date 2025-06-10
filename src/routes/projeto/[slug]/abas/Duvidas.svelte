@@ -34,7 +34,13 @@
 	});
 
 	async function getDuvidas() {
-		duvidas = await DuvidaRepository.PegarDuvidasPorProjeto(projeto.id);
+		duvidas = await DuvidaRepository.PegarDuvidasAtendidas(projeto.id);
+		try {
+			const novasDuvidas = await DuvidaRepository.PegarDuvidasPorProjeto(projeto.id);
+			if (!duvidas) return;
+			duvidas = [...novasDuvidas, ...duvidas];
+		} catch (error) {}
+
 	}
 
 	function abrirModal(modal: string, argumentos: any = null) {
@@ -103,6 +109,8 @@
 		}
 	}
 </script>
+
+<h3 class="h3 my-5">Informações</h3>
 
 <FormAdicionarDuvida
 	AdicionarDuvida={adicionarDuvida}
