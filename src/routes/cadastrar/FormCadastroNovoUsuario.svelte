@@ -20,7 +20,7 @@
 	let { data } = $props();
 	let cursos: Curso[] | null = $state(null);
 
-	let openState = $state(true);
+	let openStateTermos = $state(false);
 
 	onMount(async () => {
 		cursos = await CursoRepository.PegarTodos();
@@ -121,7 +121,7 @@
 				class="anchor"
 				type="button"
 				onclick={() => {
-					openState = true;
+				openStateTermos = true;
 				}}>Termos e Condições</button
 			></span
 		>
@@ -136,8 +136,7 @@
 </form>
 
 <ModalBase
-	bind:openState
-	classe="max-h-[90%] overflow-auto card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2"
+	bind:openState={openStateTermos} classe="max-h-[90%] overflow-auto card grid bg-surface-100-900 p-4 shadow-xl w-full md:w-1/2"
 >
 	{#snippet conteudo()}
 		<div class="">

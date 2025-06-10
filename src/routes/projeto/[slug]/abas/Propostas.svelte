@@ -96,6 +96,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Propostas</h3>
+
 <!-- <ConfirmDialog
 	bind:openState={openStateFinalizar}
 	titulo="Tem certeza que deseja finalizar esse projeto?"

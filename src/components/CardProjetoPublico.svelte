@@ -123,7 +123,7 @@
 </script>
 
 <div
-	class="card group m-2 mx-auto grid w-full grid-cols-1 border border-stone-800 shadow-2xl drop-shadow-2xl md:w-3/4 md:grid-cols-3"
+	class="card group m-2 mx-auto grid w-full grid-cols-1 border border-stone-800 drop-shadow-2xl md:w-3/4 md:grid-cols-4"
 >
 	<div class="grid items-center justify-between overflow-hidden p-4">
 		<span class="mb-auto font-bold">
@@ -174,11 +174,11 @@
 			</div>
 		{/if}
 	</div>
-	<div class="m-2 hidden flex-col md:flex">
+	<div class="col-span-2 hidden flex-col md:flex">
 		<span class="text-xl opacity-70">{projeto.descricao}</span>
 	</div>
-	<div class="ml-auto flex flex-col items-end justify-between">
-		<div class="m-2 grid grid-flow-col items-center gap-2">
+	<div class="flex flex-col">
+		<div class="m-2 ml-auto grid grid-flow-col items-center gap-2">
 			<span>{estrelas} Favoritos </span>
 			{#if usuarioLogado}
 				<label class="relative cursor-pointer brightness-125 hover:text-[#7e6eff]">
@@ -194,11 +194,11 @@
 			{/if}
 		</div>
 
-		<div class="m-2 flex gap-5">
+		<div class="m-2 mt-auto flex gap-2 ml-auto">
 			<button class="btn preset-filled-secondary-500" onclick={baixarDocumento}>
 				<Download />
-				Baixar PDF</button
-			>
+				<span>Baixar PDF</span>
+			</button>
 			{#if projeto.dataFim}
 				<span class="mt-auto font-sans font-extralight"
 					>{DataFormatHandler.FormatDate(projeto.dataFim)}</span

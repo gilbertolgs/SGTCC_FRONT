@@ -146,6 +146,8 @@
 	{getAnotacoes}
 />
 
+<h3 class="h3">Anotações</h3>
+
 <div class="grid gap-4">
 	<button
 		onclick={() => {

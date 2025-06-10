@@ -91,6 +91,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Participantes</h3>
+
 <div class="m-2 mt-10 flex gap-3">
 	<FormInputComponent
 		label="Email"

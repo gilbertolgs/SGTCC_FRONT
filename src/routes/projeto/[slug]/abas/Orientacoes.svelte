@@ -135,6 +135,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Relatório</h3>
+
 <FormAdicionarRelatorio
 	AdicionarRelatorio={adicionarRelatorio}
 	bind:openState={openStateAdicionar}

@@ -141,6 +141,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Documentação</h3>
+
 <ConfirmDialog
 	bind:openState={openStateApagar}
 	titulo="Tem certeza que deseja apagar essa versão da documentação"
@@ -194,6 +196,8 @@
 		</div>
 	</div>
 {/snippet}
+
+
 <div class="grid gap-4">
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
 		{#if arquivos && arquivos.length > 0}

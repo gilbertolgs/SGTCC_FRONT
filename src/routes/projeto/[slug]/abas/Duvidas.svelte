@@ -110,6 +110,8 @@
 	}
 </script>
 
+<h3 class="h3 my-5">Informações</h3>
+
 <FormAdicionarDuvida
 	AdicionarDuvida={adicionarDuvida}
 	bind:openState={openStateAdicionar}

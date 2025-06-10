@@ -105,29 +105,32 @@
 	}
 </script>
 
-<div class="mb-6 flex grid w-full justify-between md:flex">
-	<h1 class="text-xl font-semibold">Gerenciar Bancas</h1>
-	<button onclick={() => abrirModal()} class="btn bg-success-500">
-		<Plus class="h-4 w-4" /> Nova Banca
-	</button>
-</div>
+<div class="m-0 md:m-5">
+	<div class="mb-6 grid md:justify-between md:flex">
+		<h1 class="text-xl font-semibold">Gerenciar Bancas</h1>
+		<button onclick={() => abrirModal()} class="btn bg-success-500 w-full md:w-min">
+			<Plus class="h-4 w-4" /> Nova Banca
+		</button>
+	</div>
 
-{#if bancas.length > 0}
-	<div class="grid gap-6 md:flex md:flex-col md:items-center">
-		{#each bancas as banca}
-			<div class="preset-tonal w-full rounded-lg p-6 shadow-md md:w-3/4">
-				<div class="mb-2 flex items-center justify-between">
-					<div>
-						<p>
-							<strong>Projeto:</strong>
-							{projetos?.filter((p) => p.id == banca.idProjeto)[0].nome}
-						</p>
-						<p><strong>Data:</strong> {DataFormatHandler.FormatDate(banca.dataSeminario)}</p>
-					</div>
+	{#if bancas.length > 0}
+		<div class="grid gap-6 md:flex md:flex-col md:items-center">
+			{#each bancas as banca}
+				<div class="preset-tonal w-full rounded-lg p-6 shadow-md md:w-3/4">
+					<div class="mb-2 flex items-center justify-between">
+						<div>
+							<p>
+								<strong>Projeto:</strong>
+								{projetos?.filter((p) => p.id == banca.idProjeto)[0].nome}
+							</p>
+							<p><strong>Data:</strong> {DataFormatHandler.FormatDate(banca.dataSeminario)}</p>
+						</div>
 
-					<div class="flex gap-2">
-						<a class="btn preset-outlined-primary-500" href="/bancas/{banca.id}"> Ver detalhes </a>
-						<!-- <button onclick={() => abrirModal(banca)} class="btn preset-outlined-primary-500">
+						<div class="flex gap-2">
+							<a class="btn preset-outlined-primary-500" href="/bancas/{banca.id}">
+								Ver detalhes
+							</a>
+							<!-- <button onclick={() => abrirModal(banca)} class="btn preset-outlined-primary-500">
 							<Pencil class="h-4 w-4" />
 						</button>
 						<button
@@ -136,23 +139,24 @@
 						>
 							<Trash class="h-4 w-4" />
 						</button> -->
+						</div>
 					</div>
+					{#if banca.observacaoNotaProjeto}
+						<p class="text-sm"><strong>Obs. Nota:</strong> {banca.observacaoNotaProjeto}</p>
+					{/if}
+					{#if banca.observacaoAluno}
+						<p class="text-sm"><strong>Obs. Aluno:</strong> {banca.observacaoAluno}</p>
+					{/if}
+					{#if banca.recomendacao}
+						<p class="text-sm"><strong>Recomendação:</strong> {banca.recomendacao}</p>
+					{/if}
 				</div>
-				{#if banca.observacaoNotaProjeto}
-					<p class="text-sm"><strong>Obs. Nota:</strong> {banca.observacaoNotaProjeto}</p>
-				{/if}
-				{#if banca.observacaoAluno}
-					<p class="text-sm"><strong>Obs. Aluno:</strong> {banca.observacaoAluno}</p>
-				{/if}
-				{#if banca.recomendacao}
-					<p class="text-sm"><strong>Recomendação:</strong> {banca.recomendacao}</p>
-				{/if}
-			</div>
-		{/each}
-	</div>
-{:else}
-	<p class="text-center text-gray-500">Nenhuma banca cadastrada.</p>
-{/if}
+			{/each}
+		</div>
+	{:else}
+		<p class="text-center text-gray-500">Nenhuma banca cadastrada.</p>
+	{/if}
+</div>
 
 <ModalBase bind:openState={openModalBanca}>
 	{#snippet conteudo()}
