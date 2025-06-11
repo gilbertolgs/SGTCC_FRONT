@@ -29,7 +29,17 @@
 
 	let referenciaSelecionada: Bibliografia | null = $state(null);
 
-	let referencias: Bibliografia[] | null = $state(null);
+	let referencias: Bibliografia[] = $state([]);
+
+	let txtFiltro: string = $state('');
+
+	let referenciasFiltradas = $derived(
+		referencias?.filter(
+			(r: Bibliografia) =>
+				r.referencia.toLowerCase().includes(txtFiltro.toLowerCase()) ||
+				r.autores.toLowerCase().includes(txtFiltro.toLowerCase())
+		)
+	);
 
 	$effect(() => {
 		getBibliografia();
@@ -179,9 +189,10 @@
 	>
 		<Plus />Adicionar
 	</button>
+	<input type="text" bind:value={txtFiltro} class="input" placeholder="Filtro" />
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
-		{#if referencias && referencias.length > 0}
-			{#each referencias as referencia, i}
+		{#if referenciasFiltradas && referenciasFiltradas.length > 0}
+			{#each referenciasFiltradas as referencia, i}
 				{@render cardReferencia(referencia, i)}
 			{/each}
 		{:else}

@@ -98,11 +98,12 @@ class UsuarioRepository {
 
     async AtualizarUsuario(id: number, nome: string, email: string) {
         const data = {
-            "nome": nome,
-            "email": email
+            id: id,
+            nome: nome,
+            email: email
         };
 
-        const response = await Api.put(`/usuarios/${id}/atualizarUsuario`, data)
+        const response = await Api.put(`/usuarios/atualizarUsuario`, data)
             .catch((error) => {
                 throw new Error(error);
             });

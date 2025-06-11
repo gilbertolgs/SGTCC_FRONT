@@ -42,7 +42,7 @@ export const _addRelatorioSchema = z.object({
 export const _addNoteSchema = z.object({
     id: number(),
     titulo: z.string(),
-    descricao: z.string().max(500, "Descrição muito longa").nullish(),
+    descricao: z.string().max(500, "Descrição muito longa").nullable(),
 });
 
 export const _addBibliographySchema = z.object({

@@ -27,7 +27,13 @@
 	let openStateDetalhes = $state(false);
 	let openStateApagar = $state(false);
 	let duvidaSelecionada: Duvida | null = $state(null);
-	let duvidas: Duvida[] | null = $state(null);
+	let duvidas: Duvida[] = $state([]);
+
+	let txtFiltro: string = $state('');
+
+	let duvidasFiltradas = $derived(
+		duvidas?.filter((d: Duvida) => d.texto.toLowerCase().includes(txtFiltro.toLowerCase()))
+	);
 
 	$effect(() => {
 		getDuvidas();
@@ -40,7 +46,6 @@
 			if (!duvidas) return;
 			duvidas = [...novasDuvidas, ...duvidas];
 		} catch (error) {}
-
 	}
 
 	function abrirModal(modal: string, argumentos: any = null) {
@@ -142,9 +147,10 @@
 	>
 		<Plus />Adicionar
 	</button>
+	<input type="text" bind:value={txtFiltro} class="input" placeholder="Filtro" />
 	<div class="preset-tonal flex flex-col gap-3 border p-4 shadow-md">
-		{#if duvidas && duvidas.length > 0}
-			{#each duvidas as duvida, i}
+		{#if duvidasFiltradas && duvidasFiltradas.length > 0}
+			{#each duvidasFiltradas as duvida, i}
 				<CardDuvida {abrirModal} {duvida} />
 			{/each}
 		{:else}
