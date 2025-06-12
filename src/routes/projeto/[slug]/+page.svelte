@@ -208,7 +208,7 @@
 					{#if projeto}
 						<Tabs.Panel value="proposta"><Propostas {projeto} {getProjeto} {data} /></Tabs.Panel>
 						<Tabs.Panel value="informacoes"
-							><Informacoes {projeto} {getProjeto} {data} /></Tabs.Panel
+							><Informacoes {projeto} {getProjeto} {data} {projetoTemPropostaAprovada} /></Tabs.Panel
 						>
 						<Tabs.Panel value="participantes"><Participantes {projeto} /></Tabs.Panel>
 						<Tabs.Panel value="atividades"

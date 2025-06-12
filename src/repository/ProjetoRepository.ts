@@ -39,6 +39,12 @@ class ProjetoRepository {
         return projeto;
     }
 
+    async ExibeDashboard(idProjeto: number) {
+        const response = await Api.get(`projetos/${idProjeto}/dashboard`);
+
+        return response;
+    }
+
     async PegarPorFavoritosDeUsuario(idUsuario: number) {
         const response = await Api.get(`projetos/porFavoritosDeUsuario/${idUsuario}`);
 
