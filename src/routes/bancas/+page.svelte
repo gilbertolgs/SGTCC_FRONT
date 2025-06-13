@@ -44,6 +44,10 @@
 	$effect(() => {
 		carregarBancas();
 		pegarProjetos();
+
+		if (usuarioLogado) {
+			pegarProjetos();
+		}
 	});
 
 	async function carregarBancas() {
@@ -106,7 +110,7 @@
 </script>
 
 <div class="m-0 md:m-5">
-	<div class="mb-6 grid md:justify-between md:flex">
+	<div class="mb-6 grid md:flex md:justify-between">
 		<h1 class="text-xl font-semibold">Gerenciar Bancas</h1>
 		<button onclick={() => abrirModal()} class="btn bg-success-500 w-full md:w-min">
 			<Plus class="h-4 w-4" /> Nova Banca
@@ -121,7 +125,9 @@
 						<div>
 							<p>
 								<strong>Projeto:</strong>
-								{projetos?.filter((p) => p.id == banca.idProjeto)[0].nome}
+								{#if projetos}
+									{projetos.filter((p) => p.id == banca.idProjeto)[0].nome ?? ''}
+								{/if}
 							</p>
 							<p><strong>Data:</strong> {DataFormatHandler.FormatDate(banca.dataSeminario)}</p>
 						</div>

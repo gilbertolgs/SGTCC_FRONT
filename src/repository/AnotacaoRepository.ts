@@ -16,12 +16,12 @@ class AnotacaoRepository {
     async AdicionarAnotacao(idUsuario: number,
         idProjeto: number,
         titulo: string,
-        descricao: string) {
+        descricao: string | null) {
         const data = {
             idUsuario: idUsuario,
             idProjeto: idProjeto,
             titulo: titulo,
-            descricao: descricao
+            descricao: descricao ?? ''
         }
 
         const response = await Api.post(`anotacoes/criarAnotacao`, data)
@@ -32,13 +32,13 @@ class AnotacaoRepository {
         return response;
     }
 
-    async AtualizarAnotacao(idAnotacao: number, idUsuario: number, idProjeto: number, titulo: string, descricao: string) {
+    async AtualizarAnotacao(idAnotacao: number, idUsuario: number, idProjeto: number, titulo: string, descricao: string | null) {
         const data = {
             id: idAnotacao,
             idUsuario: idUsuario,
             idProjeto: idProjeto,
             titulo: titulo,
-            descricao: descricao
+            descricao: descricao ?? ''
         }
 
         const response = await Api.put(`anotacoes/atualizarAnotacao`, data)

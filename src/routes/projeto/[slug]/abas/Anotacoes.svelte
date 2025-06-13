@@ -32,7 +32,13 @@
 
 	let anotacaoSelecionada: Anotacao | null = $state(null);
 
-	let anotacoes: Anotacao[] | null = $state(null);
+	let anotacoes: Anotacao[] = $state([]);
+
+	let txtFiltro: string = $state('');
+
+	let anotacoesFiltradas = $derived(
+		anotacoes?.filter((a: Anotacao) => a.titulo.toLowerCase().includes(txtFiltro.toLowerCase()) || a.descricao.toLowerCase().includes(txtFiltro.toLowerCase()))
+	);
 
 	$effect(() => {
 		getAnotacoes();
@@ -157,9 +163,10 @@
 	>
 		<Plus />Adicionar
 	</button>
+	<input type="text" bind:value={txtFiltro} class="input" placeholder="Filtro" />
 	<div class="preset-tonal grid gap-3 border p-4 shadow-md md:grid-cols-3">
-		{#if anotacoes && anotacoes.length > 0}
-			{#each anotacoes as anotacao}
+		{#if anotacoesFiltradas && anotacoesFiltradas.length > 0}
+			{#each anotacoesFiltradas as anotacao}
 				<button
 					class="bg-primary-100 dark:preset-tonal rounded border p-2 shadow-2xl transition-all duration-500 hover:brightness-60"
 					onclick={() => {

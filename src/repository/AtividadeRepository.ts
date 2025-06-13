@@ -15,12 +15,12 @@ class AtividadeRepository {
         return atividades;
     }
 
-    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
+    async AdicionarAtividade(idProjeto: number, nome: string, descricao: string | null, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
         const data = {
             idProjeto: idProjeto,
             idUsuario: idUsuario,
             nome: nome,
-            descricao: descricao,
+            descricao: descricao ?? '',
             duracaoEstimada: duracaoEstimada,
             prioridade: prioridade,
             dataInicio: dataInicio,
@@ -35,13 +35,13 @@ class AtividadeRepository {
         return response;
     }
 
-    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
+    async AtualizarAtividade(idProjeto: number, idAtividade: number, nome: string, descricao: string | null, idUsuario: number, duracaoEstimada: number, prioridade: number, dataInicio: string, dataEntrega: string) {
         const data = {
             id: idAtividade,
             idProjeto: idProjeto,
             idUsuario: idUsuario,
             nome: nome,
-            descricao: descricao,
+            descricao: descricao ?? '',
             duracaoEstimada: duracaoEstimada,
             prioridade: prioridade,
             dataInicio: dataInicio,

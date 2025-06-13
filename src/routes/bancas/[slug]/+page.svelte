@@ -41,6 +41,14 @@
 	let dataSeminario = $state('');
 	let filtroNome = $state('');
 
+	let professoresFiltrados = $derived(
+		professoresDisponiveis.filter(
+			(p) =>
+				!avaliadoresSelecionados.find((a) => a.idUsuario === p.id) &&
+				p.nome.toLowerCase().includes(filtroNome.toLowerCase())
+		)
+	);
+
 	onMount(async () => {
 		await carregarDados();
 	});
@@ -90,14 +98,6 @@
 		await BancaApiRepository.AtualizarBanca({ id: idBanca, dataSeminario });
 		openModalEditar = false;
 	}
-
-	let professoresFiltrados = $derived(
-		professoresDisponiveis.filter(
-			(p) =>
-				!avaliadoresSelecionados.find((a) => a.idUsuario === p.id) &&
-				p.nome.toLowerCase().includes(filtroNome.toLowerCase())
-		)
-	);
 
 	async function baixarDocumento(
 		event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }

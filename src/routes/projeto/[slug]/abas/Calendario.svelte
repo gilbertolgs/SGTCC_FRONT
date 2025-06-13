@@ -205,7 +205,7 @@
 				{#if atividadesPorDia}
 					{#each atividadesPorDia.get(date.getTime()) ?? [] as atividade}
 						<div class="flex gap-1 overflow-hidden">
-							<span class="bg-{atividade.CorPrioridade()}-500 rounded p-1">
+							<span class="rounded p-1 {atividade.CorPrioridade()}">
 								{atividade.nome}
 							</span>
 						</div>
